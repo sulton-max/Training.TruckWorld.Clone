@@ -20,6 +20,5 @@ public class User : SoftDeletedEntity
         EmailAddress = emailAddress;
         Role = role;
         CreatedDate = DateTime.UtcNow;
-        IsDeleted = false;
     }
 }
