@@ -9,4 +9,5 @@ public interface IDataContext
     IFileSet<Component, Guid> Components { get; }
     IFileSet<ComponentCategory, Guid> ComponentsCategories { get; }
 
+    ValueTask SaveChangesAsync();
 }

@@ -9,7 +9,6 @@ namespace Training.TruckWorld.Backend.Persistence.DataContexts;
 
 public class AppFileContext : FileContext, IDataContext
 {
-
     public IFileSet<User, Guid> Users => Set<User>(nameof(Users));
 
     public IFileSet<Component, Guid> Components => Set<Component>(nameof(Components));
