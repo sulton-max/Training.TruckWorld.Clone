@@ -36,6 +36,5 @@ public class Component : SoftDeletedEntity
         Description = description;
         Action = action;
         CreatedDate = DateTime.UtcNow;
-        IsDeleted = false;
     }
 }
