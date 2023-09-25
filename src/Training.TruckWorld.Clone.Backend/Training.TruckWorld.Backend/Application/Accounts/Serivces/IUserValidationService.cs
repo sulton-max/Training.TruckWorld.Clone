@@ -8,7 +8,7 @@ namespace Training.TruckWorld.Backend.Application.Accounts.Serivces
 {
     public interface IUserValidationService
     {
-        bool IsValidName(string name);
+        bool IsValidName(string fullName);
 
         bool IsValidEmailAddress(string emailAddress);
 
