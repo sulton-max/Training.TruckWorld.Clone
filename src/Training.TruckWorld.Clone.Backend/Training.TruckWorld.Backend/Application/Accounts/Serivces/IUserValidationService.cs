@@ -11,5 +11,7 @@ namespace Training.TruckWorld.Backend.Application.Accounts.Serivces
         bool IsValidName(string name);
 
         bool IsValidEmailAddress(string emailAddress);
+
+        bool IsValidPassword(string password);
     }
 }

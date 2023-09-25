@@ -25,7 +25,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services
     {
         public bool IsValidEmailAddress(string emailAddress)
         {
-            if (string.IsNullOrWhiteSpace(emailAddress) != null)
+            if (!string.IsNullOrWhiteSpace(emailAddress))
                 return Regex.IsMatch(emailAddress, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
             return false;
         }
@@ -34,6 +34,13 @@ namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services
         {
             if (name != null)
                 return Regex.IsMatch(name, @"^[A-Za-z]+ [A-Za-z]+$");
+            return false;
+        }
+
+        public bool IsValidPassword(string password)
+        {
+            if (!string.IsNullOrWhiteSpace(password))
+                return Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{8,}$");
             return false;
         }
     }
