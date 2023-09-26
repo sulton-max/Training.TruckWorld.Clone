@@ -16,13 +16,14 @@ public class Component : SoftDeletedEntity
     public double Weight { get; set; }
     public ComponentCondition Condition { get; set; }
     public string Description { get; set; }
+    public ContactUser Contact { get; set; }
     public Action Action { get; set; }
 
     public Component() { }
 
     public Component(ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight,
-        ComponentCondition condition, string description, Action action)
+        ComponentCondition condition, string description, ContactUser contact, Action action)
     {
         Id = Guid.NewGuid();
         Category = category;
@@ -34,6 +35,7 @@ public class Component : SoftDeletedEntity
         Weight = weight;
         Condition = condition;
         Description = description;
+        Contact = contact;
         Action = action;
         CreatedDate = DateTime.UtcNow;
     }
