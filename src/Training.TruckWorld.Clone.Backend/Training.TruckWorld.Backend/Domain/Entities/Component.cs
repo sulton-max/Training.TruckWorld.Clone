@@ -17,7 +17,8 @@ public class Component : SoftDeletedEntity
     public ComponentCondition Condition { get; set; }
     public string Description { get; set; }
     public ListingType Action { get; set; }
-
+    public ContactUser Contact { get; set; }
+    
     public Component() { }
 
     public Component(ComponentCategory category, string manufacturer, string model,
@@ -34,6 +35,7 @@ public class Component : SoftDeletedEntity
         Weight = weight;
         Condition = condition;
         Description = description;
+        Contact = contact;
         Action = action;
         CreatedDate = DateTime.UtcNow;
     }
