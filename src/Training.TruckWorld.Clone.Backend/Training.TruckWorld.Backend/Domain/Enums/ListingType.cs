@@ -1,6 +1,6 @@
 ﻿namespace Training.TruckWorld.Backend.Domain.Enums;
 
-public enum Action
+public enum ListingType
 {
     Sale,
     Hire

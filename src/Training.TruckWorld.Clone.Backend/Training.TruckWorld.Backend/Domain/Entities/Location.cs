@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Training.TruckWorld.Backend.Domain.Entities
 {
-    internal class Location
+    public class Location
     {
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
+        public Location() { }
     }
 }
