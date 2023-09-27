@@ -44,6 +44,7 @@ namespace Training.TruckWorld.Backend.Domain.Entities
             FuelType = fuelType;
             Color = color;
             ContactUser = contactUser;
+            CreatedDate = DateTime.UtcNow;
         }
     }
 }

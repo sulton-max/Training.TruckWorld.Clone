@@ -12,5 +12,11 @@ namespace Training.TruckWorld.Backend.Domain.Entities
         public string City { get; set; }
         public string Street { get; set; }
         public Location() { }
+        public Location(string country, string city, string street)
+        {
+            Country = country;
+            City = city;
+            Street = street;
+        }
     }
 }

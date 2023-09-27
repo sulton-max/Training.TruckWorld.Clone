@@ -7,9 +7,16 @@ using Training.TruckWorld.Backend.Domain.Common;
 
 namespace Training.TruckWorld.Backend.Domain.Entities;
 
-    public class TruckCategory: SoftDeletedEntity
+public class TruckCategory : SoftDeletedEntity
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public TruckCategory() { }
+    public TruckCategory(int id, string name)
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        Id = id;
+        Name = name;
+        CreatedDate = DateTime.UtcNow;
     }
+}
 
