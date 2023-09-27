@@ -14,14 +14,17 @@ namespace Training.TruckWorld.Backend.Domain.Entities
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
+        public Location Location { get; set; }
         public ContactUser() { }
-        public ContactUser(string firstName, string lastName, string emailAddress, string phoneNumber)
+        public ContactUser(Guid userId, string firstName, string lastName, string emailAddress, string phoneNumber, Location location)
         {
             Id = Guid.NewGuid();
+            UserId = userId;
             FirstName = firstName;
             LastName = lastName;
             EmailAddress = emailAddress;
             PhoneNumber = phoneNumber;
+            Location = location;
             CreatedDate = DateTime.UtcNow;
         }
     }
