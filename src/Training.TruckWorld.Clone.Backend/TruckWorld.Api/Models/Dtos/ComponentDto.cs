@@ -1,6 +1,6 @@
 ﻿using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
-using Action = Training.TruckWorld.Backend.Domain.Enums.Action;
+using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
 
 namespace TruckWorld.Api.Models.Dtos;
 
@@ -17,13 +17,13 @@ public class ComponentDto
     public double Weight { get; set; }
     public ComponentCondition Condition { get; set; }
     public string Description { get; set; }
-    public Action Action { get; set; }
+    public ListingType Action { get; set; }
 
     public ComponentDto(){}
 
     public ComponentDto(Guid? userId, ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight, ComponentCondition condition,
-        string description, Action action)
+        string description, ListingType action)
     {
         Id = Guid.NewGuid();
         UserId = userId;
