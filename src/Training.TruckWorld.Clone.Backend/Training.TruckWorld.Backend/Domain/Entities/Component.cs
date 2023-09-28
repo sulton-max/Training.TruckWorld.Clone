@@ -1,4 +1,4 @@
-﻿using Training.TruckWorld.Backend.Domain.Common;
+using Training.TruckWorld.Backend.Domain.Common;
 using Training.TruckWorld.Backend.Domain.Enums;
 using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
 
@@ -16,16 +16,18 @@ public class Component : SoftDeletedEntity
     public double Weight { get; set; }
     public ComponentCondition Condition { get; set; }
     public string Description { get; set; }
-    public ListingType Action { get; set; }
+    public ListingType ListingType { get; set; }
+    public double Price { get; set; }
     public ContactUser Contact { get; set; }
     
     public Component() { }
 
-    public Component(ComponentCategory category, string manufacturer, string model,
+    public Component(Guid userId, ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight,
-        ComponentCondition condition, string description, ListingType action)
+        ComponentCondition condition, string description, ContactUser contact, ListingType listingType, double price)
     {
         Id = Guid.NewGuid();
+        UserId = userId;
         Category = category;
         Manufacturer = manufacturer;
         Model = model;
@@ -36,7 +38,8 @@ public class Component : SoftDeletedEntity
         Condition = condition;
         Description = description;
         Contact = contact;
-        Action = action;
+        ListingType = listingType;
         CreatedDate = DateTime.UtcNow;
+        Price = price;
     }
 }

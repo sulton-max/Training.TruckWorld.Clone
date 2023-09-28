@@ -1,6 +1,6 @@
-﻿using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
-using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
+using Action = Training.TruckWorld.Backend.Domain.Enums.Action;
 
 namespace Training.TruckWorld.Backend.Application.Components.Models.Filters;
 
