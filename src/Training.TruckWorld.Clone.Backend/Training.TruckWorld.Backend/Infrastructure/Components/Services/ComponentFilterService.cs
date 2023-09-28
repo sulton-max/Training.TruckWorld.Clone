@@ -1,43 +1,51 @@
-﻿using System.Net.Security;
-using Training.TruckWorld.Backend.Application.Components.Models.Filters;
+﻿using Training.TruckWorld.Backend.Application.Components.Models.Filters;
 using Training.TruckWorld.Backend.Application.Components.Services;
-using Training.TruckWorld.Backend.Application.Configs;
 using Training.TruckWorld.Backend.Domain.Entities;
-using Training.TruckWorld.Backend.Domain.Enums;
+using Training.TruckWorld.Backend.Persistence.DataContexts;
 
-
-//###Implement ComponentFilterService
-
-//###Description
-//ComponentFilterService should filter collection of Component model by given ComponentFilterModel
-
-//Requirements
-//-should get filtered collection by given filtermodel
-//-can search components by given keyword
-//-keyword is from component properties:
-//manufacturer or model
-//-service that returns IQueryable
-
-//Deliverables
-//service that filters components
 
 namespace Training.TruckWorld.Backend.Infrastructure.Components.Services
 {
     public class ComponentFilterService : IComponentFilterService
     {
-        private List<Component> _components;
-
-        public ComponentFilterService()
+        private IDataContext _dataContext;
+        
+        public ComponentFilterService(IDataContext dataContext)
         {
-            _components = new List<Component>();
+            _dataContext = dataContext;
         }
 
-        public IQueryable<Component> GetFiltered(ComponentFilterModel filterModel) =>
-            _components.Where(component => component.Manufacturer.ToLower() == 
-            filterModel.Manufacturers.ToString().ToLower()).AsQueryable();
+        public async ValueTask<ICollection<Component>> Getfiltered(ComponentFilterModel filtermodel, int pageSize = 20, int pageToken = 1)
+        {
 
-        public IQueryable<Component> SearchFiltered(string keyword)
-             => _components.Where(found => found.Model.ToLower()
-             .Contains(keyword.ToLower())).AsQueryable();
+            var result = _dataContext.Components.Where(component =>
+                filtermodel.Manufacturers is null || filtermodel.Manufacturers.Contains(component.Manufacturer)
+                && filtermodel.ListingTypes is null || filtermodel.ListingTypes.Contains(component.Action)
+                && filtermodel.Categories is null || filtermodel.Categories.Contains(component.Category)
+                && filtermodel.MinYear is null || filtermodel.MinYear >= component.Year
+                && filtermodel.MaxYear is null || filtermodel.MaxYear <= component.Year
+                && filtermodel.MinPrice is null || filtermodel.MinPrice >= component.Price
+                && filtermodel.MaxPrice is null || filtermodel.MaxPrice <= component.Price
+                && filtermodel.States is null || filtermodel.States.Equals(component.Contact.Location.City)
+                && filtermodel.Conditions is null || filtermodel.Conditions.Contains(component.Condition)
+                && filtermodel.Countries is null || filtermodel.Countries.Contains(component.Contact.Location.Country)
+                && filtermodel.MinDate is null || filtermodel.MinDate >= component.CreatedDate
+                && filtermodel.MaxDate is null || filtermodel.MaxDate <= component.CreatedDate
+                ).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+
+            return result;
+        }
+
+        public async ValueTask<ICollection<Component>> SearchFiltered(string keyword, int pageSize = 20, int pageToken = 1)
+        {
+            var foundComponent = _dataContext.Components.Where(component =>
+                component.Model.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                component.Manufacturer.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                .Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+            
+            return foundComponent;
+        }
     }
 }
+
+

@@ -10,7 +10,7 @@ namespace Training.TruckWorld.Backend.Application.Components.Services
 {
     public interface IComponentFilterService
     {
-        IQueryable<Component> GetFiltered(ComponentFilterModel filterModel);
-        IQueryable<Component> SearchFiltered(string keyword);
+        ValueTask<ICollection<Component>> Getfiltered(ComponentFilterModel filtermodel, int pageSize = 20, int pageToken = 1);
+        ValueTask<ICollection<Component>> SearchFiltered(string keyword, int pageSize = 20, int pageToken = 1);
     }
 }
