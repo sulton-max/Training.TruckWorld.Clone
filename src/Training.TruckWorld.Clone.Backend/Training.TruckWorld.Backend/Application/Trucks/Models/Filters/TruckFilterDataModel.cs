@@ -1,7 +1,7 @@
 ﻿using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
 
-namespace Training.TruckWorld.Backend.Application.Components.Models.Filters;
+namespace Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 
 public class TruckFilterDataModel
 {
