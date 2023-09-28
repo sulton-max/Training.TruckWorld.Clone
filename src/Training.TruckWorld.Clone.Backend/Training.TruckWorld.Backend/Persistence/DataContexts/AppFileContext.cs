@@ -14,8 +14,15 @@ public class AppFileContext : FileContext, IDataContext
     public IFileSet<Component, Guid> Components => Set<Component>(nameof(Components));
 
     public IFileSet<ComponentCategory, Guid> ComponentsCategories => Set<ComponentCategory>(nameof(ComponentsCategories));
+    public IFileSet<Truck, Guid> Trucks => Set<Truck>(nameof(Truck));
 
+    public IFileSet<TruckCategory, Guid> TruckCategories => Set<TruckCategory>(nameof(TruckCategory));
 
+    public IFileSet<UserCredentials, Guid> UserCredentials => Set<UserCredentials>(nameof(UserCredentials));
+
+    public IFileSet<EmailTemplate, Guid> EmailTemplates => Set<EmailTemplate>(nameof(EmailTemplate));
+
+    public IFileSet<Email, Guid> Emails => Set<Email>(nameof(Emails));
 
     public AppFileContext(IFileContextOptions<IFileContext> fileContextOptions) : base(fileContextOptions)
     {
