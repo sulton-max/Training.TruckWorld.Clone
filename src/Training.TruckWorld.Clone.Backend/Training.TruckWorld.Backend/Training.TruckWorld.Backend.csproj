@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Application\NewFolder\" />
       <Folder Include="Application\Notifications\Services\" />
     </ItemGroup>
 
