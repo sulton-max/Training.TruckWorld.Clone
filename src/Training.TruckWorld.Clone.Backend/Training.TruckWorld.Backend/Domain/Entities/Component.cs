@@ -17,13 +17,14 @@ public class Component : SoftDeletedEntity
     public ComponentCondition Condition { get; set; }
     public string Description { get; set; }
     public ListingType ListingType { get; set; }
+    public double Price { get; set; }
     public ContactUser Contact { get; set; }
     
     public Component() { }
 
     public Component(Guid userId, ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight,
-        ComponentCondition condition, string description, ContactUser contact, ListingType listingType)
+        ComponentCondition condition, string description, ContactUser contact, ListingType listingType, double price)
     {
         Id = Guid.NewGuid();
         UserId = userId;
@@ -39,5 +40,6 @@ public class Component : SoftDeletedEntity
         Contact = contact;
         ListingType = listingType;
         CreatedDate = DateTime.UtcNow;
+        Price = price;
     }
 }
