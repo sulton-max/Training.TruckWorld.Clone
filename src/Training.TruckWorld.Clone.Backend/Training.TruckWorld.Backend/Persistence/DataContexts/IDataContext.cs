@@ -1,4 +1,4 @@
-﻿using FileBaseContext.Abstractions.Models.FileSet;
+using FileBaseContext.Abstractions.Models.FileSet;
 using Training.TruckWorld.Backend.Domain.Entities;
 
 namespace Training.TruckWorld.Backend.Persistence.DataContexts;

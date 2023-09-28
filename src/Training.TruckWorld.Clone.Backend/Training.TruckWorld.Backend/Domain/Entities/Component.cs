@@ -1,4 +1,4 @@
-﻿using Training.TruckWorld.Backend.Domain.Common;
+using Training.TruckWorld.Backend.Domain.Common;
 using Training.TruckWorld.Backend.Domain.Enums;
 using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
 

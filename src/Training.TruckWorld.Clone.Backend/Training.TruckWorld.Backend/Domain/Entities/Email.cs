@@ -1,8 +1,8 @@
-﻿using Training.TruckWorld.Backend.Domain.Common;
+using Training.TruckWorld.Backend.Domain.Common;
 
 namespace Training.TruckWorld.Backend.Domain.Entities;
 
-public class Email : SoftDeletedEntity
+public class Email: SoftDeletedEntity
 {
     public string SenderAddress { get; set; }
     public string ReceiverAddress { get; set; }
