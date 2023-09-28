@@ -1,6 +1,6 @@
-﻿using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
-using Action = Training.TruckWorld.Backend.Domain.Enums.ListingType;
+using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
 
 namespace Training.TruckWorld.Backend.Application.Components.Models.Filters;
 
@@ -15,7 +15,7 @@ public class ComponentFilterDataModel
     /// <summary>
     /// Listing types (Action)
     /// </summary>
-    public IEnumerable<KeyValuePair<string, Action>> ListingTypes { get; set; }
+    public IEnumerable<KeyValuePair<string, ListingType>> ListingTypes { get; set; }
 
     /// <summary>
     /// Manufacturers (ishlab chiqaruvchilar)
