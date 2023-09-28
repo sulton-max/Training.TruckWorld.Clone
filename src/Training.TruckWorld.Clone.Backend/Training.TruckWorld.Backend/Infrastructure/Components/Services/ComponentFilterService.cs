@@ -33,7 +33,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Components.Services
                 && filtermodel.MaxDate is null || filtermodel.MaxDate <= component.CreatedDate
                 ).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
 
-            return result;
+            return result; 
         }
 
         public async ValueTask<ICollection<Component>> SearchFiltered(string keyword, int pageSize = 20, int pageToken = 1)
