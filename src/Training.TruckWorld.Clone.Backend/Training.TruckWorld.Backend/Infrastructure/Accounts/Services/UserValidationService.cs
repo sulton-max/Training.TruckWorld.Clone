@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
+using Training.TruckWorld.Backend.Domain.Extensions;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services
 {
@@ -9,11 +10,8 @@ namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services
 
         public bool IsValidName(string name)
         {
-            var capitalizedName = string.Concat(name.Substring(0, 1)
-                .ToUpper(), name.Substring(1).ToLower());
-
             if (!string.IsNullOrEmpty(name)
-                                && name.Equals(capitalizedName)
+                                && name.Equals(name.ToCapitalized())
                                 && name.All(letter => char.IsLetter(letter)))
                 return true;
             return false;
