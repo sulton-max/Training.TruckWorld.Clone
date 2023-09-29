@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
+using Training.TruckWorld.Backend.Domain.Entities;
 
-namespace Training.TruckWorld.Backend.Application.Notifications.Services
+namespace Training.TruckWorld.Backend.Application.Notifications.Services;
+
+public interface IEmailTemplateService
 {
-    internal interface IEmailTemplateService
-    {
-    }
+    IQueryable<EmailTemplate> Get(Expression<Func<EmailTemplate, bool>> expression);
+    ValueTask<ICollection<EmailTemplate>> GetAsync(IEnumerable<Guid> ids);
+    ValueTask<EmailTemplate?> GetByIdAsync(Guid id);
+    ValueTask<EmailTemplate> CreateAsync(EmailTemplate emailTemplate, bool saveChanges = true);
+    ValueTask<EmailTemplate> UpdateAsync(EmailTemplate emailTemplate, bool saveChanges = true);
+    ValueTask<EmailTemplate> DeleteAsync(Guid id, bool saveChanges = true);
+    ValueTask<EmailTemplate> DeleteAsync(EmailTemplate emailTemplate, bool saveChanges = true);
 }
