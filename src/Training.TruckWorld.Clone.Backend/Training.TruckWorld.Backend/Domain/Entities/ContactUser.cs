@@ -1,20 +1,31 @@
-﻿namespace Training.TruckWorld.Backend.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Training.TruckWorld.Backend.Domain.Common;
 
-public class ContactUser
+namespace Training.TruckWorld.Backend.Domain.Entities
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string PhoneNumber { get; set; }
-    public string Email { get; set; }
-    public Location Location { get; set; }
-
-    public ContactUser() { }
-    public ContactUser(string firstName, string lastName, string phoneNumber, string email, Location location)
+    public class ContactUser : SoftDeletedEntity
     {
-        FirstName = firstName;
-        LastName = lastName;
-        PhoneNumber = phoneNumber;
-        Email = email;
-        Location = location;
+        public Guid UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string EmailAddress { get; set; }
+        public string PhoneNumber { get; set; }
+        public Location Location { get; set; }
+        public ContactUser() { }
+        public ContactUser(Guid userId, string firstName, string lastName, string emailAddress, string phoneNumber, Location location)
+        {
+            Id = Guid.NewGuid();
+            UserId = userId;
+            FirstName = firstName;
+            LastName = lastName;
+            EmailAddress = emailAddress;
+            PhoneNumber = phoneNumber;
+            Location = location;
+            CreatedDate = DateTime.UtcNow;
+        }
     }
 }
