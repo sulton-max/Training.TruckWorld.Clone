@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Training.TruckWorld.Backend.Application.Trucks.Models.Interface;
+using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
 
