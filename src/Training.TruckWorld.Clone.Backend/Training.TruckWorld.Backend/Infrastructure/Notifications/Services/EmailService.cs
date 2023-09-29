@@ -49,6 +49,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             if (foundEmail is null)
                 throw new InvalidOperationException("You searched email not found");
 
+            foundEmail.IsDeleted = true;
             await _appDataContext.SaveChangesAsync();
 
             return foundEmail;
