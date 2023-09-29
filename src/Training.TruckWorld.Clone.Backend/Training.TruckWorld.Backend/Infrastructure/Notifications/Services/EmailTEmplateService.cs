@@ -64,7 +64,7 @@ public class EmailTemplateService : IEmailTemplateService
         var foundEmailTemplate = await GetByIdAsync(emailTemplate.Id);
         if (foundEmailTemplate is null)
             throw new InvalidOperationException("You searched emailTemplate not found");
-
+        foundEmailTemplate.IsDeleted = true;
         await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;
     }
