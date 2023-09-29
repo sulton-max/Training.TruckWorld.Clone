@@ -41,14 +41,14 @@ namespace Training.TruckWorld.Backend.Infrastructure.Components.Services
             return new ValueTask<ICollection<Component>>(result);
         }
 
-        public ValueTask<ICollection<Component>> SearchFiltered(string keyword, int pageSize = 20, int pageToken = 1)
+        public ValueTask<ICollection<Component>> SearchByKeyword(string keyword, int pageSize = 20, int pageToken = 1)
         {
-            var foundComponent = _dataContext.Components.Where(component =>
+            var foundComponents = _dataContext.Components.Where(component =>
              component.Model.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
              component.Manufacturer.Contains(keyword, StringComparison.OrdinalIgnoreCase))
              .Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
 
-            return new ValueTask<ICollection<Component>>(foundComponent);
+            return new ValueTask<ICollection<Component>>(foundComponents);
         }
     }
 }
