@@ -1,6 +1,6 @@
 ﻿using Training.TruckWorld.Backend.Domain.Entities;
 
-namespace Training.TruckWorld.Backend.Application.Emails.Interfaces;
+namespace Training.TruckWorld.Backend.Application.Notifications.Services;
 
 public interface IEmailSenderService
 {
