@@ -15,35 +15,35 @@ namespace Training.TruckWorld.Backend.Infrastructure.Components.Services
             _dataContext = dataContext;
         }
 
-        public async ValueTask<ICollection<Component>> GetFiltered(ComponentFilterModel filterModel, int pageSize = 20, int pageToken = 1)
+        public ValueTask<ICollection<Component>> GetFiltered(ComponentFilterModel filterModel, int pageSize = 20, int pageToken = 1)
         {
 
             var result = _dataContext.Components.Where(component =>
                 filterModel.Manufacturers is null || filterModel.Manufacturers.Contains(component.Manufacturer)
                 && filterModel.ListingTypes is null || filterModel.ListingTypes.Contains(component.Action)
                 && filterModel.Categories is null || filterModel.Categories.Contains(component.Category)
-                && filterModel.MinYear is null || filterModel.MinYear >= component.Year
-                && filterModel.MaxYear is null || filterModel.MaxYear <= component.Year
-                && filterModel.MinPrice is null || filterModel.MinPrice >= component.Price
-                && filterModel.MaxPrice is null || filterModel.MaxPrice <= component.Price
-                && filterModel.States is null || filterModel.States.Equals(component.Contact.Location.City)
+                && filterModel.MinYear is null || filterModel.MinYear <= component.Year
+                && filterModel.MaxYear is null || filterModel.MaxYear >= component.Year
+                && filterModel.MinPrice is null || filterModel.MinPrice <= component.Price
+                && filterModel.MaxPrice is null || filterModel.MaxPrice >= component.Price
+                && filterModel.States is null || filterModel.States.Contains(component.Contact.Location.City)
                 && filterModel.Conditions is null || filterModel.Conditions.Contains(component.Condition)
                 && filterModel.Countries is null || filterModel.Countries.Contains(component.Contact.Location.Country)
-                && filterModel.MinDate is null || filterModel.MinDate >= component.CreatedDate
-                && filterModel.MaxDate is null || filterModel.MaxDate <= component.CreatedDate
+                && filterModel.MinDate is null || filterModel.MinDate <= component.CreatedDate
+                && filterModel.MaxDate is null || filterModel.MaxDate >= component.CreatedDate
                 ).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
 
-            return result; 
+            return new ValueTask<ICollection<Component>>(result);
         }
 
-        public async ValueTask<ICollection<Component>> SearchFiltered(string keyword, int pageSize = 20, int pageToken = 1)
+        public ValueTask<ICollection<Component>> SearchFiltered(string keyword, int pageSize = 20, int pageToken = 1)
         {
             var foundComponent = _dataContext.Components.Where(component =>
                 component.Model.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                 component.Manufacturer.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                 .Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
-            
-            return foundComponent;
+
+            return new ValueTask<ICollection<Component>>(foundComponent);
         }
     }
 }
