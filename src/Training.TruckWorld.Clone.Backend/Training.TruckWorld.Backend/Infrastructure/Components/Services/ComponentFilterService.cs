@@ -15,22 +15,22 @@ namespace Training.TruckWorld.Backend.Infrastructure.Components.Services
             _dataContext = dataContext;
         }
 
-        public async ValueTask<ICollection<Component>> Getfiltered(ComponentFilterModel filtermodel, int pageSize = 20, int pageToken = 1)
+        public async ValueTask<ICollection<Component>> GetFiltered(ComponentFilterModel filterModel, int pageSize = 20, int pageToken = 1)
         {
 
             var result = _dataContext.Components.Where(component =>
-                filtermodel.Manufacturers is null || filtermodel.Manufacturers.Contains(component.Manufacturer)
-                && filtermodel.ListingTypes is null || filtermodel.ListingTypes.Contains(component.Action)
-                && filtermodel.Categories is null || filtermodel.Categories.Contains(component.Category)
-                && filtermodel.MinYear is null || filtermodel.MinYear >= component.Year
-                && filtermodel.MaxYear is null || filtermodel.MaxYear <= component.Year
-                && filtermodel.MinPrice is null || filtermodel.MinPrice >= component.Price
-                && filtermodel.MaxPrice is null || filtermodel.MaxPrice <= component.Price
-                && filtermodel.States is null || filtermodel.States.Equals(component.Contact.Location.City)
-                && filtermodel.Conditions is null || filtermodel.Conditions.Contains(component.Condition)
-                && filtermodel.Countries is null || filtermodel.Countries.Contains(component.Contact.Location.Country)
-                && filtermodel.MinDate is null || filtermodel.MinDate >= component.CreatedDate
-                && filtermodel.MaxDate is null || filtermodel.MaxDate <= component.CreatedDate
+                filterModel.Manufacturers is null || filterModel.Manufacturers.Contains(component.Manufacturer)
+                && filterModel.ListingTypes is null || filterModel.ListingTypes.Contains(component.Action)
+                && filterModel.Categories is null || filterModel.Categories.Contains(component.Category)
+                && filterModel.MinYear is null || filterModel.MinYear >= component.Year
+                && filterModel.MaxYear is null || filterModel.MaxYear <= component.Year
+                && filterModel.MinPrice is null || filterModel.MinPrice >= component.Price
+                && filterModel.MaxPrice is null || filterModel.MaxPrice <= component.Price
+                && filterModel.States is null || filterModel.States.Equals(component.Contact.Location.City)
+                && filterModel.Conditions is null || filterModel.Conditions.Contains(component.Condition)
+                && filterModel.Countries is null || filterModel.Countries.Contains(component.Contact.Location.Country)
+                && filterModel.MinDate is null || filterModel.MinDate >= component.CreatedDate
+                && filterModel.MaxDate is null || filterModel.MaxDate <= component.CreatedDate
                 ).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
 
             return result; 
