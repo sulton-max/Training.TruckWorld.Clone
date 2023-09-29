@@ -4,5 +4,5 @@ namespace Training.TruckWorld.Backend.Application.Emails.Interfaces;
 
 public interface IEmailSenderService
 {
-    ValueTask<Email> SendEmailAsync(Email email);
+    ValueTask<bool> SendEmailAsync(Email emailMessage);//implement it in EmailSenderService
 }
