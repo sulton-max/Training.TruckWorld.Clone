@@ -68,7 +68,6 @@ public class EmailTemplateService : IEmailTemplateService
         foundEmailTemplate.IsDeleted = true;
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
-        await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;
     }
 }
