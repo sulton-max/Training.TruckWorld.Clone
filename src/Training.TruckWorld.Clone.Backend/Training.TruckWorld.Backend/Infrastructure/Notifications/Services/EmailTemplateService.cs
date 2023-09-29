@@ -44,6 +44,7 @@ public class EmailTemplateService : IEmailTemplateService
             throw new InvalidOperationException("EmailTemplate not found");
         foundEmailTemplate.Subject = emailTemplate.Subject;
         foundEmailTemplate.Body = emailTemplate.Body;
+        foundEmailTemplate.ModifiedDate = DateTime.UtcNow;
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;
@@ -55,6 +56,7 @@ public class EmailTemplateService : IEmailTemplateService
         if (foundEmailTemplate is null)
             throw new InvalidOperationException("You searched emailTemplate not found");
         foundEmailTemplate.IsDeleted = true;
+        foundEmailTemplate.DeletedDate  = DateTime.UtcNow;
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;
@@ -66,6 +68,7 @@ public class EmailTemplateService : IEmailTemplateService
         if (foundEmailTemplate is null)
             throw new InvalidOperationException("You searched emailTemplate not found");
         foundEmailTemplate.IsDeleted = true;
+        foundEmailTemplate.DeletedDate = DateTime.UtcNow;
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;

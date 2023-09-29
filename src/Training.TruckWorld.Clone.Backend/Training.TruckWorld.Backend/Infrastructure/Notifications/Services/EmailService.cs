@@ -37,6 +37,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
                 throw new InvalidOperationException("You searched email not found");
 
             foundEmail.IsDeleted = true;
+            foundEmail.DeletedDate = DateTime.UtcNow;
             if (saveChanges)
                 await _appDataContext.SaveChangesAsync();
 
@@ -51,6 +52,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
                 throw new InvalidOperationException("You searched email not found");
 
             foundEmail.IsDeleted = true;
+            foundEmail.DeletedDate = DateTime.UtcNow;
             if (saveChanges)
                 await _appDataContext.SaveChangesAsync();
 
@@ -89,6 +91,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             foundEmail.Body = email.Body;
             foundEmail.SentTime = email.SentTime;
             foundEmail.IsSent = email.IsSent;
+            foundEmail.ModifiedDate = DateTime.UtcNow;
             if (saveChanges)
                 await _appDataContext.SaveChangesAsync();
             return foundEmail;

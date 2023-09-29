@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
+using Training.TruckWorld.Backend.Domain.Entities;
 
-namespace Training.TruckWorld.Backend.Application.Trucks.Services
+namespace Training.TruckWorld.Backend.Application.Trucks.Services;
+
+public interface ITruckService
 {
-    internal interface ITruckService
-    {
-    }
+    IQueryable<Truck> Get(Expression<Func<Truck, bool>> predicate);
+
+    ValueTask<ICollection<Truck>> GetAsync(IEnumerable<Guid> ids);
+
+    ValueTask<Truck?> GetByIdAsync(Guid id);
+
+    ValueTask<Truck> CreateAsync(Truck truck, bool saveChanges = true, CancellationToken cancellationToken = default);
+
+    ValueTask<Truck> UpdateAsync(Truck truck, bool saveChanges = true, CancellationToken cancellationToken = default);
+
+    ValueTask<Truck> DeleteAsync(Truck truck, bool saveChanges = true, CancellationToken cancellationToken = default);
+
+    ValueTask<Truck> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default);
 }
