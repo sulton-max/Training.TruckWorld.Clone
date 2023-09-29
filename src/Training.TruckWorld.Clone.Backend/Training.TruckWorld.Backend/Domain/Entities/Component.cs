@@ -24,7 +24,7 @@ public class Component : SoftDeletedEntity
 
     public Component(Guid userId, ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight,
-        ComponentCondition condition, string description, ContactUser contact, ListingType listingType, double price)
+        ComponentCondition condition, string description, ContactUser contact, ListingType listingType, decimal price)
     {
         Id = Guid.NewGuid();
         UserId = userId;
