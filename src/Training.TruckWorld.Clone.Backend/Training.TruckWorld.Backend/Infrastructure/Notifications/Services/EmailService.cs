@@ -19,9 +19,9 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             _appDataContext = appDataContext;
         }
 
-        public async ValueTask<Email> CreateAsync(Email email, bool saveChanges = true)
+        public async ValueTask<Email> CreateAsync(Email email, bool saveChanges = true, CancellationToken cancellationToken = default)
         {
-            await _appDataContext.Emails.AddAsync(email);
+            await _appDataContext.Emails.AddAsync(email, cancellationToken);
 
             if (saveChanges)
                 await _appDataContext.SaveChangesAsync();
@@ -29,7 +29,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             return email;
         }
 
-        public async ValueTask<Email> DeleteAsync(Guid id, bool saveChanges = true)
+        public async ValueTask<Email> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
         {
             var foundEmail = await GetByIdAsync(id);
 
@@ -37,12 +37,13 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
                 throw new InvalidOperationException("You searched email not found");
 
             foundEmail.IsDeleted = true;
-            await _appDataContext.SaveChangesAsync();
+            if (saveChanges)
+                await _appDataContext.SaveChangesAsync();
 
             return foundEmail;
         }
 
-        public async ValueTask<Email> DeleteAsync(Email email, bool saveChanges = true)
+        public async ValueTask<Email> DeleteAsync(Email email, bool saveChanges = true, CancellationToken cancellationToken = default)
         {
             var foundEmail = await GetByIdAsync(email.Id);
 
@@ -50,7 +51,8 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
                 throw new InvalidOperationException("You searched email not found");
 
             foundEmail.IsDeleted = true;
-            await _appDataContext.SaveChangesAsync();
+            if (saveChanges)
+                await _appDataContext.SaveChangesAsync();
 
             return foundEmail;
         }
@@ -74,7 +76,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             return new ValueTask<Email?>(email);
         }
 
-        public async ValueTask<Email> UpdateAsync(Email email, bool saveChanges = true)
+        public async ValueTask<Email> UpdateAsync(Email email, bool saveChanges = true, CancellationToken cancellationToken = default)
         {
             var foundEmail = _appDataContext.Emails.FirstOrDefault(searched => searched.Id == email.Id);
 
@@ -87,8 +89,8 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             foundEmail.Body = email.Body;
             foundEmail.SentTime = email.SentTime;
             foundEmail.IsSent = email.IsSent;
-
-            await _appDataContext.SaveChangesAsync();
+            if (saveChanges)
+                await _appDataContext.SaveChangesAsync();
             return foundEmail;
         }
     }
