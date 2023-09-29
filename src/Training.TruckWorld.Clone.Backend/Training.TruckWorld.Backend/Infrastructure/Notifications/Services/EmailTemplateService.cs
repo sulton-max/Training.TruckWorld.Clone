@@ -12,9 +12,9 @@ public class EmailTemplateService : IEmailTemplateService
     {
         _appDateContext = appDateContext;
     }
-    public async ValueTask<EmailTemplate> CreateAsync(EmailTemplate emailTemplate, bool saveChanges = true)
+    public async ValueTask<EmailTemplate> CreateAsync(EmailTemplate emailTemplate, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
-        await _appDateContext.EmailTemplates.AddAsync(emailTemplate);
+        await _appDateContext.EmailTemplates.AddAsync(emailTemplate, cancellationToken);
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
         return emailTemplate;
@@ -37,35 +37,37 @@ public class EmailTemplateService : IEmailTemplateService
         return new ValueTask<ICollection<EmailTemplate>>(emailTemlates.ToList());
     }
 
-    public async ValueTask<EmailTemplate> UpdateAsync(EmailTemplate emailTemplate, bool saveChanges = true)
+    public async ValueTask<EmailTemplate> UpdateAsync(EmailTemplate emailTemplate, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundEmailTemplate = _appDateContext.EmailTemplates.FirstOrDefault(searched => searched.Id == emailTemplate.Id);
         if (foundEmailTemplate is null)
             throw new InvalidOperationException("EmailTemplate not found");
         foundEmailTemplate.Subject = emailTemplate.Subject;
         foundEmailTemplate.Body = emailTemplate.Body;
-
-        await _appDateContext.SaveChangesAsync();
+        if (saveChanges)
+            await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;
     }
 
-    public async ValueTask<EmailTemplate> DeleteAsync(Guid id, bool saveChanges = true)
+    public async ValueTask<EmailTemplate> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundEmailTemplate = await GetByIdAsync(id);
         if (foundEmailTemplate is null)
             throw new InvalidOperationException("You searched emailTemplate not found");
         foundEmailTemplate.IsDeleted = true;
-        await _appDateContext.SaveChangesAsync();
+        if (saveChanges)
+            await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;
     }
 
-    public async ValueTask<EmailTemplate> DeleteAsync(EmailTemplate emailTemplate, bool saveChanges = true)
+    public async ValueTask<EmailTemplate> DeleteAsync(EmailTemplate emailTemplate, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundEmailTemplate = await GetByIdAsync(emailTemplate.Id);
         if (foundEmailTemplate is null)
             throw new InvalidOperationException("You searched emailTemplate not found");
-
-        await _appDateContext.SaveChangesAsync();
+        foundEmailTemplate.IsDeleted = true;
+        if (saveChanges)
+            await _appDateContext.SaveChangesAsync();
         return foundEmailTemplate;
     }
 }
