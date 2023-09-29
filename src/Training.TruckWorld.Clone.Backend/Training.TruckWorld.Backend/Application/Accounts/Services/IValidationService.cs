@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Training.TruckWorld.Backend.Domain.Entities;
 
-namespace Training.TruckWorld.Backend.Application.Accounts.Services
+namespace Training.TruckWorld.Backend.Application.Accounts.Services;
+
+public interface IValidationService
 {
-    internal class IValidationService
-    {
-    }
+    bool IsValidFullName(string name);
+    bool IsValidEmailAddress(string email);
+    bool IsValidPhoneNumber(string phoneNumber);
+    bool IsValidStuffs(string stuff);
+    bool IsValidTruckCategory(TruckCategory category);
+    bool IsValidComponentCategory(ComponentCategory category);
+    bool IsValidDescription(string description);
+    bool IsValidName(string name);
 }
