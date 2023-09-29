@@ -17,14 +17,14 @@ public class Component : SoftDeletedEntity
     public ComponentCondition Condition { get; set; }
     public string Description { get; set; }
     public ListingType ListingType { get; set; }
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public ContactUser Contact { get; set; }
     
     public Component() { }
 
     public Component(Guid userId, ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight,
-        ComponentCondition condition, string description, ContactUser contact, ListingType listingType, double price)
+        ComponentCondition condition, string description, ContactUser contact, ListingType listingType, decimal price)
     {
         Id = Guid.NewGuid();
         UserId = userId;
