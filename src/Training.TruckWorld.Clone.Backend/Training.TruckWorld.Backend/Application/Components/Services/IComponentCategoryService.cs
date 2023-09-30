@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Training.TruckWorld.Backend.Domain.Entities;
 
+
 namespace Training.TruckWorld.Backend.Application.Components.Services;
 
 public interface IComponentCategoryService

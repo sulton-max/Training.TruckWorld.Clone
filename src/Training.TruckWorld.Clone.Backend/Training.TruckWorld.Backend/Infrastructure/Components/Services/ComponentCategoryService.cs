@@ -26,6 +26,7 @@ public class ComponentCategoryService : IComponentCategoryService
         return componentCategory;
     }
 
+
     public async ValueTask<ComponentCategory> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundComponent = await GetByIdAsync(id);
