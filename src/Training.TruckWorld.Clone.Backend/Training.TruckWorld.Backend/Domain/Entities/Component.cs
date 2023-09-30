@@ -1,10 +1,11 @@
+using Training.TruckWorld.Backend.Application.Products.Interfaces;
 using Training.TruckWorld.Backend.Domain.Common;
 using Training.TruckWorld.Backend.Domain.Enums;
 using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
 
 namespace Training.TruckWorld.Backend.Domain.Entities;
 
-public class Component : SoftDeletedEntity
+public class Component : SoftDeletedEntity, IProduct
 {
     public Guid UserId { get; set; }
     public ComponentCategory Category { get; set; }

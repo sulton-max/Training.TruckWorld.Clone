@@ -1,9 +1,10 @@
-﻿using Training.TruckWorld.Backend.Domain.Common;
+﻿using Training.TruckWorld.Backend.Application.Products.Interfaces;
+using Training.TruckWorld.Backend.Domain.Common;
 using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
 
 namespace Training.TruckWorld.Backend.Domain.Entities;
 
-public class Truck: SoftDeletedEntity
+public class Truck: SoftDeletedEntity, IProduct
 {
     public Guid UserId { get; set; }
     public string SerialNumber { get; set; }
@@ -14,14 +15,14 @@ public class Truck: SoftDeletedEntity
     public TruckCondition Condition { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
-    public double Odometer { get; set; }
+    public decimal Odometer { get; set; }
     public ListingType ListingType { get; set; }
     public string? EngineType { get; set; }
     public string? FuelType { get; set; }
     public string? Color { get; set; }
     public ContactUser ContactUser { get; set; }
     public Truck(){}
-    public Truck(Guid userId, string serialNumber, string manufacturer, string model, TruckCategory category, int year, TruckCondition condition, string description, double price, double odometer, ListingType listingType, string? engineType, string? fuelType, string? color, ContactUser contactUser)
+    public Truck(Guid userId, string serialNumber, string manufacturer, string model, TruckCategory category, int year, TruckCondition condition, string description, decimal price, decimal odometer, ListingType listingType, string? engineType, string? fuelType, string? color, ContactUser contactUser)
     {
         Id = Guid.NewGuid();
         UserId = userId;

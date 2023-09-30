@@ -6,6 +6,7 @@ namespace Training.TruckWorld.Backend.Application.Components.Models.Filters;
 
 public class ComponentFilterModel
 {
+    public string? Keyword { get; set; }
     public IEnumerable<ComponentCategory>? Categories { get; set; }
     public IEnumerable<ListingType>? ListingTypes { get; set; }
     public IEnumerable<string>? Manufacturers { get; set; }

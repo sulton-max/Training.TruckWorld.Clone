@@ -37,4 +37,14 @@ public class ComponentFilterDataModel
     /// </summary>
     public IEnumerable<KeyValuePair<string, string>> Countries { get; set; }
 
+
+    public ComponentFilterDataModel(IEnumerable<KeyValuePair<string, ComponentCategory>> categories, IEnumerable<KeyValuePair<string, ListingType>> listingTypes, IEnumerable<KeyValuePair<string, string>> manufacturers, IEnumerable<KeyValuePair<string, string>> states, IEnumerable<KeyValuePair<string, ComponentCondition>> conditions, IEnumerable<KeyValuePair<string, string>> countries)
+    {
+        Categories = categories;
+        ListingTypes = listingTypes;
+        Manufacturers = manufacturers;
+        States = states;
+        Conditions = conditions;
+        Countries = countries;
+    }
 }
