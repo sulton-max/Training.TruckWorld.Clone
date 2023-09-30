@@ -11,5 +11,4 @@ public interface IValidationService
     bool IsValidTruckCategory(TruckCategory category);
     bool IsValidComponentCategory(ComponentCategory category);
     bool IsValidDescription(string description);
-    bool IsValidName(string name);
 }
