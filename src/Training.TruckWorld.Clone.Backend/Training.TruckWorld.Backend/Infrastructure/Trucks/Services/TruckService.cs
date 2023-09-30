@@ -17,6 +17,7 @@ public class TruckService : ITruckService
     }
     public async ValueTask<Truck> CreateAsync(Truck truck, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
+        ToValidate(truck);
         _appDataContext.Trucks.AddAsync(truck, cancellationToken);
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
@@ -64,17 +65,13 @@ public class TruckService : ITruckService
         return new ValueTask<Truck?>(foundTruck);
     }
 
-    public ValueTask<Truck?> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async ValueTask<Truck> UpdateAsync(Truck truck, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundTruck = _appDataContext.Trucks.FirstOrDefault(searchingTruck => searchingTruck.Id == truck.Id);
 
         if (foundTruck is null)
             throw new InvalidOperationException("Truck not found");
+        ToValidate(truck);
 
         foundTruck.UserId = truck.UserId;
         foundTruck.SerialNumber = truck.SerialNumber;
@@ -95,6 +92,22 @@ public class TruckService : ITruckService
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
         return foundTruck;
+    }
+    private Truck ToValidate(Truck truck)
+    {
+        if (!_validationService.IsValidTruckCategory(truck.Category))
+            throw new Exception("Invalid Category");
+        if (!_validationService.IsValidDescription(truck.Description))
+            throw new Exception("Invalid Description");
+        if (!_validationService.IsValidEmailAddress(truck.ContactUser.EmailAddress))
+            throw new Exception("Invalid EmaildAddress");
+        if (!_validationService.IsValidStuffs(truck.Manufacturer))
+            throw new Exception("Invalid Manufacturer");
+        if (!_validationService.IsValidStuffs(truck.Model))
+            throw new Exception("Invalid Model");
+        if (!_validationService.IsValidStuffs(truck.SerialNumber))
+            throw new Exception("Invalid SerialNumber");
+        return truck;
     }
 
 }

@@ -9,7 +9,7 @@ public interface ITruckService
 
     ValueTask<ICollection<Truck>> GetAsync(IEnumerable<Guid> ids);
 
-    ValueTask<Truck?> GetByIdAsync(Guid id);
+    ValueTask<Truck?> GetByIdAsync(Guid id, CancellationToken cancellation = default);
 
     ValueTask<Truck> CreateAsync(Truck truck, bool saveChanges = true, CancellationToken cancellationToken = default);
 
