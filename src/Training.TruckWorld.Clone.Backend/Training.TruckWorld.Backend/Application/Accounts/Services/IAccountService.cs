@@ -9,12 +9,8 @@ namespace Training.TruckWorld.Backend.Application.Accounts.Services
 {
     public interface IAccountService
     {
-
-
-
         public ValueTask<User> RegisterUserAsync(string firstName, string lastName, string emailAddress, string password, CancellationToken cancellationToken = default);
 
         public ValueTask<User> LoginAsync(string emailAddress, string password);
-
     }
 }
