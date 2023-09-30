@@ -2,7 +2,7 @@
 
 using Training.TruckWorld.Backend.Domain.Entities;
 
-namespace Training.TruckWorld.Backend.Application.Trucks.Models.Interface;
+namespace Training.TruckWorld.Backend.Application.Trucks.Services;
 
 public interface ITruckCategoryService
 {

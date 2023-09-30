@@ -41,7 +41,7 @@ public class TruckCategoryService : ITruckCategoryService
         {
             await _appDataContext.SaveChangesAsync();
         }
-        return founded;
+        return  founded;
     }
 
     //Delete
