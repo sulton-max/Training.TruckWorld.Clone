@@ -1,13 +1,12 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using Training.TruckWorld.Backend.Application.Notifications.Services;
-using Training.TruckWorld.Backend.Domain.Entities;
-
+using Training.TruckWorld.Backend.Infrastructure.Notifications.Models;
 namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
 
 public class EmailSenderService : IEmailSenderService
 {
-    public async ValueTask<bool> SendEmailAsync(Email emailMessage)
+    public async ValueTask<bool> SendEmailAsync(EmailMessage emailMessage)
     {
         var sendEmailMessage = false;
 
@@ -15,7 +14,7 @@ public class EmailSenderService : IEmailSenderService
         {
             using (var smtp = new SmtpClient("smpt.gmail.com", 587))
             {
-                smtp.Credentials = new NetworkCredential("username", "password");
+                smtp.Credentials = new NetworkCredential("sultonbek.rakhimov.recovery@gmail.com", "szabguksrhwsbtie");
 
                 smtp.EnableSsl = true;
 
