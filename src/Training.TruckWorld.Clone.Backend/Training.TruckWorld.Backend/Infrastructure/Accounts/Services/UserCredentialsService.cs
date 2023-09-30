@@ -2,7 +2,6 @@
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Exceptions;
-using Training.TruckWorld.Backend.Domain.Exceptions.UserCredentialsExceptions;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services;

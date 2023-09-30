@@ -1,3 +1,7 @@
+using FileBaseContext.Context.Models.Configurations;
+using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Persistence.DataContexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
