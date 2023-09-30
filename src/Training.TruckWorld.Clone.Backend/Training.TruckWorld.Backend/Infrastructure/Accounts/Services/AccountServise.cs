@@ -21,32 +21,25 @@ namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services
     {
         private readonly IDataContext _appDataContext;
         private readonly IUserCredentialsService _userCredentialsService;
-        private readonly IValidationService _validationService;
         private readonly UserCredentials _userCredentials;
         private readonly IPasswordHasherService _passwordHasherService;
 
 
         
-        public AccountServise(IDataContext appDataContext, IUserCredentialsService userCredentialsService, IValidationService validationService, UserCredentials userCredentials, IPasswordHasherService passwordHasherService)
+        public AccountServise(IDataContext appDataContext, IUserCredentialsService userCredentialsService,  UserCredentials userCredentials, IPasswordHasherService passwordHasherService)
         {
             _appDataContext = appDataContext;
             _userCredentialsService = userCredentialsService;
-            _validationService = validationService;
             _userCredentials = userCredentials;
             _passwordHasherService = passwordHasherService;
             
         }
 
-        public async ValueTask<UserCredentials> RegisterUserAsync(string firstName, string lastName, string emailAddress, string password, CancellationToken cancellationToken = default)
+        public async ValueTask<User> RegisterUserAsync(string firstName, string lastName, string emailAddress, string password, CancellationToken cancellationToken = default)
         {
             if (_appDataContext.Users.Any(user => user.EmailAddress == emailAddress))
             {
                 throw new UserAlreadyExistsException("User with this email address already exists.");
-            }
-
-            if (!_validationService.IsValidEmailAddress(emailAddress) || !_validationService.IsValidFullName(firstName) || !_validationService.IsValidFullName(lastName))
-            {
-                throw new ValidationException("Invalid email address, first name, or last name.");
             }
 
 
@@ -60,7 +53,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services
             await _appDataContext.Users.AddAsync(user);
 
           
-            return userCredentials;
+            return user;
         }
 
 
@@ -84,28 +77,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services
             return user;
         }
 
-
-
-        public async ValueTask<User> LogoutDeleteAsync(Guid userId)
-        {
-            var user = _appDataContext.Users.FirstOrDefault(user => user.Id == userId);
-
-            if (user == null)
-            {
-                throw new UserNotFoundException("User not found.");
-            }
-
-            if (user is ISoftDeletedEntity softDeletedEntity)
-            {
-                softDeletedEntity.IsDeleted = true;
-                softDeletedEntity.DeletedDate = DateTimeOffset.UtcNow;
-            }
-
-            return user;
-        }
     }
-
-   
     
 }
 
