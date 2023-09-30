@@ -11,10 +11,5 @@
       <PackageReference Include="Max.FileBaseContext.Context" Version="0.0.4" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application\Trucks\Services\" />
-      <Folder Include="Infrastructure\Trucks\Services\" />
-    </ItemGroup>
-
 
 </Project>
