@@ -25,7 +25,6 @@ public class ValidationService : IValidationService
             return true;
         return false;
     }
-    public bool IsValidName(string name) => !string.IsNullOrWhiteSpace(name) && name.Equals(name.ToCapitalized());
     public bool IsValidPhoneNumber(string phoneNumber) => !string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.Any(item => Char.IsDigit(item));
     public bool IsValidStuffs(string stuff) => !string.IsNullOrWhiteSpace(stuff);
     public bool IsValidTruckCategory(TruckCategory category) => _appDataContext.TruckCategories.Contains(category);
