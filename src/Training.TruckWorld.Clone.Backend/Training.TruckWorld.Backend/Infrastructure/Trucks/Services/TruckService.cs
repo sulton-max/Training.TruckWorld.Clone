@@ -3,6 +3,7 @@ using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
+using Training.TruckWorld.Backend.Domain.Exceptions;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Trucks.Services;
 
@@ -27,8 +28,10 @@ public class TruckService : ITruckService
     public async ValueTask<Truck> DeleteAsync(Truck truck, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundTruck = await GetByIdAsync(truck.Id, cancellationToken);
-        if (foundTruck != null)
-            throw new InvalidOperationException("Truck not found");
+        if (foundTruck is null)
+            throw new EntityNotFoundException(typeof(Truck), foundTruck.Id);
+        if (foundTruck.IsDeleted)
+            throw new EntityDeletedException(typeof(Truck), foundTruck.Id);
         foundTruck.IsDeleted = true;
         foundTruck.DeletedDate = DateTime.UtcNow;
         if (saveChanges)
@@ -39,8 +42,10 @@ public class TruckService : ITruckService
     public async ValueTask<Truck> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundTruck = await GetByIdAsync(id, cancellationToken);
-        if (foundTruck != null)
-            throw new InvalidOperationException("Truck not found");
+        if (foundTruck is null)
+            throw new EntityNotFoundException(typeof(Truck), foundTruck.Id);
+        if (foundTruck.IsDeleted)
+            throw new EntityDeletedException(typeof(Truck), foundTruck.Id);
         foundTruck.IsDeleted = true;
         foundTruck.DeletedDate = DateTime.UtcNow;
         if (saveChanges)
@@ -70,7 +75,7 @@ public class TruckService : ITruckService
         var foundTruck = _appDataContext.Trucks.FirstOrDefault(searchingTruck => searchingTruck.Id == truck.Id);
 
         if (foundTruck is null)
-            throw new InvalidOperationException("Truck not found");
+            throw new EntityNotFoundException(typeof(Truck), foundTruck.Id);
         ToValidate(truck);
 
         foundTruck.UserId = truck.UserId;
@@ -96,17 +101,17 @@ public class TruckService : ITruckService
     private Truck ToValidate(Truck truck)
     {
         if (!_validationService.IsValidTruckCategory(truck.Category))
-            throw new Exception("Invalid Category");
+            throw new InvalidEntityException(typeof(Truck), truck.Id,"Invalid Category");
         if (!_validationService.IsValidDescription(truck.Description))
-            throw new Exception("Invalid Description");
+            throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Description");
         if (!_validationService.IsValidEmailAddress(truck.ContactUser.EmailAddress))
-            throw new Exception("Invalid EmaildAddress");
+            throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid EmaildAddress");
         if (!_validationService.IsValidStuffs(truck.Manufacturer))
-            throw new Exception("Invalid Manufacturer");
+            throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Manufacturer");
         if (!_validationService.IsValidStuffs(truck.Model))
-            throw new Exception("Invalid Model");
+            throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Model");
         if (!_validationService.IsValidStuffs(truck.SerialNumber))
-            throw new Exception("Invalid SerialNumber");
+            throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid SerialNumber");
         return truck;
     }
 

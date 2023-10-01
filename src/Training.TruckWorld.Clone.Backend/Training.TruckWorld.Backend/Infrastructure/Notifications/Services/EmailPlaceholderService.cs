@@ -1,7 +1,9 @@
 ﻿using System.Data;
 using System.Text;
+using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Notifications.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Exceptions;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
 
@@ -24,7 +26,9 @@ public class EmailPlaceholderService : IEmailPlaceholderService
     {
         var placeholders = GetPlaceholders(template.Body);
 
-        var user = await _userService.GetByIdAsync(userId) ?? throw new ArgumentException();
+        var user = await _userService.GetByIdAsync(userId);
+        if(user is null)
+            throw new EntityNotFoundException(typeof(User), user.Id);
 
         var result = placeholders.Select(placeholder =>
         {

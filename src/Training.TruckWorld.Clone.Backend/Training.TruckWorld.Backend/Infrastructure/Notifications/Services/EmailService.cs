@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using Training.TruckWorld.Backend.Application.Notifications.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
+using Training.TruckWorld.Backend.Domain.Exceptions;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
 {
@@ -34,7 +30,10 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             var foundEmail = await GetByIdAsync(id);
 
             if (foundEmail is null)
-                throw new InvalidOperationException("You searched email not found");
+                throw new EntityNotFoundException(typeof(Email), foundEmail.Id);
+
+            if(foundEmail.IsDeleted)
+                throw new EntityDeletedException(typeof(Email), foundEmail.Id);
 
             foundEmail.IsDeleted = true;
             foundEmail.DeletedDate = DateTime.UtcNow;
@@ -49,7 +48,10 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             var foundEmail = await GetByIdAsync(email.Id);
 
             if (foundEmail is null)
-                throw new InvalidOperationException("You searched email not found");
+                throw new EntityNotFoundException(typeof(Email), foundEmail.Id);
+
+            if (foundEmail.IsDeleted)
+                throw new EntityDeletedException(typeof(Email), foundEmail.Id);
 
             foundEmail.IsDeleted = true;
             foundEmail.DeletedDate = DateTime.UtcNow;
@@ -83,7 +85,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             var foundEmail = _appDataContext.Emails.FirstOrDefault(searched => searched.Id == email.Id);
 
             if (foundEmail is null)
-                throw new InvalidOperationException("Email not found");
+                throw new EntityNotFoundException(typeof(Email), foundEmail.Id);
 
             foundEmail.SenderAddress = email.SenderAddress;
             foundEmail.ReceiverAddress = email.ReceiverAddress;
