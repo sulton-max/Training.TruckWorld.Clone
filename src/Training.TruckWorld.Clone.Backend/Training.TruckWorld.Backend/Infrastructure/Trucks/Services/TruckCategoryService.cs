@@ -2,6 +2,7 @@
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
+using Training.TruckWorld.Backend.Domain.Exceptions;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Trucks.Services;
 
@@ -32,11 +33,13 @@ public class TruckCategoryService : ITruckCategoryService
     public async ValueTask<TruckCategory> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var founded = _appDataContext.TruckCategories.FirstOrDefault(x => x.Id == id);
-        if (founded != null)
-        {
-            founded.IsDeleted = true;
-            founded.DeletedDate = DateTime.UtcNow;
-        }
+        if (founded is null)
+            throw new EntityNotFoundException(typeof(TruckCategory), founded.Id);
+        if (founded.IsDeleted)
+            throw new EntityDeletedException(typeof(TruckCategory), founded.Id);
+
+        founded.IsDeleted = true;
+        founded.DeletedDate = DateTime.UtcNow;
         if (saveChanges)
         {
             await _appDataContext.SaveChangesAsync();
@@ -49,11 +52,11 @@ public class TruckCategoryService : ITruckCategoryService
     {
 
         var founded = _appDataContext.TruckCategories.FirstOrDefault(x => x.Id == truckCategory.Id);
-        if(founded is null)
-        {
-            throw new InvalidOperationException("not found");
-        }
-       
+        if (founded is null)
+            throw new EntityNotFoundException(typeof(TruckCategory), founded.Id);
+        if (founded.IsDeleted)
+            throw new EntityDeletedException(typeof(TruckCategory), founded.Id);
+
         founded.IsDeleted = true;
         
         founded.DeletedDate = DateTime.UtcNow;
@@ -93,7 +96,7 @@ public class TruckCategoryService : ITruckCategoryService
 
         if(founded is null)
         {
-            throw new InvalidOperationException("not found");
+            throw new EntityNotFoundException(typeof(TruckCategory), founded.Id);
         }
 
         founded.Name = truckCategory.Name;

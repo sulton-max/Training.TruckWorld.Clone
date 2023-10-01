@@ -2,7 +2,7 @@
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
-using Training.TruckWorld.Backend.Domain.Enums;
+using Training.TruckWorld.Backend.Domain.Exceptions;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Components.Services;
@@ -29,7 +29,9 @@ public class ComponentService : IComponentService
     {
         var foundComponent = await GetByIdAsync(component.Id, cancellationToken);
         if (foundComponent != null)
-            throw new InvalidOperationException("Component not found");
+            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
+        if (foundComponent.IsDeleted)
+            throw new EntityDeletedException(typeof(Component), foundComponent.Id);
         foundComponent.IsDeleted = true;
         foundComponent.DeletedDate = DateTime.UtcNow;
         if (saveChanges)
@@ -41,7 +43,10 @@ public class ComponentService : IComponentService
     {
         var foundComponent = await GetByIdAsync(id, cancellationToken);
         if (foundComponent != null)
-            throw new InvalidOperationException("Component not found");
+            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
+        if (foundComponent.IsDeleted)
+            throw new EntityDeletedException(typeof(Component), foundComponent.Id);
+
         foundComponent.IsDeleted = true;
         foundComponent.DeletedDate = DateTime.UtcNow;
         if (saveChanges)
@@ -70,7 +75,7 @@ public class ComponentService : IComponentService
         var foundComponent = _appDataContext.Components.FirstOrDefault(searchingComponent => searchingComponent.Id == component.Id);
 
         if (foundComponent is null)
-            throw new InvalidOperationException("Truck not found");
+            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
 
         ToValidate(foundComponent);
 
@@ -95,17 +100,17 @@ public class ComponentService : IComponentService
     private Component ToValidate(Component component)
     {
         if (!_validationService.IsValidComponentCategory(component.Category))
-            throw new Exception("Invalid Category");
+            throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Category");
         if (!_validationService.IsValidDescription(component.Description))
-            throw new Exception("Invalid Description");
+            throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Description");
         if (!_validationService.IsValidEmailAddress(component.Contact.EmailAddress))
-            throw new Exception("Invalid EmaildAddress");
+            throw new InvalidEntityException(typeof(Component), component.Id, "Invalid EmailAddress");
         if (!_validationService.IsValidStuffs(component.Manufacturer))
-            throw new Exception("Invalid Manufacturer");
+            throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Manufacturer");
         if (!_validationService.IsValidStuffs(component.Model))
-            throw new Exception("Invalid Model");
-        if (!_validationService.IsValidStuffs(component.SerialNumber)) 
-            throw new Exception("Invalid SerialNumber");
+            throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Model");
+        if (!_validationService.IsValidStuffs(component.SerialNumber))
+            throw new InvalidEntityException(typeof(Component), component.Id, "Invalid SerialNumber");
         return component;
     }
 }

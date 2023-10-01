@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Net;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Exceptions;
@@ -42,10 +43,10 @@ public class UserCredentialsService : IUserCredentialsService
         var credentials = await GetByIdAsync(id);
 
         if (credentials == null)
-            throw new UserCredentialsNotFoundException("User credentials not found!");
+            throw new EntityNotFoundException(typeof(UserCredentials), credentials.Id);
 
         if (credentials.IsDeleted)
-            throw new UserCredentialsAlreadyDeletedException("User credentials already deleted!");
+            throw new EntityDeletedException(typeof(UserCredentials), credentials.Id);
 
         credentials.IsDeleted = true;
         credentials.DeletedDate = DateTime.UtcNow;
@@ -86,12 +87,12 @@ public class UserCredentialsService : IUserCredentialsService
     private bool ValidateOnCreate(UserCredentials userCredentials)
     {
         if (UserCredentialsExists(userCredentials.Id))
-            throw new UserCredentialsAlreadyExistsException("User credentials already exists !");
+            throw new ExistingEntityException(typeof(UserCredentials), userCredentials.Id);
 
         if (_appDataContext.UserCredentials.Any(credentials => credentials.UserId == userCredentials.UserId))
-            throw new UserAlreadyHasCredentialsException("The given user already has credentials!");
+            throw new ExistingEntityException(typeof(UserCredentials), userCredentials.Id);
 
-        ValidatePassword(userCredentials.Password);
+        ValidatePassword(userCredentials);
         return true;
     }
 
@@ -99,20 +100,20 @@ public class UserCredentialsService : IUserCredentialsService
     {
         if (!UserCredentialsExists(userCredentials.Id))
         {
-            throw new UserCredentialsNotFoundException("user credentials not found!");
+            throw new EntityNotFoundException(typeof(UserCredentials), userCredentials.Id);
         }
 
-        ValidatePassword(userCredentials.Password);
+        ValidatePassword(userCredentials);
         return true;
     }
 
     private bool UserCredentialsExists(Guid id)
         => _appDataContext.UserCredentials.Any(credentials => credentials.Id == id);
 
-    private bool ValidatePassword(string password)
+    private bool ValidatePassword(UserCredentials userCredentials)
     {
-        if (password.Length < 8)
-            throw new InvalidPasswordException("Password must contain at least 8 characters!");
+        if (userCredentials.Password.Length < 8)
+            throw new InvalidEntityException(typeof(UserCredentials), userCredentials.Id, "Invalid Password");
 
         return true;
     }

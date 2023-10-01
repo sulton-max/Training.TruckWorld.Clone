@@ -2,6 +2,7 @@
 using Training.TruckWorld.Backend.Application.Notifications.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
+using Training.TruckWorld.Backend.Domain.Exceptions;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
 
@@ -41,7 +42,7 @@ public class EmailTemplateService : IEmailTemplateService
     {
         var foundEmailTemplate = _appDateContext.EmailTemplates.FirstOrDefault(searched => searched.Id == emailTemplate.Id);
         if (foundEmailTemplate is null)
-            throw new InvalidOperationException("EmailTemplate not found");
+            throw new EntityNotFoundException(typeof(EmailTemplate), foundEmailTemplate.Id);
         foundEmailTemplate.Subject = emailTemplate.Subject;
         foundEmailTemplate.Body = emailTemplate.Body;
         foundEmailTemplate.ModifiedDate = DateTime.UtcNow;
@@ -54,7 +55,11 @@ public class EmailTemplateService : IEmailTemplateService
     {
         var foundEmailTemplate = await GetByIdAsync(id);
         if (foundEmailTemplate is null)
-            throw new InvalidOperationException("You searched emailTemplate not found");
+            throw new EntityNotFoundException(typeof(EmailTemplate), foundEmailTemplate.Id);
+
+        if (foundEmailTemplate.IsDeleted)
+            throw new EntityDeletedException(typeof(EmailTemplate), foundEmailTemplate.Id);
+
         foundEmailTemplate.IsDeleted = true;
         foundEmailTemplate.DeletedDate  = DateTime.UtcNow;
         if (saveChanges)
@@ -66,7 +71,11 @@ public class EmailTemplateService : IEmailTemplateService
     {
         var foundEmailTemplate = await GetByIdAsync(emailTemplate.Id);
         if (foundEmailTemplate is null)
-            throw new InvalidOperationException("You searched emailTemplate not found");
+            throw new EntityNotFoundException(typeof(EmailTemplate), foundEmailTemplate.Id);
+
+        if (foundEmailTemplate.IsDeleted)
+            throw new EntityDeletedException(typeof(EmailTemplate), foundEmailTemplate.Id);
+
         foundEmailTemplate.IsDeleted = true;
         foundEmailTemplate.DeletedDate = DateTime.UtcNow;
         if (saveChanges)

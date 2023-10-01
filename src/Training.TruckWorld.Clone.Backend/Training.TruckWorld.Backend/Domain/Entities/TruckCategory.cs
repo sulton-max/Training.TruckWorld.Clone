@@ -9,12 +9,11 @@ namespace Training.TruckWorld.Backend.Domain.Entities;
 
 public class TruckCategory : SoftDeletedEntity
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public TruckCategory() { }
-    public TruckCategory(int id, string name)
+    public TruckCategory(string name)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
         CreatedDate = DateTime.UtcNow;
     }

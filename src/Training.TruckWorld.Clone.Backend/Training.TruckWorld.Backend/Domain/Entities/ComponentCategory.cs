@@ -5,12 +5,11 @@ namespace Training.TruckWorld.Backend.Domain.Entities;
 
 public class ComponentCategory : SoftDeletedEntity
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public ComponentCategory() { }
-    public ComponentCategory(int id, string name)
+    public ComponentCategory(string name)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
         CreatedDate = DateTime.UtcNow;
     }

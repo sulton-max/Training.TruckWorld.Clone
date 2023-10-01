@@ -2,6 +2,7 @@
 
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Exceptions;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Components.Services;
@@ -33,8 +34,11 @@ public class ComponentCategoryService : IComponentCategoryService
 
         if (foundComponent is null)
         {
-            throw new InvalidOperationException("not found");
+            throw new EntityNotFoundException(typeof(ComponentCategory), foundComponent.Id);
         }
+        if (foundComponent.IsDeleted)
+            throw new EntityDeletedException(typeof(ComponentCategory), foundComponent.Id);
+
         foundComponent.IsDeleted = true;
 
         foundComponent.DeletedDate = DateTime.UtcNow;
@@ -51,9 +55,14 @@ public class ComponentCategoryService : IComponentCategoryService
 
         if (foundComponent == null)
         {
-            throw new InvalidOperationException("not found");
+            throw new EntityNotFoundException(typeof(ComponentCategory), foundComponent.Id);
         }
+        if (foundComponent.IsDeleted)
+            throw new EntityDeletedException(typeof(ComponentCategory), foundComponent.Id);
 
+        foundComponent.IsDeleted = true;
+
+        foundComponent.DeletedDate = DateTime.UtcNow;
         await _appDataContext.SaveChangesAsync();
 
         return foundComponent;
@@ -84,7 +93,7 @@ public class ComponentCategoryService : IComponentCategoryService
 
         if (componentCategorys is null)
         {
-            throw new InvalidOperationException("not found");
+            throw new EntityNotFoundException(typeof(ComponentCategory), componentCategory.Id);
         }
 
         componentCategorys.ModifiedDate = DateTime.UtcNow;
