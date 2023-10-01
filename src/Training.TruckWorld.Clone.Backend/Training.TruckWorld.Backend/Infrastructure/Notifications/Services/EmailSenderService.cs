@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using Training.TruckWorld.Backend.Application.Notifications.Services;
-using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Notifications.Models;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
 
 public class EmailSenderService : IEmailSenderService
 {
-    public async ValueTask<bool> SendEmailAsync(Email emailMessage)
+    public async ValueTask<bool> SendEmailAsync(EmailMessage emailMessage)
     {
         var sendEmailMessage = false;
 
