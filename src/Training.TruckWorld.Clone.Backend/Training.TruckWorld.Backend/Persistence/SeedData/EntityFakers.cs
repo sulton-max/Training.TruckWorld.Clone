@@ -10,7 +10,7 @@ internal static class EntityFakers
     internal static Faker<User> GetUserFaker(IDataContext context)
     {
         return new Faker<User>()
-            .RuleFor(user => user.Id, Guid.NewGuid())
+            .RuleFor(user => user.Id, Guid.NewGuid)
             .RuleFor(user => user.FirstName, faker => faker.Person.FirstName)
             .RuleFor(user => user.LastName, faker => faker.Person.LastName)
             .RuleFor(user => user.EmailAddress, faker => faker.Person.Email);
@@ -28,7 +28,7 @@ internal static class EntityFakers
         var random = new Random();
         var user = new Faker().PickRandom(context.Users.Select(user => user));
         return new Faker<Truck>()
-            .RuleFor(truck => truck.Id, Guid.NewGuid())
+            .RuleFor(truck => truck.Id, Guid.NewGuid)
             .RuleFor(truck => truck.UserId, user.Id)
             .RuleFor(truck => truck.SerialNumber, faker => faker.Lorem.Word())
             .RuleFor(truck => truck.Manufacturer, faker => faker.Company.CompanyName())
@@ -41,7 +41,7 @@ internal static class EntityFakers
             .RuleFor(truck => truck.Odometer, random.Next(1000, 10000))
             .RuleFor(truck => truck.ListingType, (ListingType)random.Next(0, 2))
             .RuleFor(truck => truck.ContactUser, faker => new Faker<ContactUser>()
-            .RuleFor(contact => contact.Id, Guid.NewGuid())
+            .RuleFor(contact => contact.Id, Guid.NewGuid)
             .RuleFor(contact => contact.UserId, user.Id)
             .RuleFor(context => context.FirstName, user.FirstName)
             .RuleFor(contact => contact.LastName, user.LastName)
@@ -59,7 +59,7 @@ internal static class EntityFakers
         var random = new Random();
         var user = new Faker().PickRandom(context.Users.Select(user => user));
         return new Faker<Component>()
-            .RuleFor(component => component.Id, Guid.NewGuid())
+            .RuleFor(component => component.Id, Guid.NewGuid)
             .RuleFor(component => component.UserId, user.Id)
             .RuleFor(component => component.SerialNumber, faker => faker.Lorem.Word())
             .RuleFor(component => component.Manufacturer, faker => faker.Company.CompanyName())
@@ -73,7 +73,7 @@ internal static class EntityFakers
             .RuleFor(component => component.Quantity, random.Next(1, 100))
             .RuleFor(component => component.Weight, random.Next(1, 100))
             .RuleFor(component => component.Contact, faker => new Faker<ContactUser>()
-            .RuleFor(contact => contact.Id, Guid.NewGuid())
+            .RuleFor(contact => contact.Id, Guid.NewGuid)
             .RuleFor(contact => contact.UserId, user.Id)
             .RuleFor(context => context.FirstName, user.FirstName)
             .RuleFor(contact => contact.LastName, user.LastName)
