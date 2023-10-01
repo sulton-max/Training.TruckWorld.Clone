@@ -10,6 +10,7 @@ namespace Training.TruckWorld.Backend.Domain.Entities;
 public class TruckCategory : SoftDeletedEntity
 {
     public string Name { get; set; }
+    
     public TruckCategory() { }
     public TruckCategory(string name)
     {

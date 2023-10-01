@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 public enum TruckCondition : byte
 {
     New, 
+    
     Used,
+    
     Salvaged,
+    
     Wrecking
 }
