@@ -3,5 +3,6 @@
 public enum ListingType
 {
     Sale,
+    
     Hire
 }

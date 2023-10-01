@@ -6,8 +6,11 @@ namespace Training.TruckWorld.Backend.Domain.Entities;
 public class User : SoftDeletedEntity
 {
     public string FirstName { get; set; }
+    
     public string LastName { get; set; }
+    
     public string EmailAddress { get; set; }
+    
 
     public User() { }
 
