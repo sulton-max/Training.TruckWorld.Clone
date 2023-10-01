@@ -6,7 +6,9 @@ namespace Training.TruckWorld.Backend.Domain.Entities;
 public class ComponentCategory : SoftDeletedEntity
 {
     public string Name { get; set; }
+    
     public ComponentCategory() { }
+    
     public ComponentCategory(string name)
     {
         Id = Guid.NewGuid();

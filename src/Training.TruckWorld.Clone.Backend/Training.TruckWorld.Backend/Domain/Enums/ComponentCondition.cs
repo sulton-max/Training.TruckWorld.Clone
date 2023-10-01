@@ -3,8 +3,12 @@
 public enum ComponentCondition : byte
 {
     Core,
+    
     New,
+    
     Rebuilt,
+    
     Salvaged,
+    
     Used
 }
