@@ -6,6 +6,8 @@ public class ExistingEntityException : Exception
     
     public Guid? Id { get; set; }
 
+    public Guid? Id { get; set; }
+    
     public ExistingEntityException(Type type, Guid? id = default)
         : base($"Entity of type : {type} with ID {id} is already exist!")
     {
