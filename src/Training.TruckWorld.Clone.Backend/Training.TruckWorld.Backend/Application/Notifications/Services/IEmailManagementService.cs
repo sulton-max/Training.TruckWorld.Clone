@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Training.TruckWorld.Backend.Application.Notifications.Services;
 
-namespace Training.TruckWorld.Backend.Application.Notifications.Services
+public interface IEmailManagementService
 {
-    internal class IEmailManagementService
-    {
-    }
+    ValueTask<bool> SendEmailAsync(Guid userId, Guid templateId);
+    IQueryable<ValueTask<bool>> SendEmailAsync(Guid userId, string templateCategory);
 }

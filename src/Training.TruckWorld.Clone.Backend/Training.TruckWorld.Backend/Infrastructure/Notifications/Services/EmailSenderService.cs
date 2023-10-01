@@ -7,7 +7,7 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
 
 public class EmailSenderService : IEmailSenderService
 {
-    public async ValueTask<bool> SendEmailAsync(Email emailMessage)
+    public async ValueTask<bool> SendEmailAsync(EmailMessage emailMessage)
     {
         var sendEmailMessage = false;
 
