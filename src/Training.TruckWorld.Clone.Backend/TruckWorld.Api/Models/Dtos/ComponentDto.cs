@@ -7,7 +7,6 @@ namespace TruckWorld.Api.Models.Dtos;
 public class ComponentDto
 {
     public Guid? Id { get; set; }
-    public Guid? UserId { get; set; }
     public ComponentCategory Category { get; set; }
     public string Manufacturer { get; set; }
     public string Model { get; set; }
@@ -21,12 +20,11 @@ public class ComponentDto
 
     public ComponentDto(){}
 
-    public ComponentDto(Guid? userId, ComponentCategory category, string manufacturer, string model,
+    public ComponentDto(ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight, ComponentCondition condition,
         string description, ListingType action)
     {
         Id = Guid.NewGuid();
-        UserId = userId;
         Category = category;
         Manufacturer = manufacturer;
         Model = model;

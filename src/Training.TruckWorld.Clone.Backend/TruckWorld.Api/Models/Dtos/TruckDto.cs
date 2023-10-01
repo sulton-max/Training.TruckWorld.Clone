@@ -1,12 +1,13 @@
 ﻿using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
 
+
+
 namespace TruckWorld.Api.Models.Dtos
 {
     public class TruckDto
     {
         public Guid? Id { get; set; }
-        public Guid? UserId { get; set; }
         public string SerialNumber { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
@@ -21,10 +22,9 @@ namespace TruckWorld.Api.Models.Dtos
         public string? FuelType { get; set; }
         public string? Color { get; set; }
         public TruckDto() { }
-        public TruckDto(Guid? userId, string serialNumber, string manufacturer, string model, TruckCategory category, int year, TruckCondition condition, string description, double price, double odometer, ListingType listingType, string? engineType, string? fuelType, string? color)
+        public TruckDto(string serialNumber, string manufacturer, string model, TruckCategory category, int year, TruckCondition condition, string description, double price, double odometer, ListingType listingType, string? engineType, string? fuelType, string? color)
         {
             Id = Guid.NewGuid();
-            UserId = userId;
             SerialNumber = serialNumber;
             Manufacturer = manufacturer;
             Model = model;
