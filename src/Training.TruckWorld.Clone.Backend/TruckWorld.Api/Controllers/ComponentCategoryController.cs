@@ -16,7 +16,7 @@ namespace TruckWorld.Api.Controllers
         }
 
 
-        [HttpGet("Component - Cotegories")]
+        [HttpGet("cotegories")]
         public IActionResult GetAllComponentCategories([FromQuery] int pageToken, [FromQuery] int pageSize, IComponentCategoryService componentCategoryService)
         {
             var result = componentCategoryService.Get(componentcotegory => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
@@ -24,8 +24,8 @@ namespace TruckWorld.Api.Controllers
         }
 
 
-        [HttpGet("componentCategoryId : guid/componentCategory")]
-        public async ValueTask<IActionResult> GetById([FromRoute] Guid componentCategoryId)
+        [HttpGet("categoryId : guid/componentCategory")]
+        public async ValueTask<IActionResult> GetCategoryById([FromRoute] Guid componentCategoryId)
         {
             var result = await _componentCategoryService.GetByIdAsync(componentCategoryId);
             return result is not null ? Ok(result) : NotFound();
@@ -36,7 +36,7 @@ namespace TruckWorld.Api.Controllers
         public async ValueTask<IActionResult> CreateComponentCategory([FromBody] ComponentCategory componentCategory)
         {
             var result = await _componentCategoryService.CreateAsync(componentCategory);
-            return CreatedAtAction(nameof(GetById), new { categroyId = result.Id }, result);
+            return CreatedAtAction(nameof(GetCategoryById), new { categroyId = result.Id }, result);
         }
         
 
@@ -48,7 +48,7 @@ namespace TruckWorld.Api.Controllers
         }
         
 
-        [HttpDelete]
+        [HttpDelete("categoryId : guid/componentCategory")]
         public async ValueTask<IActionResult> DeleteCategory([FromRoute] Guid categoryId)
         {
             var result = await _componentCategoryService.DeleteAsync(categoryId);
