@@ -7,7 +7,7 @@ using Training.TruckWorld.Backend.Domain.Common;
 
 namespace Training.TruckWorld.Backend.Domain.Entities
 {
-    public class ContactUser : SoftDeletedEntity
+    public class ContactUser 
     {
         public Guid UserId { get; set; }
         
@@ -24,14 +24,12 @@ namespace Training.TruckWorld.Backend.Domain.Entities
         public ContactUser() { }
         public ContactUser(Guid userId, string firstName, string lastName, string emailAddress, string phoneNumber, Location location)
         {
-            Id = Guid.NewGuid();
             UserId = userId;
             FirstName = firstName;
             LastName = lastName;
             EmailAddress = emailAddress;
             PhoneNumber = phoneNumber;
             Location = location;
-            CreatedDate = DateTime.UtcNow;
         }
     }
 }
