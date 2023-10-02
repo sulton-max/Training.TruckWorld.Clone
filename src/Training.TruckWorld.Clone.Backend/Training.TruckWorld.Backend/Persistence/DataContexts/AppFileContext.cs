@@ -9,20 +9,20 @@ namespace Training.TruckWorld.Backend.Persistence.DataContexts;
 
 public class AppFileContext : FileContext, IDataContext
 {
-    public IFileSet<User, Guid> Users => Set<User>(nameof(Users));
+    public IFileSet<User, Guid> Users => Set<User, Guid>(nameof(Users));
 
-    public IFileSet<Component, Guid> Components => Set<Component>(nameof(Components));
+    public IFileSet<Component, Guid> Components => Set<Component, Guid>(nameof(Components));
 
-    public IFileSet<ComponentCategory, Guid> ComponentsCategories => Set<ComponentCategory>(nameof(ComponentsCategories));
-    public IFileSet<Truck, Guid> Trucks => Set<Truck>(nameof(Truck));
+    public IFileSet<ComponentCategory, Guid> ComponentsCategories => Set<ComponentCategory, Guid>(nameof(ComponentsCategories));
+    public IFileSet<Truck, Guid> Trucks => Set<Truck, Guid>(nameof(Truck));
 
-    public IFileSet<TruckCategory, Guid> TruckCategories => Set<TruckCategory>(nameof(TruckCategory));
+    public IFileSet<TruckCategory, Guid> TruckCategories => Set<TruckCategory, Guid>(nameof(TruckCategory));
 
-    public IFileSet<UserCredentials, Guid> UserCredentials => Set<UserCredentials>(nameof(UserCredentials));
+    public IFileSet<UserCredentials, Guid> UserCredentials => Set<UserCredentials, Guid>(nameof(UserCredentials));
 
-    public IFileSet<EmailTemplate, Guid> EmailTemplates => Set<EmailTemplate>(nameof(EmailTemplate));
+    public IFileSet<EmailTemplate, Guid> EmailTemplates => Set<EmailTemplate, Guid>(nameof(EmailTemplate));
 
-    public IFileSet<Email, Guid> Emails => Set<Email>(nameof(Emails));
+    public IFileSet<Email, Guid> Emails => Set<Email, Guid>(nameof(Emails));
 
     public AppFileContext(IFileContextOptions<IFileContext> fileContextOptions) : base(fileContextOptions)
     {

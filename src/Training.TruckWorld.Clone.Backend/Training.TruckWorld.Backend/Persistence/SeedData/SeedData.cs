@@ -56,21 +56,21 @@ public static class SeedData
     {
         var faker = EntityFakers.GetUserFaker(context);
         var users = faker.Generate(10_000).Distinct();
-        await context.Users.AddRangeAsync(users.Take(count));
+        await context.Users.AddRangeAsync(users.Take(count).ToList());
     }
 
     private static async ValueTask AddUserCredentialsAsync(this IDataContext context, int count)
     {
         var faker = EntityFakers.GetUserCredentialsFaker(context);
         var userCredentials = faker.Generate(context.Users.Count());
-        await context.UserCredentials.AddRangeAsync(userCredentials.Take(count));
+        await context.UserCredentials.AddRangeAsync(userCredentials.Take(count).ToList());
     }
 
     private static async ValueTask AddTrucksAsync(this IDataContext context, int count)
     {
         var faker = EntityFakers.GetTruckFaker(context);
         var trucks = faker.Generate(50_000);
-        await context.Trucks.AddRangeAsync(trucks.Take(count));
+        await context.Trucks.AddRangeAsync(trucks.Take(count).ToList());
     }
 
     private static async ValueTask AddComponentsAsync(this IDataContext context, int count)
@@ -105,7 +105,7 @@ public static class SeedData
             new TruckCategory("Off Road Caravans"),
         };
 
-        await context.TruckCategories.AddRangeAsync(truckCategories.Take(count));
+        await context.TruckCategories.AddRangeAsync(truckCategories.Take(count).ToList());
     }
 
     private static async ValueTask AddComponentCategoriesAsync(this IDataContext context, int count)
@@ -128,7 +128,7 @@ public static class SeedData
             new ComponentCategory("GPS"),
         };
 
-        await context.ComponentsCategories.AddRangeAsync(componentCategories.Take(count));
+        await context.ComponentsCategories.AddRangeAsync(componentCategories.Take(count).ToList());
     }
 
     private static async ValueTask AddEmailTemplatesAsync(this IDataContext context, int count)
@@ -142,6 +142,6 @@ public static class SeedData
             new EmailTemplate("Your password has been changes", "Dear {{FullName}}, Your password has been changed."),
         };
 
-        await context.EmailTemplates.AddRangeAsync(emailTemplates.Take(count));
+        await context.EmailTemplates.AddRangeAsync(emailTemplates.Take(count).ToList());
     }
 }
