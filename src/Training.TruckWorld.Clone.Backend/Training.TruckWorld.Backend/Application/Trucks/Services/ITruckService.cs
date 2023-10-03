@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 using Training.TruckWorld.Backend.Domain.Entities;
 
 namespace Training.TruckWorld.Backend.Application.Trucks.Services;
@@ -6,6 +7,10 @@ namespace Training.TruckWorld.Backend.Application.Trucks.Services;
 public interface ITruckService
 {
     IQueryable<Truck> Get(Expression<Func<Truck, bool>> predicate);
+
+    ValueTask<TruckFilterDataModel> GetFilterDataModel();
+    
+    ValueTask<ICollection<Truck>> GetAsync(TruckFilterModel filterModel);
 
     ValueTask<ICollection<Truck>> GetAsync(IEnumerable<Guid> ids);
 
