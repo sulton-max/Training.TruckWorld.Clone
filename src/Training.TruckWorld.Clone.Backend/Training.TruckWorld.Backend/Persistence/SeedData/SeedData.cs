@@ -8,32 +8,34 @@ public static class SeedData
 {
     public static async ValueTask InitializeSeedDataAsync(this IDataContext context)
     {
-        if (!context.Users.Any())
-            await context.AddAsync<User>(100);
-
-        if (!context.UserCredentials.Any())
-            await context.AddAsync<UserCredentials>(100);
-
-        if (!context.Trucks.Any())
-            await context.AddAsync<Truck>(1000);
-
-        if (!context.Components.Any())
-            await context.AddAsync<Component>(2000);
-
         if (!context.TruckCategories.Any())
             await context.AddAsync<TruckCategory>(15);
 
         if (!context.ComponentsCategories.Any())
             await context.AddAsync<ComponentCategory>(10);
 
-        if (!context.EmailTemplates.Any())
-            await context.AddAsync<EmailTemplate>(5);
+        if (!context.Users.Any())
+            await context.AddAsync<User>(100);
 
+        if (!context.UserCredentials.Any())
+            await context.AddAsync<UserCredentials>(context.Users.Count());
+
+        if (!context.Trucks.Any())
+            await context.AddAsync<Truck>(50);
+
+        if (!context.Components.Any())
+            await context.AddAsync<Component>(50);
+
+
+        if (!context.EmailTemplates.Any())
+            await context.AddAsync<EmailTemplate>(10);
+
+        if (!context.Emails.Any())
+            await context.AddAsync<Email>(50);
 
         await context.SaveChangesAsync();
-
     }
-    
+
     private static async ValueTask AddAsync<TEntity>(this IDataContext context, int count) where TEntity : IEntity
     {
         var task = typeof(TEntity) switch
@@ -45,17 +47,18 @@ public static class SeedData
             { } type when type == typeof(TruckCategory) => context.AddTruckCategoriesAsync(count),
             { } type when type == typeof(ComponentCategory) => context.AddComponentCategoriesAsync(count),
             { } type when type == typeof(EmailTemplate) => context.AddEmailTemplatesAsync(count),
+            {} type when type == typeof(Email) => context.AddEmailAsync(count),
             _ => new ValueTask(Task.CompletedTask)
         };
 
         await task;
     }
-    
-    
+
+
     private static async ValueTask AddUsersAsync(this IDataContext context, int count)
     {
         var faker = EntityFakers.GetUserFaker(context);
-        var users = faker.Generate(10_000).Distinct();
+        var users = faker.Generate(1_000).Distinct();
         await context.Users.AddRangeAsync(users.Take(count).ToList());
     }
 
@@ -69,66 +72,29 @@ public static class SeedData
     private static async ValueTask AddTrucksAsync(this IDataContext context, int count)
     {
         var faker = EntityFakers.GetTruckFaker(context);
-        var trucks = faker.Generate(50_000);
+        var trucks = faker.Generate(1000);
         await context.Trucks.AddRangeAsync(trucks.Take(count).ToList());
     }
 
     private static async ValueTask AddComponentsAsync(this IDataContext context, int count)
     {
         var faker = EntityFakers.GetComponentFaker(context);
-        var components = faker.Generate(100_000);
-        await context.Components.AddRangeAsync(components);
+        var components = faker.Generate(1000);
+        await context.Components.AddRangeAsync(components.Take(count).ToArray());
     }
 
     private static async ValueTask AddTruckCategoriesAsync(this IDataContext context, int count)
     {
-        var truckCategories = new List<TruckCategory>
-        {
-            new TruckCategory("Asphalt / Concrete Trucks"),
-            new TruckCategory("Beavertail Trucks"),
-            new TruckCategory("Beverage Trucks"),
-            new TruckCategory("Cab / Chasis Trucks"),
-            new TruckCategory("Cherry Picker"),
-            new TruckCategory("Hay and Forage Equipment"),
-            new TruckCategory("Flail Mowers"),
-            new TruckCategory("Spreaders & Sprayers"),
-            new TruckCategory("Sprayers"),
-            new TruckCategory("Pull Type"),
-            new TruckCategory("Farm Trailers"),
-            new TruckCategory("Material Handling Trailers"),
-            new TruckCategory("Utility Vehicles"),
-            new TruckCategory("Utility"),
-            new TruckCategory("Camper Trailers"),
-            new TruckCategory("Soft-Sided"),
-            new TruckCategory("Motorhomes"),
-            new TruckCategory("Gas"),
-            new TruckCategory("Off Road Caravans"),
-        };
-
+        var faker = EntityFakers.GetTruckCategoryFaker();
+        var truckCategories = faker.Generate(100).DistinctBy(category => category.Name);
         await context.TruckCategories.AddRangeAsync(truckCategories.Take(count).ToList());
     }
 
     private static async ValueTask AddComponentCategoriesAsync(this IDataContext context, int count)
     {
-        var componentCategories = new List<ComponentCategory>
-        {
-            new ComponentCategory("Fifth Wheel"),
-            new ComponentCategory("Fuel Pump"),
-            new ComponentCategory("Fuel Tank"),
-            new ComponentCategory("Grill"),
-            new ComponentCategory("Hood"),
-            new ComponentCategory("Ramps"),
-            new ComponentCategory("Reefer Unit"),
-            new ComponentCategory("Seat"),
-            new ComponentCategory("Tool Box"),
-            new ComponentCategory("Transmission"),
-            new ComponentCategory("Turbo"),
-            new ComponentCategory("Wheel"),
-            new ComponentCategory("Fleet"),
-            new ComponentCategory("GPS"),
-        };
-
-        await context.ComponentsCategories.AddRangeAsync(componentCategories.Take(count).ToList());
+        var faker = EntityFakers.GetComponentCategoryFaker();
+        var categories = faker.Generate(100);
+        await context.ComponentsCategories.AddRangeAsync(categories.Take(count).ToArray());
     }
 
     private static async ValueTask AddEmailTemplatesAsync(this IDataContext context, int count)
@@ -143,5 +109,12 @@ public static class SeedData
         };
 
         await context.EmailTemplates.AddRangeAsync(emailTemplates.Take(count).ToList());
+    }
+
+    private static async ValueTask AddEmailAsync(this IDataContext context, int count)
+    {
+        var faker = EntityFakers.GetEmailFaker(context);
+        var emails = faker.Generate(1000);
+        await context.Emails.AddRangeAsync(emails.Take(count).ToArray());
     }
 }
