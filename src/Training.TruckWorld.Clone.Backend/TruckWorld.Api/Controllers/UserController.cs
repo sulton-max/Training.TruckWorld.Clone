@@ -6,17 +6,17 @@ namespace TruckWorld.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class UserControllers: ControllerBase
+public class UserController: ControllerBase
 {
     private readonly IUserService _userService;
-    public UserControllers(IUserService userService)
+    public UserController(IUserService userService)
     {
         _userService = userService;
     }
-    [HttpGet("users")]
-    public IActionResult GetAllUsers([FromQuery] int pageToken, [FromQuery] int pageSize, [FromServices] IUserService userService)
+    [HttpGet]
+    public IActionResult GetAllUsers([FromQuery] int pageToken, [FromQuery] int pageSize)
     {
-        var result = userService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _userService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 

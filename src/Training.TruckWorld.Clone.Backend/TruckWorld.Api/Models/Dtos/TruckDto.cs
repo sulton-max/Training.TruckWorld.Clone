@@ -6,7 +6,6 @@ namespace TruckWorld.Api.Models.Dtos
     public class TruckDto
     {
         public Guid? Id { get; set; }
-        public Guid? UserId { get; set; }
         public string SerialNumber { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
@@ -14,17 +13,18 @@ namespace TruckWorld.Api.Models.Dtos
         public int Year { get; set; }
         public TruckCondition Condition { get; set; }
         public string Description { get; set; }
-        public double Price { get; set; }
-        public double Odometer { get; set; }
+        public decimal Price { get; set; }
+        public decimal Odometer { get; set; }
         public ListingType ListingType { get; set; }
         public string? EngineType { get; set; }
         public string? FuelType { get; set; }
         public string? Color { get; set; }
+        public ContactUser ContactUser { get; set; }
+
         public TruckDto() { }
-        public TruckDto(Guid? userId, string serialNumber, string manufacturer, string model, TruckCategory category, int year, TruckCondition condition, string description, double price, double odometer, ListingType listingType, string? engineType, string? fuelType, string? color)
+        public TruckDto(Guid? userId, string serialNumber, string manufacturer, string model, TruckCategory category, int year, TruckCondition condition, string description, decimal price, decimal odometer, ListingType listingType, string? engineType, string? fuelType, string? color, ContactUser contact)
         {
             Id = Guid.NewGuid();
-            UserId = userId;
             SerialNumber = serialNumber;
             Manufacturer = manufacturer;
             Model = model;
@@ -38,6 +38,7 @@ namespace TruckWorld.Api.Models.Dtos
             EngineType = engineType;
             FuelType = fuelType;
             Color = color;
+            ContactUser = contact;
         }
     }
 }
