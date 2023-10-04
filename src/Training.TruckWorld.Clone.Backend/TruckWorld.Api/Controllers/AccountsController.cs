@@ -7,10 +7,10 @@ using Training.TruckWorld.Backend.Infrastructure.Accounts.Services;
 namespace TruckWorld.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController : ControllerBase
+public class AccountsController : ControllerBase
 {
     private readonly IAccountService _accountService;
-    public AccountController(IAccountService accountService)
+    public AccountsController(IAccountService accountService)
     {
         _accountService = accountService;
     }
@@ -20,7 +20,8 @@ public class AccountController : ControllerBase
         var result = await _accountService.Register(regisetrDetails);
         return result is not null ? Ok(result) : BadRequest();
     }
-    [HttpGet("account")]
+
+    [HttpPost("account")]
     public async ValueTask<IActionResult> Login([FromBody] LoginDetails loginDetails)
     {
         var result = await _accountService.Login(loginDetails);
