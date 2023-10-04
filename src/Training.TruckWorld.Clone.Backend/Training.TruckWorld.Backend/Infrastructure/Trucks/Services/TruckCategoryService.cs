@@ -17,65 +17,53 @@ public class TruckCategoryService : ITruckCategoryService
     }
 
     //Create
-    public async ValueTask<TruckCategory> CreateAsync(TruckCategory truckCategory, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<TruckCategory> CreateAsync(TruckCategory truckCategory, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        
-        await _appDataContext.TruckCategories.AddAsync(truckCategory);
-      
+        await _appDataContext.TruckCategories.AddAsync(truckCategory, cancellationToken);
+
         if (saveChanges)
         {
             await _appDataContext.SaveChangesAsync();
         }
+
         return truckCategory;
     }
 
     //Delete
-    public async ValueTask<TruckCategory> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<TruckCategory> DeleteAsync(Guid id, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var founded = _appDataContext.TruckCategories.FirstOrDefault(x => x.Id == id);
-        if (founded is null)
-            throw new EntityNotFoundException(typeof(TruckCategory), founded.Id);
+        var founded = _appDataContext.TruckCategories.FirstOrDefault(x => x.Id == id)
+                      ?? throw new EntityNotFoundException(typeof(TruckCategory));
+
         if (founded.IsDeleted)
             throw new EntityDeletedException(typeof(TruckCategory), founded.Id);
 
-        founded.IsDeleted = true;
-        founded.DeletedDate = DateTime.UtcNow;
+        await _appDataContext.TruckCategories.RemoveAsync(founded, cancellationToken);
+
         if (saveChanges)
         {
             await _appDataContext.SaveChangesAsync();
         }
-        return  founded;
+
+        return founded;
     }
 
     //Delete
-    public async ValueTask<TruckCategory> DeleteAsync(TruckCategory truckCategory, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public ValueTask<TruckCategory> DeleteAsync(TruckCategory truckCategory, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-
-        var founded = _appDataContext.TruckCategories.FirstOrDefault(x => x.Id == truckCategory.Id);
-        if (founded is null)
-            throw new EntityNotFoundException(typeof(TruckCategory), founded.Id);
-        if (founded.IsDeleted)
-            throw new EntityDeletedException(typeof(TruckCategory), founded.Id);
-
-        founded.IsDeleted = true;
-        
-        founded.DeletedDate = DateTime.UtcNow;
-        
-        if (saveChanges)
-        {
-           await _appDataContext.SaveChangesAsync();
-        }
-        return founded;
-
+        return DeleteAsync(truckCategory.Id);
     }
 
     //Get
-    public IQueryable<TruckCategory> Get(Expression<Func<TruckCategory, bool>> predicate, CancellationToken cancellationToken = default)
-    {
-        return _appDataContext.TruckCategories.Where(predicate.Compile()).AsQueryable();
-    }
+    public IQueryable<TruckCategory> Get(Expression<Func<TruckCategory, bool>> predicate,
+        CancellationToken cancellationToken = default)
+        => _appDataContext.TruckCategories.Where(predicate.Compile()).AsQueryable();
 
-    public async ValueTask<ICollection<TruckCategory>> GetAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+    public async ValueTask<ICollection<TruckCategory>> GetAsync(IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default)
     {
         var truckCategory = _appDataContext.TruckCategories.Where(x => ids.Contains(x.Id));
         return await new ValueTask<ICollection<TruckCategory>>(truckCategory.ToList());
@@ -90,23 +78,22 @@ public class TruckCategoryService : ITruckCategoryService
     }
 
     //UpdateAsync
-    public async ValueTask<TruckCategory> UpdateAsync(TruckCategory truckCategory, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<TruckCategory> UpdateAsync(TruckCategory truckCategory, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var founded = _appDataContext.TruckCategories.FirstOrDefault(x => x.Id == truckCategory.Id);
+        var founded = _appDataContext.TruckCategories.FirstOrDefault(x => x.Id == truckCategory.Id)
+                      ?? throw new EntityNotFoundException(typeof(TruckCategory));
 
-        if(founded is null)
-        {
-            throw new EntityNotFoundException(typeof(TruckCategory), founded.Id);
-        }
 
         founded.Name = truckCategory.Name;
-     
-        founded.ModifiedDate = DateTime.UtcNow;
+
+        await _appDataContext.TruckCategories.UpdateAsync(founded, cancellationToken);
 
         if (saveChanges)
         {
-           await _appDataContext.SaveChangesAsync();
+            await _appDataContext.SaveChangesAsync();
         }
+
         return founded;
     }
 }

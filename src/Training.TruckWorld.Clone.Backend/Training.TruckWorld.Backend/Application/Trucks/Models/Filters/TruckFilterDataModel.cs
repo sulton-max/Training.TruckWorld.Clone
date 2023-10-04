@@ -1,5 +1,6 @@
 ﻿using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
+using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 
 namespace Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 

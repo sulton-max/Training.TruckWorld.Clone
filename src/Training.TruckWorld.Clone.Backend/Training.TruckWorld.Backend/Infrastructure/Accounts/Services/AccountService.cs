@@ -11,7 +11,8 @@ public class AccountService : IAccountService
     private IUserService _userService;
     private IUserCredentialsService _credentialsService;
 
-    public AccountService(IPasswordHasherService passwordHasherService, IUserService userService, IUserCredentialsService credentialsService)
+    public AccountService(IPasswordHasherService passwordHasherService, IUserService userService,
+        IUserCredentialsService credentialsService)
     {
         _passwordHasherService = passwordHasherService;
         _userService = userService;
@@ -24,9 +25,10 @@ public class AccountService : IAccountService
             throw new EntityConflictException(typeof(User), nameof(registerDetails.EmailAddress));
 
         var user = new User(registerDetails.FirstName, registerDetails.LastName, registerDetails.EmailAddress);
-        var credentials = new UserCredentials(user.Id, _passwordHasherService.Hash(registerDetails.Password));
+        var credentials = new UserCredentials(user.Id, registerDetails.Password);
 
-        await _userService.CreateAsync(user).AsTask().ContinueWith(_ => _credentialsService.CreateAsync(credentials));
+        await _userService.CreateAsync(user);
+        await _credentialsService.CreateAsync(credentials);
 
         return user;
     }

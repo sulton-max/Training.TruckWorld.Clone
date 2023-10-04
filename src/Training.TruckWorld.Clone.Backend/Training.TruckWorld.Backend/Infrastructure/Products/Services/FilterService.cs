@@ -17,14 +17,20 @@ public class FilterService : IFilterService
     public ICollection<IProduct> GetFilteredProducts(ProductFilterModel productFilterModel)
     {
         var trucks = _appDataContext.Trucks.Where(truck =>
-            productFilterModel.Keyword is null || truck.Manufacturer.Contains(productFilterModel.Keyword, StringComparison.OrdinalIgnoreCase)
-                                              || truck.Model.Contains(productFilterModel.Keyword, StringComparison.OrdinalIgnoreCase)).AsQueryable();
+            productFilterModel.Keyword is null || truck.Manufacturer.Contains(productFilterModel.Keyword,
+                                                   StringComparison.OrdinalIgnoreCase)
+                                               || truck.Model.Contains(productFilterModel.Keyword,
+                                                   StringComparison.OrdinalIgnoreCase)).AsQueryable();
 
         var components = _appDataContext.Components.Where(component =>
-            productFilterModel.Keyword is null || component.Manufacturer.Contains(productFilterModel.Keyword, StringComparison.OrdinalIgnoreCase)
-                                               || component.Model.Contains(productFilterModel.Keyword, StringComparison.OrdinalIgnoreCase)).AsQueryable();
+            productFilterModel.Keyword is null || component.Manufacturer.Contains(productFilterModel.Keyword,
+                                                   StringComparison.OrdinalIgnoreCase)
+                                               || component.Model.Contains(productFilterModel.Keyword,
+                                                   StringComparison.OrdinalIgnoreCase)).AsQueryable();
 
-        var products = trucks.Concat<IProduct>(components).Skip((productFilterModel.PageToken - 1) * productFilterModel.PageSize).Take(productFilterModel.PageSize).ToList();
+        var products = trucks.Concat<IProduct>(components)
+            .Skip((productFilterModel.PageToken - 1) * productFilterModel.PageSize).Take(productFilterModel.PageSize)
+            .ToList();
 
         return products;
     }

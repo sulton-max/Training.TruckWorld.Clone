@@ -63,7 +63,7 @@ public class UserService : IUserService
 
     public ValueTask<ICollection<User>> GetAsync(IEnumerable<Guid> ids)
     {
-        var users = _appDataContext.Users.Where(truck => ids.Contains(truck.Id));
+        var users = _appDataContext.Users.Where(user => ids.Contains(user.Id));
 
         return new ValueTask<ICollection<User>>(users.ToList());
     }

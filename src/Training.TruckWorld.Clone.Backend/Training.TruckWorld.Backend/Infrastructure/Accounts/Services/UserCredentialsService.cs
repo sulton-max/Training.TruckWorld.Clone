@@ -27,7 +27,7 @@ public class UserCredentialsService : IUserCredentialsService
         await _appDataContext.UserCredentials.AddAsync(userCredentials, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.UserCredentials.SaveChangesAsync(cancellationToken);
+            await _appDataContext.SaveChangesAsync();
 
         return userCredentials;
     }
@@ -46,10 +46,10 @@ public class UserCredentialsService : IUserCredentialsService
         if (credentials.IsDeleted)
             throw new EntityDeletedException(typeof(UserCredentials), credentials.Id);
 
-        await _appDataContext.UserCredentials.RemoveAsync(credentials);
+        await _appDataContext.UserCredentials.RemoveAsync(credentials, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.UserCredentials.SaveChangesAsync(cancellationToken);
+            await _appDataContext.SaveChangesAsync();
 
         return credentials;
     }
@@ -58,7 +58,7 @@ public class UserCredentialsService : IUserCredentialsService
         => _appDataContext.UserCredentials.Where(predicate.Compile()).AsQueryable();
 
     public ValueTask<ICollection<UserCredentials>> Get(IEnumerable<Guid> ids)
-        => new ValueTask<ICollection<UserCredentials>>(_appDataContext.UserCredentials
+        => new(_appDataContext.UserCredentials
             .Where(credentials => ids.Contains(credentials.Id)).ToList());
 
     public async ValueTask<UserCredentials> UpdateAsync(string oldPassword, UserCredentials userCredentials,
@@ -66,7 +66,8 @@ public class UserCredentialsService : IUserCredentialsService
     {
         ValidateOnUpdate(userCredentials);
 
-        var credentials = await GetByIdAsync(userCredentials.Id);
+        var credentials = await GetByIdAsync(userCredentials.Id)
+                          ?? throw new EntityNotFoundException(typeof(UserCredentials));
 
         if (_passwordHasherService.Verify(oldPassword, credentials.Password))
             throw new IncorrectPasswordException("Password incorrect!");
@@ -76,7 +77,7 @@ public class UserCredentialsService : IUserCredentialsService
         await _appDataContext.UserCredentials.UpdateAsync(credentials, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.UserCredentials.SaveChangesAsync(cancellationToken);
+            await _appDataContext.SaveChangesAsync();
 
         return credentials;
     }
