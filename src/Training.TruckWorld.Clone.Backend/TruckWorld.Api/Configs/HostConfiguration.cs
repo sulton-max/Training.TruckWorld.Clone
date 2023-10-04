@@ -5,8 +5,13 @@ public static partial class HostConfiguration
     public static WebApplicationBuilder Configure(this WebApplicationBuilder builder)
     {
         builder.AddDataContext();
+        
         builder.AddServices();
+        
         builder.AddExposers();
+        
+        builder.AddMappers();
+        
         builder.AddDevTools();
 
         return builder;
@@ -15,8 +20,9 @@ public static partial class HostConfiguration
     public static async ValueTask<WebApplication> ConfigureAsync(this WebApplication app)
     {
         app.UseDevTools();
+        
         await app.SeedDataAsync();
-
+        
         return app;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Training.TruckWorld.Backend.Application.Components.Models.Filters;
 using Training.TruckWorld.Backend.Application.Products.Services;
-using Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
+using Training.TruckWorld.Backend.Infrastructure.Products.Models.Filters;
 
 namespace TruckWorld.Api.Controllers;
 [ApiController]

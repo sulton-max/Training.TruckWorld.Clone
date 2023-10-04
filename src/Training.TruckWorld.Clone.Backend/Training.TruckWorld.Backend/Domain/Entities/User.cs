@@ -1,7 +1,7 @@
 ﻿using Training.TruckWorld.Backend.Domain.Common;
-using Training.TruckWorld.Backend.Domain.Enums;
 
 namespace Training.TruckWorld.Backend.Domain.Entities;
+#pragma warning disable CS8618
 
 public class User : SoftDeletedEntity
 {

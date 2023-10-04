@@ -3,13 +3,14 @@ using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 
 namespace TruckWorld.Api.Controllers;
+
 [ApiController]
 [Route("api/[controller]")]
-
-public class UsersController: ControllerBase
+public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IUserCredentialsService _userCredentialsService;
+
     public UsersController(IUserService userService, IUserCredentialsService userCredentialsService)
     {
         _userService = userService;
@@ -79,8 +80,9 @@ public class UsersController: ControllerBase
         return CreatedAtAction(nameof(GetById), new { userId = result.Id }, result);
     }
 
-    [HttpPut("{oldPassword:string}/credentials")]
-    public async ValueTask<IActionResult> UpdateCredentials([FromBody] string oldPassword, UserCredentials userCredentials)
+    [HttpPut("oldPassword/credentials")]
+    public async ValueTask<IActionResult> UpdateCredentials(string oldPassword,
+        [FromBody] UserCredentials userCredentials)
     {
         var result = await _userCredentialsService.UpdateAsync(oldPassword, userCredentials);
         return NoContent();

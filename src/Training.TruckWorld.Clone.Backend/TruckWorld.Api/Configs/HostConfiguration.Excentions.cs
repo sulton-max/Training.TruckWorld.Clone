@@ -74,6 +74,13 @@ public static partial class HostConfiguration
         return builder;
     }
 
+    public static WebApplicationBuilder AddMappers(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+        return builder;
+    }
+
     //Web Application configuration
 
     public static WebApplication UseDevTools(this WebApplication app)
