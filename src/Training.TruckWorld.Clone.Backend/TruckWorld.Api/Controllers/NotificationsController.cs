@@ -17,14 +17,14 @@ public class NotificationsController : ControllerBase
         _emailManagementService = emailManagementService;
     }
 
-    [HttpPost("{userId:Guid}/{tempate:Guid}")]
+    [HttpPost("{userId:guid}/{tempate:Guid}")]
     public async ValueTask<IActionResult> SendEmailAsync(Guid userId, Guid templateId)
     {
         var result = await _emailManagementService.SendEmailAsync(userId, templateId);
         return result ? Ok(result) : BadRequest();
     }
 
-    [HttpPost("{userId:Guid}/{templateCategory}")]
+    [HttpPost("{userId:guid}/{templateCategory}")]
     public IActionResult SendEmailAsync(Guid userId, string templateCategory)
     {
         var result = _emailManagementService.SendEmailAsync(userId, templateCategory);
