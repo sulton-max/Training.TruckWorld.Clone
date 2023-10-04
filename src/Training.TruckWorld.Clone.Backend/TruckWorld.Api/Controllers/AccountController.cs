@@ -20,7 +20,8 @@ public class AccountController : ControllerBase
         var result = await _accountService.Register(regisetrDetails);
         return result is not null ? Ok(result) : BadRequest();
     }
-    [HttpGet("account")]
+
+    [HttpPost("account")]
     public async ValueTask<IActionResult> Login([FromBody] LoginDetails loginDetails)
     {
         var result = await _accountService.Login(loginDetails);

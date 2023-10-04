@@ -14,28 +14,10 @@ public class FilterController: ControllerBase
         _filterService = filterService;
     }
 
-    [HttpGet("ComponentFilterData")]
-    public IActionResult GetComponentFilterDataModel()
+    [HttpPost("productFilterModel")]
+    public IActionResult GetFilteredProducts([FromBody]ProductFilterModel productFilterModel)
     {
-        var result = _filterService.GetComponentFilterDataModel();
-        return result is not null ? Ok(result) : NotFound();
-    }
-    [HttpGet("TruckFilterdata")]
-    public IActionResult GetTruckFilterDataModel()
-    {
-        var result = _filterService.GetTruckFilterDataModel();
-        return result is not null ? Ok(result) : NotFound();
-    }
-    [HttpPost("componentfilter")]
-    public IActionResult GetFilteredTrucks([FromBody] TruckFilterModel filterModel, [FromQuery] int pageToken, [FromQuery] int pageSize)
-    {
-        var result = _filterService.GetFilteredTrucks(filterModel, pageSize, pageToken);
-        return result is not null ? Ok(result) : NotFound();
-    }
-    [HttpPost("truckfilter")]
-    public IActionResult GetFilteredComponents([FromBody] ComponentFilterModel filterModel, [FromQuery] int pageToken, [FromQuery] int pageSize)
-    {
-        var result = _filterService.GetFilteredComponents(filterModel, pageSize, pageToken);
-        return result is not null ? Ok(result) : NotFound();
+        var result = _filterService.GetFilteredProducts(productFilterModel);
+        return result.Any() ? Ok(result) : NotFound();
     }
 }

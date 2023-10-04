@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
@@ -10,48 +11,51 @@ namespace TruckWorld.Api.Controllers;
 public class TruckController: ControllerBase
 {
     private readonly ITruckService _truckService;
-    public TruckController(ITruckService truckService)
+    private readonly IMapper _mapper;
+    public TruckController(ITruckService truckService, IMapper mapper)
     {
         _truckService = truckService;
+        _mapper = mapper;
     }
     [HttpGet]
     public IActionResult GetAllTrucks([FromQuery] int pageToken, [FromQuery] int pageSize)
     {
-        var result = _truckService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var value = _truckService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _mapper.Map<List<TruckDto>>(value);
         return result.Any() ? Ok(result) : NotFound();
     }
 
     [HttpGet("{truckId:guid}/truck")]
     public async ValueTask<IActionResult> GetById([FromRoute] Guid truckId)
     {
-        var result = await _truckService.GetByIdAsync(truckId);
+        var value = await _truckService.GetByIdAsync(truckId);
+        var result = _mapper.Map<TruckDto>(value);
         return result is not null ? Ok(result) : NotFound();
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> CreateUser([FromBody] TruckDto truckDto)
+    public async ValueTask<IActionResult> CreateTruck([FromBody] TruckDto truckDto)
     {
-        var result = await _truckService.UpdateAsync(ToTruck(truckDto));
+        var truck = _mapper.Map<Truck>(truckDto);
+        var value = await _truckService.CreateAsync(truck);
+        var result = _mapper.Map<TruckDto>(value);
         return CreatedAtAction(nameof(GetById), new { truckId = result.Id }, result);
     }
 
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateUser([FromBody] TruckDto truckDto)
+    public async ValueTask<IActionResult> UpdateTruck([FromBody] TruckDto truckDto)
     {
-        var result = await _truckService.UpdateAsync(ToTruck(truckDto));
+        var truck = _mapper.Map<Truck>(truckDto);
+        var value = await _truckService.UpdateAsync(truck);
+        var result = _mapper.Map<TruckDto>(value);
         return NoContent();
     }
 
     [HttpDelete("{truckId:guid}")]
-    public async ValueTask<IActionResult> DeleteUser([FromRoute] Guid truckId)
+    public async ValueTask<IActionResult> DeleteTruck([FromRoute] Guid truckId)
     {
-        var result = await _truckService.DeleteAsync(truckId);
+        var value = await _truckService.DeleteAsync(truckId);
+        var result = _mapper.Map<TruckDto>(value);
         return NoContent();
-    }
-    private Truck ToTruck(TruckDto truckDto)
-    {
-        var ownerId = Guid.NewGuid();
-        var truck = new Truck(ownerId, truckDto.SerialNumber, truckDto.Manufacturer, truckDto.Model, truckDto.Category, truckDto.Year, truckDto.Condition, truckDto.Description, truckDto.Price, truckDto.Odometer, truckDto.ListingType, truckDto.EngineType, truckDto.FuelType, truckDto.Color, truckDto.ContactUser);
-        return truck;
     }
 }
