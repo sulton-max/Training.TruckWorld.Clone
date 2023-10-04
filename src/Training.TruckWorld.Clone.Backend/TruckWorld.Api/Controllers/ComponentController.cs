@@ -43,10 +43,10 @@ public class ComponentController : ControllerBase
     }
 
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateComponent([FromBody] TruckDto truckDto)
+    public async ValueTask<IActionResult> UpdateComponent([FromBody] ComponentDto componentDto)
     {
-        var truck = _mapper.Map<Truck>(truckDto);
-        var value = await _componentService.UpdateAsync(truck);
+        var component = _mapper.Map<Component>(componentDto);
+        var value = await _componentService.UpdateAsync(component);
         var result = _mapper.Map<TruckDto>(value);
         return NoContent();
     }
