@@ -1,6 +1,8 @@
 ﻿using Training.TruckWorld.Backend.Application.Products.Interfaces;
 using Training.TruckWorld.Backend.Domain.Common;
 using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
+#pragma warning disable CS8618
+
 
 namespace Training.TruckWorld.Backend.Domain.Entities;
 
