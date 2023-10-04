@@ -6,58 +6,65 @@ using Training.TruckWorld.Backend.Persistence.DataContexts;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Accounts.Services;
 
-public class UserService: IUserService
+public class UserService : IUserService
 {
     private readonly IDataContext _appDataContext;
     private readonly IValidationService _validationService;
+
     public UserService(IDataContext appDataContext, IValidationService validationService)
     {
         _appDataContext = appDataContext;
         _validationService = validationService;
     }
-    public async ValueTask<User> CreateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default)
+
+    public async ValueTask<User> CreateAsync(User user, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
         ToValidate(user);
-        _appDataContext.Users.AddAsync(user, cancellationToken);
+
+        await _appDataContext.Users.AddAsync(user, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+
         return user;
     }
 
-    public async ValueTask<User> DeleteAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<User> DeleteAsync(User user, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundUser = await GetByIdAsync(user.Id, cancellationToken);
-        if (foundUser != null)
-            throw new EntityNotFoundException(typeof(User), foundUser.Id);
+        var foundUser = await GetByIdAsync(user.Id, cancellationToken)
+                        ?? throw new EntityNotFoundException(typeof(User));
 
-        foundUser.IsDeleted = true;
-        foundUser.DeletedDate = DateTime.UtcNow;
+        await _appDataContext.Users.RemoveAsync(foundUser, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+
         return foundUser;
     }
 
-    public async ValueTask<User> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<User> DeleteAsync(Guid id, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundUser = await GetByIdAsync(id, cancellationToken);
-        if (foundUser != null)
-            throw new EntityNotFoundException(typeof(User), foundUser.Id);
+        var foundUser = await GetByIdAsync(id, cancellationToken)
+                        ?? throw new EntityNotFoundException(typeof(User));
 
-        foundUser.IsDeleted = true;
-        foundUser.DeletedDate = DateTime.UtcNow;
+        await _appDataContext.Users.RemoveAsync(foundUser, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+
         return foundUser;
     }
 
     public IQueryable<User> Get(Expression<Func<User, bool>> predicate)
-    {
-        return _appDataContext.Users.Where(predicate.Compile()).AsQueryable();
-    }
+        => _appDataContext.Users.Where(predicate.Compile()).AsQueryable();
 
     public ValueTask<ICollection<User>> GetAsync(IEnumerable<Guid> ids)
     {
         var users = _appDataContext.Users.Where(truck => ids.Contains(truck.Id));
+
         return new ValueTask<ICollection<User>>(users.ToList());
     }
 
@@ -67,24 +74,26 @@ public class UserService: IUserService
         return new ValueTask<User?>(foundUser);
     }
 
-    public async ValueTask<User> UpdateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<User> UpdateAsync(User user, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundUser = _appDataContext.Users.FirstOrDefault(searchingUser => searchingUser.Id == user.Id);
-
-        if (foundUser is null)
-            throw new EntityNotFoundException(typeof(User), foundUser.Id);
+        var foundUser = _appDataContext.Users.FirstOrDefault(searchingUser => searchingUser.Id == user.Id)
+                        ?? throw new EntityNotFoundException(typeof(User));
 
         ToValidate(user);
 
         foundUser.FirstName = user.FirstName;
         foundUser.LastName = user.LastName;
         foundUser.EmailAddress = user.EmailAddress;
-        foundUser.ModifiedDate = DateTime.UtcNow;
+
+        await _appDataContext.Users.UpdateAsync(foundUser, cancellationToken);
 
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+
         return foundUser;
     }
+
     private User ToValidate(User user)
     {
         if (!_validationService.IsValidFullName(user.FirstName) || !_validationService.IsValidFullName(user.LastName))
