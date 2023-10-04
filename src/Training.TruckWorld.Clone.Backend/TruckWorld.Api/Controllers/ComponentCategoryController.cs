@@ -5,7 +5,7 @@ using Training.TruckWorld.Backend.Domain.Entities;
 namespace TruckWorld.Api.Controllers
 {
     [ApiController]
-    [Route("api/controller")]
+    [Route("api/[controller]")]
     public class ComponentCategoryController : ControllerBase
     {
         private readonly IComponentCategoryService _componentCategoryService;
@@ -24,7 +24,7 @@ namespace TruckWorld.Api.Controllers
         }
 
 
-        [HttpGet("categoryId : guid/componentCategory")]
+        [HttpGet("{categoryId:guid}/componentCategory")]
         public async ValueTask<IActionResult> GetCategoryById([FromRoute] Guid componentCategoryId)
         {
             var result = await _componentCategoryService.GetByIdAsync(componentCategoryId);
@@ -48,7 +48,7 @@ namespace TruckWorld.Api.Controllers
         }
         
 
-        [HttpDelete("categoryId : guid/componentCategory")]
+        [HttpDelete("{categoryId:guid}")]
         public async ValueTask<IActionResult> DeleteCategory([FromRoute] Guid categoryId)
         {
             var result = await _componentCategoryService.DeleteAsync(categoryId);
