@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
+using Training.TruckWorld.Backend.Application.Components.Models.Filters;
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Enums;
 using Training.TruckWorld.Backend.Domain.Exceptions;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
 
@@ -11,12 +13,15 @@ public class ComponentService : IComponentService
 {
     private readonly IDataContext _appDataContext;
     private readonly IValidationService _validationService;
+
     public ComponentService(IDataContext appDataContext, IValidationService validationService)
     {
         _appDataContext = appDataContext;
         _validationService = validationService;
     }
-    public async ValueTask<Component> CreateAsync(Component component, bool saveChanges = true, CancellationToken cancellationToken = default)
+
+    public async ValueTask<Component> CreateAsync(Component component, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
         ToValidate(component);
         _appDataContext.Components.AddAsync(component, cancellationToken);
@@ -25,7 +30,70 @@ public class ComponentService : IComponentService
         return component;
     }
 
-    public async ValueTask<Component> DeleteAsync(Component component, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public ValueTask<ComponentFilterDataModel> GetFilterDataModel()
+    {
+        var dataModel = new ComponentFilterDataModel(
+            _appDataContext.Components.Select(component => component.Category).Distinct().Select(category =>
+            {
+                return new KeyValuePair<string, ComponentCategory>(
+                    $"{category.ToString()} ({_appDataContext.Components.Count(component => component.Category == category)})",
+                    category);
+            }),
+            _appDataContext.Components.Select(component => component.ListingType).Distinct().Select(listingType =>
+            {
+                return new KeyValuePair<string, ListingType>(
+                    $"{listingType} ({_appDataContext.Components.Count(component => component.ListingType == listingType)})",
+                    listingType);
+            }),
+            _appDataContext.Components.Select(component => component.Manufacturer).Distinct().Select(manufacturer =>
+            {
+                return new KeyValuePair<string, string>(
+                    $"{manufacturer} ({_appDataContext.Components.Count(component => component.Manufacturer == manufacturer)})",
+                    manufacturer);
+            }),
+            _appDataContext.Components.Select(component => component.Contact.Location.City).Distinct().Select(state =>
+            {
+                return new KeyValuePair<string, string>(
+                    $"{state} ({_appDataContext.Components.Count(component => component.Contact.Location.City == state)})",
+                    state);
+            }),
+            _appDataContext.Components.Select(component => component.Condition).Distinct().Select(condition =>
+            {
+                return new KeyValuePair<string, ComponentCondition>(
+                    $"{condition.ToString()} ({_appDataContext.Components.Count(component => component.Condition == condition)})",
+                    condition);
+            }),
+            _appDataContext.Components.Select(component => component.Contact.Location.Country).Distinct().Select(
+                country =>
+                {
+                    return new KeyValuePair<string, string>(
+                        $"{country} ({_appDataContext.Components.Count(component => component.Contact.Location.Country == country)})",
+                        country);
+                })
+        );
+
+        return new ValueTask<ComponentFilterDataModel>(dataModel);
+    }
+
+    public ValueTask<ICollection<Component>> GetAsync(ComponentFilterModel filterModel)
+    {
+        return new ValueTask<ICollection<Component>>(_appDataContext.Components.Where(component =>
+            (filterModel.Keyword is null ||
+             (component.Manufacturer.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)
+              || component.Model.Contains(filterModel.Keyword)))
+            && (filterModel.ListingTypes == null || filterModel.ListingTypes.Contains(component.ListingType))
+            && (filterModel.Categories == null || filterModel.Categories.Contains(component.Category))
+            && (filterModel.MinYear == null || filterModel.MinYear <= component.Year)
+            && (filterModel.MaxYear == null || filterModel.MaxYear >= component.Year)
+            && (filterModel.MinDate == null || filterModel.MinDate <= component.CreatedDate)
+            && (filterModel.MaxDate == null || filterModel.MaxDate >= component.CreatedDate)
+            && (filterModel.MinPrice == null || filterModel.MinPrice <= component.Price)
+            && (filterModel.MaxPrice == null || filterModel.MaxPrice >= component.Price)
+        ).Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToList());
+    }
+
+    public async ValueTask<Component> DeleteAsync(Component component, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
         var foundComponent = await GetByIdAsync(component.Id, cancellationToken);
         if (foundComponent != null)
@@ -39,7 +107,8 @@ public class ComponentService : IComponentService
         return foundComponent;
     }
 
-    public async ValueTask<Component> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<Component> DeleteAsync(Guid id, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
         var foundComponent = await GetByIdAsync(id, cancellationToken);
         if (foundComponent != null)
@@ -70,9 +139,12 @@ public class ComponentService : IComponentService
         var foundComponent = _appDataContext.Components.FirstOrDefault(component => component.Id == id);
         return new ValueTask<Component?>(foundComponent);
     }
-    public async ValueTask<Component> UpdateAsync(Component component, bool saveChanges = true, CancellationToken cancellationToken = default)
+
+    public async ValueTask<Component> UpdateAsync(Component component, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundComponent = _appDataContext.Components.FirstOrDefault(searchingComponent => searchingComponent.Id == component.Id);
+        var foundComponent =
+            _appDataContext.Components.FirstOrDefault(searchingComponent => searchingComponent.Id == component.Id);
 
         if (foundComponent is null)
             throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
@@ -97,6 +169,7 @@ public class ComponentService : IComponentService
             await _appDataContext.SaveChangesAsync();
         return foundComponent;
     }
+
     private Component ToValidate(Component component)
     {
         if (!_validationService.IsValidComponentCategory(component.Category))

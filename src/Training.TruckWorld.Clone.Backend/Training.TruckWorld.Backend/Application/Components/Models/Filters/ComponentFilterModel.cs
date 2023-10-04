@@ -1,10 +1,11 @@
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
+using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
 
 namespace Training.TruckWorld.Backend.Application.Components.Models.Filters;
 
-public class ComponentFilterModel
+public class ComponentFilterModel : FilterPagination
 {
     public string? Keyword { get; set; }
     
