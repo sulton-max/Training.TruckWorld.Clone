@@ -7,12 +7,12 @@ namespace TruckWorld.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoryController : ControllerBase
+public class CategoriesController : ControllerBase
 {
     private readonly IComponentCategoryService _componentCategoryService;
     private readonly ITruckCategoryService _truckCategoryService;
 
-    public CategoryController(IComponentCategoryService componentCategoryService, ITruckCategoryService truckCategoryService)
+    public CategoriesController(IComponentCategoryService componentCategoryService, ITruckCategoryService truckCategoryService)
     {
         _componentCategoryService = componentCategoryService;
         _truckCategoryService = truckCategoryService;

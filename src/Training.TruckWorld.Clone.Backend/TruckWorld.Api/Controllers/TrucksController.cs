@@ -8,11 +8,11 @@ using TruckWorld.Api.Models.Dtos;
 namespace TruckWorld.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class TruckController: ControllerBase
+public class TrucksController: ControllerBase
 {
     private readonly ITruckService _truckService;
     private readonly IMapper _mapper;
-    public TruckController(ITruckService truckService, IMapper mapper)
+    public TrucksController(ITruckService truckService, IMapper mapper)
     {
         _truckService = truckService;
         _mapper = mapper;

@@ -8,11 +8,11 @@ namespace TruckWorld.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ComponentController : ControllerBase
+public class ComponentsController : ControllerBase
 {
     private readonly IComponentService _componentService;
     private readonly IMapper _mapper;
-    public ComponentController(IComponentService componentService, IMapper mapper)
+    public ComponentsController(IComponentService componentService, IMapper mapper)
     {
         _componentService = componentService;
         _mapper = mapper;

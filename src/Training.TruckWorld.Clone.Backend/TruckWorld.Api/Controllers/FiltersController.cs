@@ -6,10 +6,10 @@ using Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 namespace TruckWorld.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class FilterController: ControllerBase
+public class FiltersController: ControllerBase
 {
     private readonly IFilterService _filterService;
-    public FilterController(IFilterService filterService)
+    public FiltersController(IFilterService filterService)
     {
         _filterService = filterService;
     }

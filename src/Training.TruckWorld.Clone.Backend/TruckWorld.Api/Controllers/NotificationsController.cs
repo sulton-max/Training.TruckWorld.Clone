@@ -6,13 +6,13 @@ namespace TruckWorld.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class NotificationController : ControllerBase
+public class NotificationsController : ControllerBase
 {
     private readonly IEmailManagementService _emailManagementService;
     private readonly IEmailService _emailService;
     private readonly IEmailTemplateService _emailTemplateService;
 
-    public NotificationController(IEmailManagementService emailManagementService)
+    public NotificationsController(IEmailManagementService emailManagementService)
     {
         _emailManagementService = emailManagementService;
     }

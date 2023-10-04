@@ -6,11 +6,11 @@ namespace TruckWorld.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class UserController: ControllerBase
+public class UsersController: ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IUserCredentialsService _userCredentialsService;
-    public UserController(IUserService userService, IUserCredentialsService userCredentialsService)
+    public UsersController(IUserService userService, IUserCredentialsService userCredentialsService)
     {
         _userService = userService;
         _userCredentialsService = userCredentialsService;
