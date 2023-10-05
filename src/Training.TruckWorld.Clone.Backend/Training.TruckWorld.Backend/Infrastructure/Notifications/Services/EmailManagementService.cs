@@ -47,7 +47,7 @@ public class EmailManagementService : IEmailManagementService
         return result;
     }
 
-    public IQueryable<ValueTask<bool>> SendEmailAsync(Guid userId, string templateCategory)
+    public IQueryable<ValueTask<bool>> SendEmail(Guid userId, string templateCategory)
     {
         var templates = _emailTemplateService.Get(template => template.Subject.Equals(templateCategory));
         return templates.Select(template => SendEmailAsync(userId, template.Id));
