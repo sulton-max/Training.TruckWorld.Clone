@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
@@ -50,7 +50,7 @@ public class CategoriesController : ControllerBase
 
 
     [HttpPut("componentCategory")]
-    public async ValueTask<IActionResult> UpdateComponentCategory([FromBody] ComponentCategory componentCategory)
+    public async ValueTask<IActionResult> UpdateComponentCategoryAsync([FromBody] ComponentCategory componentCategory)
     {
         await _componentCategoryService.UpdateAsync(componentCategory);
 
@@ -59,7 +59,7 @@ public class CategoriesController : ControllerBase
 
 
     [HttpDelete("{componentCategoryId:guid}/componentCategory")]
-    public async ValueTask<IActionResult> DeleteComponentCategory([FromRoute] Guid componentCategoryId)
+    public async ValueTask<IActionResult> DeleteComponentCategoryAsync([FromRoute] Guid componentCategoryId)
     {
         await _componentCategoryService.DeleteAsync(componentCategoryId);
 
@@ -93,7 +93,7 @@ public class CategoriesController : ControllerBase
 
 
     [HttpPut("truckCategory")]
-    public async ValueTask<IActionResult> UpdateTruckCategory([FromBody] TruckCategory truckCategory)
+    public async ValueTask<IActionResult> UpdateTruckCategoryAsync([FromBody] TruckCategory truckCategory)
     {
         await _truckCategoryService.UpdateAsync(truckCategory);
 
@@ -102,7 +102,7 @@ public class CategoriesController : ControllerBase
 
 
     [HttpDelete("{truckCategoryId:guid}/truckCategory")]
-    public async ValueTask<IActionResult> DeleteTruckCategory([FromRoute] Guid truckCategoryId)
+    public async ValueTask<IActionResult> DeleteTruckCategoryAsync([FromRoute] Guid truckCategoryId)
     {
         await _truckCategoryService.DeleteAsync(truckCategoryId);
 
