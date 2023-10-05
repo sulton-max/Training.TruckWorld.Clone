@@ -21,7 +21,8 @@ public class UsersController : ControllerBase
     [HttpGet]
     public IActionResult GetAllUsers([FromQuery] FilterPagination filterPagination)
     {
-        var result = _userService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
+        var result = _userService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize)
+            .Take(filterPagination.PageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
@@ -30,6 +31,13 @@ public class UsersController : ControllerBase
     {
         var result = await _userService.GetByIdAsync(userId);
         return result is not null ? Ok(result) : NotFound();
+    }
+
+    [HttpPost]
+    public async ValueTask<IActionResult> CreateUser([FromBody] User user)
+    {
+        var result = await _userService.CreateAsync(user);
+        return Ok(result);
     }
 
     [HttpPut]
@@ -49,7 +57,9 @@ public class UsersController : ControllerBase
     [HttpGet("credentials")]
     public IActionResult GetAllCredentials([FromQuery] FilterPagination filterPagination)
     {
-        var result = _userCredentialsService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
+        var result = _userCredentialsService.Get(user => true)
+            .Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize)
+            .ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
