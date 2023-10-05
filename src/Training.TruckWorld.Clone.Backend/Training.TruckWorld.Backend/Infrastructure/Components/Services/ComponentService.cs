@@ -11,8 +11,8 @@ namespace Training.TruckWorld.Backend.Infrastructure.Components.Services;
 
 public class ComponentService : IComponentService
 {
-    private readonly IDataContext _appDataContext;
-    private readonly IValidationService _validationService;
+    private IDataContext _appDataContext;
+    private IValidationService _validationService;
 
     public ComponentService(IDataContext appDataContext, IValidationService validationService)
     {
@@ -111,7 +111,7 @@ public class ComponentService : IComponentService
         CancellationToken cancellationToken = default)
     {
         var foundComponent = await GetByIdAsync(id, cancellationToken);
-        if (foundComponent != null)
+        if (foundComponent == null)
             throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
         if (foundComponent.IsDeleted)
             throw new EntityDeletedException(typeof(Component), foundComponent.Id);
@@ -143,14 +143,15 @@ public class ComponentService : IComponentService
     public async ValueTask<Component> UpdateAsync(Component component, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
+        ToValidate(component);
+
         var foundComponent =
             _appDataContext.Components.FirstOrDefault(searchingComponent => searchingComponent.Id == component.Id);
 
         if (foundComponent is null)
-            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
+            throw new EntityNotFoundException(typeof(Component), Guid.NewGuid());
 
-        ToValidate(foundComponent);
-
+        
         foundComponent.UserId = component.UserId;
         foundComponent.SerialNumber = component.SerialNumber;
         foundComponent.Manufacturer = component.Manufacturer;
@@ -175,7 +176,10 @@ public class ComponentService : IComponentService
         if (!_validationService.IsValidComponentCategory(component.Category))
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Category");
         if (!_validationService.IsValidDescription(component.Description))
+        {
+            Console.WriteLine(component.Description);
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Description");
+        }
         if (!_validationService.IsValidEmailAddress(component.Contact.EmailAddress))
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid EmailAddress");
         if (!_validationService.IsValidStuffs(component.Manufacturer))

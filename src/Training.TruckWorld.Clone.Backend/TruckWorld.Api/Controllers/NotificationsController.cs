@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Notifications.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 
 namespace TruckWorld.Api.Controllers;
 [ApiController]
@@ -17,7 +18,7 @@ public class NotificationsController : ControllerBase
         _emailManagementService = emailManagementService;
     }
 
-    [HttpPost("{userId:guid}/{tempate:Guid}")]
+    [HttpPost("{userId:guid}/{tempateId:Guid}")]
     public async ValueTask<IActionResult> SendEmailAsync(Guid userId, Guid templateId)
     {
         var result = await _emailManagementService.SendEmailAsync(userId, templateId);
@@ -32,9 +33,9 @@ public class NotificationsController : ControllerBase
     }
 
     [HttpGet("emails")]
-    public IActionResult GetAllEmails([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllEmails([FromQuery] FilterPagination filterPagination)
     {
-        var result = _emailService.Get(email => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _emailService.Get(email => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
@@ -71,9 +72,9 @@ public class NotificationsController : ControllerBase
     }
 
     [HttpGet("emailTemplates")]
-    public IActionResult GetAllEmailTemplates([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllEmailTemplates([FromQuery] FilterPagination filterPagination)
     {
-        var result = _emailTemplateService.Get(emailTemplate => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _emailTemplateService.Get(emailTemplate => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 

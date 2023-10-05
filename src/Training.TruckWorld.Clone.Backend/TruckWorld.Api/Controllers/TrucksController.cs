@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 using TruckWorld.Api.Models.Dtos;
 
 namespace TruckWorld.Api.Controllers;
@@ -18,9 +19,9 @@ public class TrucksController: ControllerBase
         _mapper = mapper;
     }
     [HttpGet]
-    public IActionResult GetAllTrucks([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllTrucks([FromQuery] FilterPagination filterPagination)
     {
-        var value = _truckService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var value = _truckService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         var result = _mapper.Map<List<TruckDto>>(value);
         return result.Any() ? Ok(result) : NotFound();
     }

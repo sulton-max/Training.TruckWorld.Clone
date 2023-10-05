@@ -17,12 +17,12 @@ public class ComponentDto
     public ComponentCondition Condition { get; set; }
     public string Description { get; set; }
     public ListingType Action { get; set; }
-
+    public ContactUser ContactUser { get; set; }
     public ComponentDto(){}
 
     public ComponentDto(ComponentCategory category, string manufacturer, string model,
         string serialNumber, int year, int quantity, double weight, ComponentCondition condition,
-        string description, ListingType action)
+        string description, ListingType action, ContactUser contactUser)
     {
         Id = Guid.NewGuid();
         Category = category;
@@ -35,5 +35,6 @@ public class ComponentDto
         Condition = condition;
         Description = description;
         Action = action;
+        ContactUser = contactUser;
     }
 }

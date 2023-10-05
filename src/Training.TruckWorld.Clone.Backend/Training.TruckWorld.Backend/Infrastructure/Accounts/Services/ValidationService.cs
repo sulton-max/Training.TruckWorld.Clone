@@ -14,7 +14,7 @@ public class ValidationService : IValidationService
     {
         _appDataContext = appDataContext;
     }
-    public bool IsValidComponentCategory(ComponentCategory category) => _appDataContext.ComponentsCategories.Contains(category);
+    public bool IsValidComponentCategory(ComponentCategory category) => _appDataContext.ComponentsCategories.Select(category => category.Name).Contains(category.Name);
     public bool IsValidDescription(string description) => !string.IsNullOrWhiteSpace(description) && description.Length > 10;
     public bool IsValidEmailAddress(string email) => Regex.IsMatch(email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
     public bool IsValidFullName(string name)
@@ -27,5 +27,5 @@ public class ValidationService : IValidationService
     }
     public bool IsValidPhoneNumber(string phoneNumber) => !string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.Any(item => Char.IsDigit(item));
     public bool IsValidStuffs(string stuff) => !string.IsNullOrWhiteSpace(stuff);
-    public bool IsValidTruckCategory(TruckCategory category) => _appDataContext.TruckCategories.Contains(category);
+    public bool IsValidTruckCategory(TruckCategory category) => _appDataContext.TruckCategories.Select(category => category.Name).Contains(category.Name);
 }
