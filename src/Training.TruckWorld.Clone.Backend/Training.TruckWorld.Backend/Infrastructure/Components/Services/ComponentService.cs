@@ -24,7 +24,9 @@ public class ComponentService : IComponentService
         CancellationToken cancellationToken = default)
     {
         ToValidate(component);
-        _appDataContext.Components.AddAsync(component, cancellationToken);
+
+        await _appDataContext.Components.AddAsync(component, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
         return component;
@@ -92,41 +94,31 @@ public class ComponentService : IComponentService
         ).Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToList());
     }
 
-    public async ValueTask<Component> DeleteAsync(Component component, bool saveChanges = true,
+    public ValueTask<Component> DeleteAsync(Component component, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
-        var foundComponent = await GetByIdAsync(component.Id, cancellationToken);
-        if (foundComponent != null)
-            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
-        if (foundComponent.IsDeleted)
-            throw new EntityDeletedException(typeof(Component), foundComponent.Id);
-        foundComponent.IsDeleted = true;
-        foundComponent.DeletedDate = DateTime.UtcNow;
-        if (saveChanges)
-            await _appDataContext.SaveChangesAsync();
-        return foundComponent;
+        return DeleteAsync(component.Id, saveChanges, cancellationToken);
     }
 
     public async ValueTask<Component> DeleteAsync(Guid id, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
-        var foundComponent = await GetByIdAsync(id, cancellationToken);
-        if (foundComponent != null)
-            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
+        var foundComponent = await GetByIdAsync(id, cancellationToken)
+                             ?? throw new EntityNotFoundException(typeof(Component));
+
         if (foundComponent.IsDeleted)
             throw new EntityDeletedException(typeof(Component), foundComponent.Id);
 
-        foundComponent.IsDeleted = true;
-        foundComponent.DeletedDate = DateTime.UtcNow;
+        await _appDataContext.Components.RemoveAsync(foundComponent, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+
         return foundComponent;
     }
 
     public IQueryable<Component> Get(Expression<Func<Component, bool>> predicate)
-    {
-        return _appDataContext.Components.Where(predicate.Compile()).AsQueryable();
-    }
+        => _appDataContext.Components.Where(predicate.Compile()).AsQueryable();
 
     public ValueTask<ICollection<Component>> GetAsync(IEnumerable<Guid> ids)
     {
@@ -144,10 +136,8 @@ public class ComponentService : IComponentService
         CancellationToken cancellationToken = default)
     {
         var foundComponent =
-            _appDataContext.Components.FirstOrDefault(searchingComponent => searchingComponent.Id == component.Id);
-
-        if (foundComponent is null)
-            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
+            _appDataContext.Components.FirstOrDefault(searchingComponent => searchingComponent.Id == component.Id)
+            ?? throw new EntityNotFoundException(typeof(Component));
 
         ToValidate(foundComponent);
 
@@ -164,9 +154,12 @@ public class ComponentService : IComponentService
         foundComponent.ListingType = component.ListingType;
         foundComponent.Weight = component.Weight;
         foundComponent.Price = component.Price;
-        foundComponent.ModifiedDate = DateTime.UtcNow;
+
+        await _appDataContext.Components.UpdateAsync(foundComponent, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+
         return foundComponent;
     }
 

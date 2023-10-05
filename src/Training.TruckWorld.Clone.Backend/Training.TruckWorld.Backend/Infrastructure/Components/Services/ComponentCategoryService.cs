@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Exceptions;
@@ -16,64 +15,50 @@ public class ComponentCategoryService : IComponentCategoryService
         _appDataContext = appDataContext;
     }
 
-    public async ValueTask<ComponentCategory> CreateAsync(ComponentCategory componentCategory, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<ComponentCategory> CreateAsync(ComponentCategory componentCategory, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
         await _appDataContext.ComponentsCategories.AddAsync(componentCategory);
 
         if (saveChanges)
         {
-            await _appDataContext.SaveChangesAsync();
+            await _appDataContext.ComponentsCategories.SaveChangesAsync(cancellationToken);
         }
+
         return componentCategory;
     }
 
 
-    public async ValueTask<ComponentCategory> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<ComponentCategory> DeleteAsync(Guid id, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundComponent = await GetByIdAsync(id);
+        var foundComponent = await GetByIdAsync(id)
+                             ?? throw new EntityNotFoundException(typeof(ComponentCategory));
 
-        if (foundComponent is null)
-        {
-            throw new EntityNotFoundException(typeof(ComponentCategory), foundComponent.Id);
-        }
         if (foundComponent.IsDeleted)
             throw new EntityDeletedException(typeof(ComponentCategory), foundComponent.Id);
 
-        foundComponent.IsDeleted = true;
 
-        foundComponent.DeletedDate = DateTime.UtcNow;
+        await _appDataContext.ComponentsCategories.RemoveAsync(foundComponent, cancellationToken);
 
-        await _appDataContext.SaveChangesAsync();
-
-        return foundComponent;
-
-    }
-
-    public async ValueTask<ComponentCategory> DeleteAsync(ComponentCategory componentCategory, bool saveChanges = true, CancellationToken cancellationToken = default)
-    {
-        var foundComponent = await GetByIdAsync(componentCategory.Id);
-
-        if (foundComponent == null)
-        {
-            throw new EntityNotFoundException(typeof(ComponentCategory), foundComponent.Id);
-        }
-        if (foundComponent.IsDeleted)
-            throw new EntityDeletedException(typeof(ComponentCategory), foundComponent.Id);
-
-        foundComponent.IsDeleted = true;
-
-        foundComponent.DeletedDate = DateTime.UtcNow;
-        await _appDataContext.SaveChangesAsync();
+        if (saveChanges)
+            await _appDataContext.SaveChangesAsync();
 
         return foundComponent;
     }
 
-    public IQueryable<ComponentCategory> Get(Expression<Func<ComponentCategory, bool>> predicate, CancellationToken cancellationToken = default)
+    public ValueTask<ComponentCategory> DeleteAsync(ComponentCategory componentCategory, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        return _appDataContext.ComponentsCategories.Where(predicate.Compile()).AsQueryable();
+        return DeleteAsync(componentCategory.Id, saveChanges, cancellationToken);
     }
 
-    public async ValueTask<ICollection<ComponentCategory>> GetAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+    public IQueryable<ComponentCategory> Get(Expression<Func<ComponentCategory, bool>> predicate,
+        CancellationToken cancellationToken = default)
+        => _appDataContext.ComponentsCategories.Where(predicate.Compile()).AsQueryable();
+
+    public async ValueTask<ICollection<ComponentCategory>> GetAsync(IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default)
     {
         var componentCategory = _appDataContext.ComponentsCategories.Where(x => ids.Contains(x.Id));
 
@@ -87,19 +72,20 @@ public class ComponentCategoryService : IComponentCategoryService
         return await new ValueTask<ComponentCategory?>(componentCategorys);
     }
 
-    public async ValueTask<ComponentCategory> UpdateAsync(ComponentCategory componentCategory, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<ComponentCategory> UpdateAsync(ComponentCategory componentCategory, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var componentCategorys = _appDataContext.ComponentsCategories.FirstOrDefault(x => x.Id == componentCategory.Id);
+        var foundCategory = _appDataContext.ComponentsCategories.FirstOrDefault(x => x.Id == componentCategory.Id)
+                            ?? throw new EntityNotFoundException(typeof(ComponentCategory));
 
-        if (componentCategorys is null)
-        {
-            throw new EntityNotFoundException(typeof(ComponentCategory), componentCategory.Id);
-        }
 
-        componentCategorys.ModifiedDate = DateTime.UtcNow;
+        foundCategory.Name = componentCategory.Name;
 
-        await _appDataContext.SaveChangesAsync();
+        await _appDataContext.ComponentsCategories.UpdateAsync(foundCategory, cancellationToken);
 
-        return componentCategorys;
+        if (saveChanges)
+            await _appDataContext.SaveChangesAsync();
+
+        return foundCategory;
     }
 }

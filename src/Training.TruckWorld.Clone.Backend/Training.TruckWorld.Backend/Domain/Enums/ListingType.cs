@@ -1,6 +1,6 @@
 ﻿namespace Training.TruckWorld.Backend.Domain.Enums;
 
-public enum ListingType
+public enum ListingType : byte
 {
     Sale,
     

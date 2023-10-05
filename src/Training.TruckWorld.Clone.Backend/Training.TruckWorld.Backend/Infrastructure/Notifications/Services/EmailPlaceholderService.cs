@@ -22,13 +22,12 @@ public class EmailPlaceholderService : IEmailPlaceholderService
         _userService = userService;
     }
 
-    public async ValueTask<(EmailTemplate, Dictionary<string, string>)> GetTemplateValues(Guid userId, EmailTemplate template)
+    public async ValueTask<(EmailTemplate, Dictionary<string, string>)> GetTemplateValues(Guid userId,
+        EmailTemplate template)
     {
         var placeholders = GetPlaceholders(template.Body);
 
-        var user = await _userService.GetByIdAsync(userId);
-        if(user is null)
-            throw new EntityNotFoundException(typeof(User), user.Id);
+        var user = await _userService.GetByIdAsync(userId) ?? throw new EntityNotFoundException(typeof(User));
 
         var result = placeholders.Select(placeholder =>
         {
@@ -72,7 +71,6 @@ public class EmailPlaceholderService : IEmailPlaceholderService
             {
                 placeholder.Append(body[i]);
             }
-
         }
     }
 }
