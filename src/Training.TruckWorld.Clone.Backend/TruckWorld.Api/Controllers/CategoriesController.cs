@@ -13,7 +13,8 @@ public class CategoriesController : ControllerBase
     private readonly IComponentCategoryService _componentCategoryService;
     private readonly ITruckCategoryService _truckCategoryService;
 
-    public CategoriesController(IComponentCategoryService componentCategoryService, ITruckCategoryService truckCategoryService)
+    public CategoriesController(IComponentCategoryService componentCategoryService,
+        ITruckCategoryService truckCategoryService)
     {
         _componentCategoryService = componentCategoryService;
         _truckCategoryService = truckCategoryService;
@@ -23,52 +24,60 @@ public class CategoriesController : ControllerBase
     [HttpGet("componentCategories")]
     public IActionResult GetAllComponentCategories([FromQuery] FilterPagination filterPagination)
     {
-        var result = _componentCategoryService.Get(componentcategory => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
+        var result = _componentCategoryService.Get(componentcategory => true)
+            .Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize)
+            .ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
 
     [HttpGet("{componentCategoryId:guid}/componentCategory")]
-    public async ValueTask<IActionResult> GetComponentCategoryByIdAsync([FromRoute] Guid componentCategoryId)
+    public async ValueTask<IActionResult> GetComponentCategoryById([FromRoute] Guid componentCategoryId)
     {
         var result = await _componentCategoryService.GetByIdAsync(componentCategoryId);
+
         return result is not null ? Ok(result) : NotFound();
     }
 
     [HttpPost("componentCategory")]
-    [ActionName(nameof(GetComponentCategoryByIdAsync))]
+    [ActionName(nameof(GetComponentCategoryById))]
     public async ValueTask<IActionResult> CreateComponentCategory([FromBody] ComponentCategory componentCategory)
     {
         var result = await _componentCategoryService.CreateAsync(componentCategory);
-        return  await GetComponentCategoryByIdAsync(result.Id);
+
+        return await GetComponentCategoryById(result.Id);
     }
-    
+
 
     [HttpPut("componentCategory")]
     public async ValueTask<IActionResult> UpdateComponentCategory([FromBody] ComponentCategory componentCategory)
     {
-        var result = await _componentCategoryService.UpdateAsync(componentCategory);
+        await _componentCategoryService.UpdateAsync(componentCategory);
+
         return NoContent();
     }
-    
+
 
     [HttpDelete("{componentCategoryId:guid}/componentCategory")]
     public async ValueTask<IActionResult> DeleteComponentCategory([FromRoute] Guid componentCategoryId)
     {
-        var result = await _componentCategoryService.DeleteAsync(componentCategoryId);
+        await _componentCategoryService.DeleteAsync(componentCategoryId);
+
         return NoContent();
     }
 
     [HttpGet("truckCategories")]
     public IActionResult GetAllTruckCategories([FromQuery] FilterPagination filterPagination)
     {
-        var result = _truckCategoryService.Get(truckCategory => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
+        var result = _truckCategoryService.Get(truckCategory => true)
+            .Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize)
+            .ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
 
     [HttpGet("{truckCategoryId:guid}/truckCategory")]
-    public async ValueTask<IActionResult> GetTruckCategoryByIdAsync([FromRoute] Guid truckCategoryId)
+    public async ValueTask<IActionResult> GetTruckCategoryById([FromRoute] Guid truckCategoryId)
     {
         var result = await _truckCategoryService.GetByIdAsync(truckCategoryId);
         return result is not null ? Ok(result) : NotFound();
@@ -76,18 +85,18 @@ public class CategoriesController : ControllerBase
 
 
     [HttpPost("truckCategory")]
-    [ActionName(nameof(GetTruckCategoryByIdAsync))]
     public async ValueTask<IActionResult> CreateTruckCategory([FromBody] TruckCategory truckCategory)
     {
         var result = await _truckCategoryService.CreateAsync(truckCategory);
-        return await GetTruckCategoryByIdAsync(result.Id);
+        return await GetTruckCategoryById(result.Id);
     }
 
 
     [HttpPut("truckCategory")]
     public async ValueTask<IActionResult> UpdateTruckCategory([FromBody] TruckCategory truckCategory)
     {
-        var result = await _truckCategoryService.UpdateAsync(truckCategory);
+        await _truckCategoryService.UpdateAsync(truckCategory);
+
         return NoContent();
     }
 
@@ -95,7 +104,8 @@ public class CategoriesController : ControllerBase
     [HttpDelete("{truckCategoryId:guid}/truckCategory")]
     public async ValueTask<IActionResult> DeleteTruckCategory([FromRoute] Guid truckCategoryId)
     {
-        var result = await _truckCategoryService.DeleteAsync(truckCategoryId);
+        await _truckCategoryService.DeleteAsync(truckCategoryId);
+
         return NoContent();
     }
 }

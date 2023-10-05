@@ -17,6 +17,7 @@ public class FiltersController: ControllerBase
     public IActionResult GetFilteredProducts([FromBody]ProductFilterModel productFilterModel)
     {
         var result = _filterService.GetFilteredProducts(productFilterModel);
+        
         return result.Any() ? Ok(result) : NotFound();
     }
 }
