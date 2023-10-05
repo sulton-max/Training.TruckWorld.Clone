@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 using TruckWorld.Api.Models.Dtos;
 
 namespace TruckWorld.Api.Controllers;
@@ -18,9 +19,9 @@ public class ComponentsController : ControllerBase
         _mapper = mapper;
     }
     [HttpGet]
-    public IActionResult GetAllComponents([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllComponents([FromQuery] FilterPagination filterPagination)
     {
-        var value = _componentService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var value = _componentService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         var result = _mapper.Map<List<ComponentDto>>(value);
         return result.Any() ? Ok(result) : NotFound();
     }
@@ -47,7 +48,7 @@ public class ComponentsController : ControllerBase
     {
         var component = _mapper.Map<Component>(componentDto);
         var value = await _componentService.UpdateAsync(component);
-        var result = _mapper.Map<TruckDto>(value);
+        var result = _mapper.Map<ComponentDto>(value);
         return NoContent();
     }
 

@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Components.Models.Filters;
 using Training.TruckWorld.Backend.Application.Components.Services;
@@ -11,8 +11,8 @@ namespace Training.TruckWorld.Backend.Infrastructure.Components.Services;
 
 public class ComponentService : IComponentService
 {
-    private readonly IDataContext _appDataContext;
-    private readonly IValidationService _validationService;
+    private IDataContext _appDataContext;
+    private IValidationService _validationService;
 
     public ComponentService(IDataContext appDataContext, IValidationService validationService)
     {
@@ -135,9 +135,14 @@ public class ComponentService : IComponentService
     public async ValueTask<Component> UpdateAsync(Component component, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
+        ToValidate(component);
+
         var foundComponent =
             _appDataContext.Components.FirstOrDefault(searchingComponent => searchingComponent.Id == component.Id)
             ?? throw new EntityNotFoundException(typeof(Component));
+
+        if (foundComponent is null)
+            throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
 
         ToValidate(foundComponent);
 
@@ -168,7 +173,10 @@ public class ComponentService : IComponentService
         if (!_validationService.IsValidComponentCategory(component.Category))
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Category");
         if (!_validationService.IsValidDescription(component.Description))
+        {
+            Console.WriteLine(component.Description);
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Description");
+        }
         if (!_validationService.IsValidEmailAddress(component.Contact.EmailAddress))
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid EmailAddress");
         if (!_validationService.IsValidStuffs(component.Manufacturer))

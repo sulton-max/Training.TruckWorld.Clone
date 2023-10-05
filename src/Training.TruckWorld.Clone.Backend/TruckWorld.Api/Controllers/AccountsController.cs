@@ -14,14 +14,14 @@ public class AccountsController : ControllerBase
     {
         _accountService = accountService;
     }
-    [HttpPost]
+    [HttpPost("register")]
     public async ValueTask<IActionResult> Register([FromBody] RegisterDetails regisetrDetails)
     {
         var result = await _accountService.Register(regisetrDetails);
         return result is not null ? Ok(result) : BadRequest();
     }
 
-    [HttpPost("account")]
+    [HttpPost("login")]
     public async ValueTask<IActionResult> Login([FromBody] LoginDetails loginDetails)
     {
         var result = await _accountService.Login(loginDetails);

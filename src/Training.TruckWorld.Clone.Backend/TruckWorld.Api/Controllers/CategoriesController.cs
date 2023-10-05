@@ -2,6 +2,7 @@
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 
 namespace TruckWorld.Api.Controllers;
 
@@ -20,26 +21,26 @@ public class CategoriesController : ControllerBase
 
 
     [HttpGet("componentCategories")]
-    public IActionResult GetAllComponentCategories([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllComponentCategories([FromQuery] FilterPagination filterPagination)
     {
-        var result = _componentCategoryService.Get(componentcategory => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _componentCategoryService.Get(componentcategory => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
 
     [HttpGet("{componentCategoryId:guid}/componentCategory")]
-    public async ValueTask<IActionResult> GetComponentCategoryById([FromRoute] Guid componentCategoryId)
+    public async ValueTask<IActionResult> GetComponentCategoryByIdAsync([FromRoute] Guid componentCategoryId)
     {
         var result = await _componentCategoryService.GetByIdAsync(componentCategoryId);
         return result is not null ? Ok(result) : NotFound();
     }
 
-
     [HttpPost("componentCategory")]
+    [ActionName(nameof(GetComponentCategoryByIdAsync))]
     public async ValueTask<IActionResult> CreateComponentCategory([FromBody] ComponentCategory componentCategory)
     {
         var result = await _componentCategoryService.CreateAsync(componentCategory);
-        return CreatedAtAction(nameof(GetComponentCategoryById), new { componentCategroyId = result.Id }, result);
+        return  await GetComponentCategoryByIdAsync(result.Id);
     }
     
 
@@ -51,7 +52,7 @@ public class CategoriesController : ControllerBase
     }
     
 
-    [HttpDelete("{componentCategoryId:guid}")]
+    [HttpDelete("{componentCategoryId:guid}/componentCategory")]
     public async ValueTask<IActionResult> DeleteComponentCategory([FromRoute] Guid componentCategoryId)
     {
         var result = await _componentCategoryService.DeleteAsync(componentCategoryId);
@@ -59,15 +60,15 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet("truckCategories")]
-    public IActionResult GetAllTruckCategories([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllTruckCategories([FromQuery] FilterPagination filterPagination)
     {
-        var result = _truckCategoryService.Get(truckCategory => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _truckCategoryService.Get(truckCategory => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
 
     [HttpGet("{truckCategoryId:guid}/truckCategory")]
-    public async ValueTask<IActionResult> GetTruckCategoryById([FromRoute] Guid truckCategoryId)
+    public async ValueTask<IActionResult> GetTruckCategoryByIdAsync([FromRoute] Guid truckCategoryId)
     {
         var result = await _truckCategoryService.GetByIdAsync(truckCategoryId);
         return result is not null ? Ok(result) : NotFound();
@@ -75,10 +76,11 @@ public class CategoriesController : ControllerBase
 
 
     [HttpPost("truckCategory")]
+    [ActionName(nameof(GetTruckCategoryByIdAsync))]
     public async ValueTask<IActionResult> CreateTruckCategory([FromBody] TruckCategory truckCategory)
     {
         var result = await _truckCategoryService.CreateAsync(truckCategory);
-        return CreatedAtAction(nameof(GetTruckCategoryById), new { truckCategroyId = result.Id }, result);
+        return await GetTruckCategoryByIdAsync(result.Id);
     }
 
 
@@ -90,7 +92,7 @@ public class CategoriesController : ControllerBase
     }
 
 
-    [HttpDelete("{truckCategoryId:guid}")]
+    [HttpDelete("{truckCategoryId:guid}/truckCategory")]
     public async ValueTask<IActionResult> DeleteTruckCategory([FromRoute] Guid truckCategoryId)
     {
         var result = await _truckCategoryService.DeleteAsync(truckCategoryId);
