@@ -62,6 +62,7 @@ public class ComponentsController : ControllerBase
         var value = await _componentService.CreateAsync(component);
 
         var result = _mapper.Map<ComponentDto>(value);
+
         return CreatedAtAction(nameof(GetById), new { componentId = result.Id }, result);
     }
 
@@ -73,7 +74,15 @@ public class ComponentsController : ControllerBase
     }
 
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateComponent([FromBody] ComponentDto componentDto)
+    public async ValueTask<IActionResult> UpdateComponentAsync([FromBody] ComponentDto componentDto)
+=========
+
+        return CreatedAtAction(nameof(GetById), new { componentId = result.Id }, result);
+    }
+
+    [HttpPut]
+    public async ValueTask<IActionResult> Update([FromBody] ComponentDto componentDto)
+>>>>>>>>> Temporary merge branch 2
     {
         var component = _mapper.Map<Component>(componentDto);
 
@@ -85,7 +94,11 @@ public class ComponentsController : ControllerBase
     }
 
     [HttpDelete("{componentId:guid}")]
-    public async ValueTask<IActionResult> DeleteComponent([FromRoute] Guid componentId)
+<<<<<<<<< Temporary merge branch 1
+    public async ValueTask<IActionResult> DeleteComponentAsync([FromRoute] Guid componentId)
+=========
+    public async ValueTask<IActionResult> Delete([FromRoute] Guid componentId)
+>>>>>>>>> Temporary merge branch 2
     {
         var value = await _componentService.DeleteAsync(componentId);
 

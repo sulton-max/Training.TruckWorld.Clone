@@ -29,7 +29,7 @@ public class NotificationsController : ControllerBase
     [HttpPost("{userId:guid}/{templateCategory}")]
     public IActionResult SendEmail(Guid userId, string templateCategory)
     {
-        var result = _emailManagementService.SendEmail(userId, templateCategory);
+        var result = _emailManagementService.SendEmailAsync(userId, templateCategory);
         
         return result.Any() ? Ok(result) : BadRequest();
     }
@@ -56,6 +56,7 @@ public class NotificationsController : ControllerBase
     public async ValueTask<IActionResult> CreateEmailAsync([FromBody] Email email)
     {
         var result = await _emailService.CreateAsync(email);
+        
         return CreatedAtAction(nameof(GetEmailById), new { emailId = result.Id }, result);
     }
 

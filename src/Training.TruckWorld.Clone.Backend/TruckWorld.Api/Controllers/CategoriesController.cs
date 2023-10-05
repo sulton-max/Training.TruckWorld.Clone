@@ -85,7 +85,6 @@ public class CategoriesController : ControllerBase
 
 
     [HttpPost("truckCategory")]
-    [ActionName(nameof(GetTruckCategoryByIdAsync))]
     public async ValueTask<IActionResult> CreateTruckCategory([FromBody] TruckCategory truckCategory)
     {
         var result = await _truckCategoryService.CreateAsync(truckCategory);
