@@ -24,39 +24,34 @@ public class TruckService : ITruckService
         CancellationToken cancellationToken = default)
     {
         ToValidate(truck);
-        _appDataContext.Trucks.AddAsync(truck, cancellationToken);
+
+        await _appDataContext.Trucks.AddAsync(truck, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+
         return truck;
     }
 
-    public async ValueTask<Truck> DeleteAsync(Truck truck, bool saveChanges = true,
+    public ValueTask<Truck> DeleteAsync(Truck truck, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
-        var foundTruck = await GetByIdAsync(truck.Id, cancellationToken);
-        if (foundTruck is null)
-            throw new EntityNotFoundException(typeof(Truck), foundTruck.Id);
-        if (foundTruck.IsDeleted)
-            throw new EntityDeletedException(typeof(Truck), foundTruck.Id);
-        foundTruck.IsDeleted = true;
-        foundTruck.DeletedDate = DateTime.UtcNow;
-        if (saveChanges)
-            await _appDataContext.SaveChangesAsync();
-        return foundTruck;
+        return DeleteAsync(truck.Id, saveChanges, cancellationToken);
     }
 
     public async ValueTask<Truck> DeleteAsync(Guid id, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
-        var foundTruck = await GetByIdAsync(id, cancellationToken);
-        if (foundTruck is null)
-            throw new EntityNotFoundException(typeof(Truck), foundTruck.Id);
+        var foundTruck = await GetByIdAsync(id, cancellationToken) ?? throw new EntityNotFoundException(typeof(Truck));
+
         if (foundTruck.IsDeleted)
             throw new EntityDeletedException(typeof(Truck), foundTruck.Id);
-        foundTruck.IsDeleted = true;
-        foundTruck.DeletedDate = DateTime.UtcNow;
+
+        await _appDataContext.Trucks.RemoveAsync(foundTruck, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+        
         return foundTruck;
     }
 
@@ -144,10 +139,9 @@ public class TruckService : ITruckService
     public async ValueTask<Truck> UpdateAsync(Truck truck, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
-        var foundTruck = _appDataContext.Trucks.FirstOrDefault(searchingTruck => searchingTruck.Id == truck.Id);
+        var foundTruck = _appDataContext.Trucks.FirstOrDefault(searchingTruck => searchingTruck.Id == truck.Id)
+                         ?? throw new EntityNotFoundException(typeof(Truck));
 
-        if (foundTruck is null)
-            throw new EntityNotFoundException(typeof(Truck), foundTruck.Id);
         ToValidate(truck);
 
         foundTruck.UserId = truck.UserId;
@@ -165,9 +159,12 @@ public class TruckService : ITruckService
         foundTruck.FuelType = truck.FuelType;
         foundTruck.Color = truck.Color;
         foundTruck.ContactUser = truck.ContactUser;
-        foundTruck.ModifiedDate = DateTime.UtcNow;
+
+        await _appDataContext.Trucks.UpdateAsync(foundTruck, cancellationToken);
+
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
+        
         return foundTruck;
     }
 

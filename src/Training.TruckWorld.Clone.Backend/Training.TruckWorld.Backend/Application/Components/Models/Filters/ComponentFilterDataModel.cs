@@ -11,7 +11,6 @@ public class ComponentFilterDataModel
     /// </summary>
     public IEnumerable<KeyValuePair<string, ComponentCategory>> Categories { get; set; }
 
-
     /// <summary>
     /// Listing types (Action)
     /// </summary>

@@ -14,19 +14,4 @@ public class ContactUser
     public string PhoneNumber { get; set; }
 
     public Location Location { get; set; }
-
-    public ContactUser()
-    {
-    }
-
-    public ContactUser(Guid userId, string firstName, string lastName, string emailAddress, string phoneNumber,
-        Location location)
-    {
-        UserId = userId;
-        FirstName = firstName;
-        LastName = lastName;
-        EmailAddress = emailAddress;
-        PhoneNumber = phoneNumber;
-        Location = location;
-    }
 }

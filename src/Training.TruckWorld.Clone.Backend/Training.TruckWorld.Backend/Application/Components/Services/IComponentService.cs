@@ -9,11 +9,11 @@ public interface IComponentService
     IQueryable<Component> Get(Expression<Func<Component, bool>> predicate);
 
     ValueTask<ICollection<Component>> GetAsync(IEnumerable<Guid> ids);
-    
+
     ValueTask<ComponentFilterDataModel> GetFilterDataModel();
-    
+
     ValueTask<ICollection<Component>> GetAsync(ComponentFilterModel filterModel);
-    
+
     ValueTask<Component?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     ValueTask<Component> CreateAsync(Component component, bool saveChanges = true,

@@ -15,7 +15,8 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             _appDataContext = appDataContext;
         }
 
-        public async ValueTask<Email> CreateAsync(Email email, bool saveChanges = true, CancellationToken cancellationToken = default)
+        public async ValueTask<Email> CreateAsync(Email email, bool saveChanges = true,
+            CancellationToken cancellationToken = default)
         {
             await _appDataContext.Emails.AddAsync(email, cancellationToken);
 
@@ -25,47 +26,34 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             return email;
         }
 
-        public async ValueTask<Email> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
+        public async ValueTask<Email> DeleteAsync(Guid id, bool saveChanges = true,
+            CancellationToken cancellationToken = default)
         {
-            var foundEmail = await GetByIdAsync(id);
+            var foundEmail = await GetByIdAsync(id) ?? throw new EntityNotFoundException(typeof(Email));
 
-            if (foundEmail is null)
-                throw new EntityNotFoundException(typeof(Email), foundEmail.Id);
-
-            if(foundEmail.IsDeleted)
+            if (foundEmail.IsDeleted)
                 throw new EntityDeletedException(typeof(Email), foundEmail.Id);
 
-            foundEmail.IsDeleted = true;
-            foundEmail.DeletedDate = DateTime.UtcNow;
+
+            await _appDataContext.Emails.RemoveAsync(foundEmail, cancellationToken);
+
             if (saveChanges)
                 await _appDataContext.SaveChangesAsync();
 
             return foundEmail;
         }
 
-        public async ValueTask<Email> DeleteAsync(Email email, bool saveChanges = true, CancellationToken cancellationToken = default)
+        public ValueTask<Email> DeleteAsync(Email email, bool saveChanges = true,
+            CancellationToken cancellationToken = default)
         {
-            var foundEmail = await GetByIdAsync(email.Id);
-
-            if (foundEmail is null)
-                throw new EntityNotFoundException(typeof(Email), foundEmail.Id);
-
-            if (foundEmail.IsDeleted)
-                throw new EntityDeletedException(typeof(Email), foundEmail.Id);
-
-            foundEmail.IsDeleted = true;
-            foundEmail.DeletedDate = DateTime.UtcNow;
-            if (saveChanges)
-                await _appDataContext.SaveChangesAsync();
-
-            return foundEmail;
+            return DeleteAsync(email.Id, saveChanges, cancellationToken);
         }
 
         public IQueryable<Email> Get(Expression<Func<Email, bool>> expression)
         {
             return _appDataContext.Emails.Where(expression.Compile()).AsQueryable();
         }
-        
+
         public ValueTask<ICollection<Email>> GetAsync(IEnumerable<Guid> ids)
         {
             var email = _appDataContext.Emails.Where(email => ids.Contains(email.Id));
@@ -80,12 +68,12 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             return new ValueTask<Email?>(email);
         }
 
-        public async ValueTask<Email> UpdateAsync(Email email, bool saveChanges = true, CancellationToken cancellationToken = default)
+        public async ValueTask<Email> UpdateAsync(Email email, bool saveChanges = true,
+            CancellationToken cancellationToken = default)
         {
-            var foundEmail = _appDataContext.Emails.FirstOrDefault(searched => searched.Id == email.Id);
+            var foundEmail = _appDataContext.Emails.FirstOrDefault(searched => searched.Id == email.Id)
+                             ?? throw new EntityNotFoundException(typeof(Email));
 
-            if (foundEmail is null)
-                throw new EntityNotFoundException(typeof(Email), foundEmail.Id);
 
             foundEmail.SenderAddress = email.SenderAddress;
             foundEmail.ReceiverAddress = email.ReceiverAddress;
@@ -93,11 +81,13 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             foundEmail.Body = email.Body;
             foundEmail.SentTime = email.SentTime;
             foundEmail.IsSent = email.IsSent;
-            foundEmail.ModifiedDate = DateTime.UtcNow;
+
+            await _appDataContext.Emails.UpdateAsync(foundEmail, cancellationToken);
+
             if (saveChanges)
                 await _appDataContext.SaveChangesAsync();
+            
             return foundEmail;
         }
     }
-
 }

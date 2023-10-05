@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Net;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Exceptions;
@@ -16,43 +15,41 @@ public class UserCredentialsService : IUserCredentialsService
     {
         _appDataContext = appDataContext;
         _passwordHasherService = passwordHasherService;
-
     }
 
-    public async ValueTask<UserCredentials> CreateAsync(UserCredentials userCredentials, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<UserCredentials> CreateAsync(UserCredentials userCredentials, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
         ValidateOnCreate(userCredentials);
 
         userCredentials.Password = _passwordHasherService.Hash(userCredentials.Password);
 
-        await _appDataContext.UserCredentials.AddAsync(userCredentials);
+        await _appDataContext.UserCredentials.AddAsync(userCredentials, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.UserCredentials.SaveChangesAsync();
+            await _appDataContext.SaveChangesAsync();
 
         return userCredentials;
     }
 
-    public ValueTask<UserCredentials> DeleteAsync(UserCredentials userCredentials, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public ValueTask<UserCredentials> DeleteAsync(UserCredentials userCredentials, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        return DeleteAsync(userCredentials.Id, saveChanges);
+        return DeleteAsync(userCredentials.Id, saveChanges, cancellationToken);
     }
 
-    public async ValueTask<UserCredentials> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<UserCredentials> DeleteAsync(Guid id, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var credentials = await GetByIdAsync(id);
-
-        if (credentials == null)
-            throw new EntityNotFoundException(typeof(UserCredentials), credentials.Id);
+        var credentials = await GetByIdAsync(id) ?? throw new EntityNotFoundException(typeof(UserCredentials));
 
         if (credentials.IsDeleted)
             throw new EntityDeletedException(typeof(UserCredentials), credentials.Id);
 
-        credentials.IsDeleted = true;
-        credentials.DeletedDate = DateTime.UtcNow;
+        await _appDataContext.UserCredentials.RemoveAsync(credentials, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.UserCredentials.SaveChangesAsync();
+            await _appDataContext.SaveChangesAsync();
 
         return credentials;
     }
@@ -61,36 +58,41 @@ public class UserCredentialsService : IUserCredentialsService
         => _appDataContext.UserCredentials.Where(predicate.Compile()).AsQueryable();
 
     public ValueTask<ICollection<UserCredentials>> Get(IEnumerable<Guid> ids)
-        => new ValueTask<ICollection<UserCredentials>>(_appDataContext.UserCredentials
+        => new(_appDataContext.UserCredentials
             .Where(credentials => ids.Contains(credentials.Id)).ToList());
 
-    public async ValueTask<UserCredentials> UpdateAsync(string oldPassword, UserCredentials userCredentials, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<UserCredentials> UpdateAsync(string oldPassword, UserCredentials userCredentials,
+        bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         ValidateOnUpdate(userCredentials);
 
-        var credentials = await GetByIdAsync(userCredentials.Id);
+        var credentials = await GetByIdAsync(userCredentials.Id)
+                          ?? throw new EntityNotFoundException(typeof(UserCredentials));
 
         if (_passwordHasherService.Verify(oldPassword, credentials.Password))
             throw new IncorrectPasswordException("Password incorrect!");
 
         credentials.Password = _passwordHasherService.Hash(userCredentials.Password);
-        credentials.ModifiedDate = DateTime.UtcNow;
+
+        await _appDataContext.UserCredentials.UpdateAsync(credentials, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.UserCredentials.SaveChangesAsync();
+            await _appDataContext.SaveChangesAsync();
 
         return credentials;
     }
-    public async ValueTask<UserCredentials> GetByIdAsync(Guid id) => await _appDataContext.UserCredentials.FindAsync(id);
+
+    public async ValueTask<UserCredentials> GetByIdAsync(Guid id) =>
+        await _appDataContext.UserCredentials.FindAsync(id);
 
 
     private bool ValidateOnCreate(UserCredentials userCredentials)
     {
         if (UserCredentialsExists(userCredentials.Id))
-            throw new ExistingEntityException(typeof(UserCredentials), userCredentials.Id);
+            throw new EntityConflictException(typeof(UserCredentials), nameof(userCredentials));
 
         if (_appDataContext.UserCredentials.Any(credentials => credentials.UserId == userCredentials.UserId))
-            throw new ExistingEntityException(typeof(UserCredentials), userCredentials.Id);
+            throw new EntityConflictException(typeof(UserCredentials), nameof(userCredentials));
 
         ValidatePassword(userCredentials);
         return true;

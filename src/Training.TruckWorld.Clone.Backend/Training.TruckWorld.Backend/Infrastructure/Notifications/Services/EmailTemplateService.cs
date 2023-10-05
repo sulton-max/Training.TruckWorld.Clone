@@ -9,15 +9,20 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
 public class EmailTemplateService : IEmailTemplateService
 {
     private readonly IDataContext _appDateContext;
+
     public EmailTemplateService(IDataContext appDateContext)
     {
         _appDateContext = appDateContext;
     }
-    public async ValueTask<EmailTemplate> CreateAsync(EmailTemplate emailTemplate, bool saveChanges = true, CancellationToken cancellationToken = default)
+
+    public async ValueTask<EmailTemplate> CreateAsync(EmailTemplate emailTemplate, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
         await _appDateContext.EmailTemplates.AddAsync(emailTemplate, cancellationToken);
+
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
+
         return emailTemplate;
     }
 
@@ -29,57 +34,57 @@ public class EmailTemplateService : IEmailTemplateService
     public ValueTask<EmailTemplate?> GetByIdAsync(Guid id)
     {
         var emailTemplate = _appDateContext.EmailTemplates.FirstOrDefault(emailTemplate => emailTemplate.Id == id);
+
         return new ValueTask<EmailTemplate?>(emailTemplate);
     }
 
     public ValueTask<ICollection<EmailTemplate>> GetAsync(IEnumerable<Guid> ids)
     {
         var emailTemlates = _appDateContext.EmailTemplates.Where(emailtemplate => ids.Contains(emailtemplate.Id));
+
         return new ValueTask<ICollection<EmailTemplate>>(emailTemlates.ToList());
     }
 
-    public async ValueTask<EmailTemplate> UpdateAsync(EmailTemplate emailTemplate, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<EmailTemplate> UpdateAsync(EmailTemplate emailTemplate, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundEmailTemplate = _appDateContext.EmailTemplates.FirstOrDefault(searched => searched.Id == emailTemplate.Id);
-        if (foundEmailTemplate is null)
-            throw new EntityNotFoundException(typeof(EmailTemplate), foundEmailTemplate.Id);
+        var foundEmailTemplate =
+            _appDateContext.EmailTemplates.FirstOrDefault(searched => searched.Id == emailTemplate.Id)
+            ?? throw new EntityNotFoundException(typeof(EmailTemplate));
+
+
         foundEmailTemplate.Subject = emailTemplate.Subject;
         foundEmailTemplate.Body = emailTemplate.Body;
-        foundEmailTemplate.ModifiedDate = DateTime.UtcNow;
+
+        await _appDateContext.EmailTemplates.UpdateAsync(foundEmailTemplate, cancellationToken);
+
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
+
         return foundEmailTemplate;
     }
 
-    public async ValueTask<EmailTemplate> DeleteAsync(Guid id, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public async ValueTask<EmailTemplate> DeleteAsync(Guid id, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundEmailTemplate = await GetByIdAsync(id);
-        if (foundEmailTemplate is null)
-            throw new EntityNotFoundException(typeof(EmailTemplate), foundEmailTemplate.Id);
+        var foundEmailTemplate = await GetByIdAsync(id) ?? throw new EntityNotFoundException(typeof(EmailTemplate));
 
         if (foundEmailTemplate.IsDeleted)
             throw new EntityDeletedException(typeof(EmailTemplate), foundEmailTemplate.Id);
 
         foundEmailTemplate.IsDeleted = true;
-        foundEmailTemplate.DeletedDate  = DateTime.UtcNow;
+
+        await _appDateContext.EmailTemplates.RemoveAsync(foundEmailTemplate, cancellationToken);
+
         if (saveChanges)
             await _appDateContext.SaveChangesAsync();
+
         return foundEmailTemplate;
     }
 
-    public async ValueTask<EmailTemplate> DeleteAsync(EmailTemplate emailTemplate, bool saveChanges = true, CancellationToken cancellationToken = default)
+    public  ValueTask<EmailTemplate> DeleteAsync(EmailTemplate emailTemplate, bool saveChanges = true,
+        CancellationToken cancellationToken = default)
     {
-        var foundEmailTemplate = await GetByIdAsync(emailTemplate.Id);
-        if (foundEmailTemplate is null)
-            throw new EntityNotFoundException(typeof(EmailTemplate), foundEmailTemplate.Id);
-
-        if (foundEmailTemplate.IsDeleted)
-            throw new EntityDeletedException(typeof(EmailTemplate), foundEmailTemplate.Id);
-
-        foundEmailTemplate.IsDeleted = true;
-        foundEmailTemplate.DeletedDate = DateTime.UtcNow;
-        if (saveChanges)
-            await _appDateContext.SaveChangesAsync();
-        return foundEmailTemplate;
+        return DeleteAsync(emailTemplate.Id, saveChanges, cancellationToken);
     }
 }
