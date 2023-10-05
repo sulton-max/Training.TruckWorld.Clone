@@ -42,7 +42,7 @@ public class AppFileContext : FileContext, IDataContext
         {
             if (entry is not IFileEntityEntry<IEntity> entityEntry) continue;
 
-            if (entityEntry.Entity is User) continue;
+            // if (entityEntry.Entity is User) continue;
 
             if (entityEntry.State == FileEntityState.Added)
                 entityEntry.Entity.Id = Guid.NewGuid();

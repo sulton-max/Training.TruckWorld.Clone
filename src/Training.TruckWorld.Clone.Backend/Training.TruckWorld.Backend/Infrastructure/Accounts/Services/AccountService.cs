@@ -25,9 +25,9 @@ public class AccountService : IAccountService
             throw new EntityConflictException(typeof(User), nameof(registerDetails.EmailAddress));
 
         var user = new User(registerDetails.FirstName, registerDetails.LastName, registerDetails.EmailAddress);
-        var credentials = new UserCredentials(user.Id, registerDetails.Password);
+        var result = await _userService.CreateAsync(user);
 
-        await _userService.CreateAsync(user);
+        var credentials = new UserCredentials(result.Id, registerDetails.Password);
         await _credentialsService.CreateAsync(credentials);
 
         return user;
