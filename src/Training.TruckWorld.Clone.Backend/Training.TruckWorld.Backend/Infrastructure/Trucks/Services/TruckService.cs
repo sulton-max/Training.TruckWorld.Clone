@@ -51,7 +51,7 @@ public class TruckService : ITruckService
 
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
-        
+
         return foundTruck;
     }
 
@@ -104,7 +104,6 @@ public class TruckService : ITruckService
         return new ValueTask<TruckFilterDataModel>(dataModel);
     }
 
-
     public ValueTask<ICollection<Truck>> GetAsync(TruckFilterModel filterModel)
     {
         return new ValueTask<ICollection<Truck>>(_appDataContext.Trucks.Where(truck =>
@@ -113,14 +112,14 @@ public class TruckService : ITruckService
               || truck.Model.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)))
             && (filterModel.ListingTypes == null || filterModel.ListingTypes.Contains(truck.ListingType))
             && (filterModel.Categories == null || filterModel.Categories.Contains(truck.Category))
-            && (filterModel.MinYear == null || filterModel.MinYear <= truck.Year)
-            && (filterModel.MaxYear == null || filterModel.MaxYear >= truck.Year)
-            && (filterModel.MinOdometer == null || filterModel.MinOdometer <= truck.Odometer)
-            && (filterModel.MaxOdometer == null || filterModel.MaxOdometer <= truck.Odometer)
-            && (filterModel.MinPrice == null || filterModel.MinPrice <= truck.Price)
-            && (filterModel.MaxPrice == null || filterModel.MaxPrice >= truck.Price)
-            && (filterModel.MinDate == null || filterModel.MinDate <= truck.CreatedDate)
-            && (filterModel.MaxDate == null || filterModel.MaxDate >= truck.CreatedDate)
+            && (!filterModel.MinYear.HasValue || filterModel.MinYear <= truck.Year)
+            && (!filterModel.MaxYear.HasValue || filterModel.MaxYear >= truck.Year)
+            && (!filterModel.MinOdometer.HasValue || filterModel.MinOdometer <= truck.Odometer)
+            && (!filterModel.MaxOdometer.HasValue || filterModel.MaxOdometer <= truck.Odometer)
+            && (!filterModel.MinPrice.HasValue || filterModel.MinPrice <= truck.Price)
+            && (!filterModel.MaxPrice.HasValue || filterModel.MaxPrice >= truck.Price)
+            && (!filterModel.MinDate.HasValue || filterModel.MinDate <= truck.CreatedDate)
+            && (!filterModel.MaxDate.HasValue || filterModel.MaxDate >= truck.CreatedDate)
         ).Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToArray());
     }
 
@@ -164,7 +163,7 @@ public class TruckService : ITruckService
 
         if (saveChanges)
             await _appDataContext.SaveChangesAsync();
-        
+
         return foundTruck;
     }
 

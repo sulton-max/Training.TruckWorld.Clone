@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Notifications.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
@@ -19,16 +19,18 @@ public class NotificationsController : ControllerBase
     }
 
     [HttpPost("{userId:guid}/{tempateId:Guid}")]
-    public async ValueTask<IActionResult> SendEmailAsync(Guid userId, Guid templateId)
+    public async ValueTask<IActionResult> SendEmail(Guid userId, Guid templateId)
     {
         var result = await _emailManagementService.SendEmailAsync(userId, templateId);
+        
         return result ? Ok(result) : BadRequest();
     }
 
     [HttpPost("{userId:guid}/{templateCategory}")]
     public IActionResult SendEmail(Guid userId, string templateCategory)
     {
-        var result = _emailManagementService.SendEmail(userId, templateCategory);
+        var result = _emailManagementService.SendEmailAsync(userId, templateCategory);
+        
         return result.Any() ? Ok(result) : BadRequest();
     }
 
@@ -36,6 +38,7 @@ public class NotificationsController : ControllerBase
     public IActionResult GetAllEmails([FromQuery] FilterPagination filterPagination)
     {
         var result = _emailService.Get(email => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
+        
         return result.Any() ? Ok(result) : NotFound();
     }
 
@@ -44,6 +47,7 @@ public class NotificationsController : ControllerBase
     public async ValueTask<IActionResult> GetEmailByIdAsync([FromRoute] Guid emailId)
     {
         var result = await _emailService.GetByIdAsync(emailId);
+        
         return result is not null ? Ok(result) : NotFound();
     }
 
@@ -52,7 +56,8 @@ public class NotificationsController : ControllerBase
     public async ValueTask<IActionResult> CreateEmailAsync([FromBody] Email email)
     {
         var result = await _emailService.CreateAsync(email);
-        return CreatedAtAction(nameof(GetEmailByIdAsync), new { emailId = result.Id }, result);
+        
+        return CreatedAtAction(nameof(GetEmailById), new { emailId = result.Id }, result);
     }
 
 
@@ -60,6 +65,7 @@ public class NotificationsController : ControllerBase
     public async ValueTask<IActionResult> UpdateEmailAsync([FromBody] Email email)
     {
         var result = await _emailService.UpdateAsync(email);
+        
         return NoContent();
     }
 
@@ -67,7 +73,8 @@ public class NotificationsController : ControllerBase
     [HttpDelete("{emailId:guid}")]
     public async ValueTask<IActionResult> DeleteEmailAsync([FromRoute] Guid emailId)
     {
-        var result = await _emailService.DeleteAsync(emailId);
+        await _emailService.DeleteAsync(emailId);
+
         return NoContent();
     }
 
@@ -75,6 +82,7 @@ public class NotificationsController : ControllerBase
     public IActionResult GetAllEmailTemplates([FromQuery] FilterPagination filterPagination)
     {
         var result = _emailTemplateService.Get(emailTemplate => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
+     
         return result.Any() ? Ok(result) : NotFound();
     }
 
@@ -83,6 +91,7 @@ public class NotificationsController : ControllerBase
     public async ValueTask<IActionResult> GetEmailTemplateById([FromRoute] Guid emailTemplateId)
     {
         var result = await _emailTemplateService.GetByIdAsync(emailTemplateId);
+        
         return result is not null ? Ok(result) : NotFound();
     }
 
@@ -91,6 +100,7 @@ public class NotificationsController : ControllerBase
     public async ValueTask<IActionResult> CreateTRuckCategory([FromBody] EmailTemplate emailTemplate)
     {
         var result = await _emailTemplateService.CreateAsync(emailTemplate);
+        
         return CreatedAtAction(nameof(GetEmailTemplateById), new { emailTemplateId = result.Id }, result);
     }
 
@@ -98,7 +108,8 @@ public class NotificationsController : ControllerBase
     [HttpPut("emailTemplate")]
     public async ValueTask<IActionResult> UpdateEmailTemplate([FromBody] EmailTemplate emailTemplate)
     {
-        var result = await _emailTemplateService.UpdateAsync(emailTemplate);
+        await _emailTemplateService.UpdateAsync(emailTemplate);
+        
         return NoContent();
     }
 
@@ -106,7 +117,8 @@ public class NotificationsController : ControllerBase
     [HttpDelete("{emailTemplateId:guid}")]
     public async ValueTask<IActionResult> DeleteEmailTemplate([FromRoute] Guid emailTemplateId)
     {
-        var result = await _emailTemplateService.DeleteAsync(emailTemplateId);
+        await _emailTemplateService.DeleteAsync(emailTemplateId);
+        
         return NoContent();
     }
 }

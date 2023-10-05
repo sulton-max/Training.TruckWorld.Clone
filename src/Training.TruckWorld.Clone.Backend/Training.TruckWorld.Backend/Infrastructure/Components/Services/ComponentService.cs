@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Bogus;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Components.Models.Filters;
 using Training.TruckWorld.Backend.Application.Components.Services;
@@ -83,14 +84,14 @@ public class ComponentService : IComponentService
             (filterModel.Keyword is null ||
              (component.Manufacturer.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)
               || component.Model.Contains(filterModel.Keyword)))
-            && (filterModel.ListingTypes == null || filterModel.ListingTypes.Contains(component.ListingType))
-            && (filterModel.Categories == null || filterModel.Categories.Contains(component.Category))
-            && (filterModel.MinYear == null || filterModel.MinYear <= component.Year)
-            && (filterModel.MaxYear == null || filterModel.MaxYear >= component.Year)
-            && (filterModel.MinDate == null || filterModel.MinDate <= component.CreatedDate)
-            && (filterModel.MaxDate == null || filterModel.MaxDate >= component.CreatedDate)
-            && (filterModel.MinPrice == null || filterModel.MinPrice <= component.Price)
-            && (filterModel.MaxPrice == null || filterModel.MaxPrice >= component.Price)
+            && (filterModel.ListingTypes is null || filterModel.ListingTypes.Contains(component.ListingType))
+            && (filterModel.Categories is null || filterModel.Categories.Contains(component.Category))
+            && (!filterModel.MinYear.HasValue || filterModel.MinYear <= component.Year)
+            && (!filterModel.MaxYear.HasValue || filterModel.MaxYear >= component.Year)
+            && (!filterModel.MinDate.HasValue || filterModel.MinDate <= component.CreatedDate)
+            && (!filterModel.MaxDate.HasValue || filterModel.MaxDate >= component.CreatedDate)
+            && (!filterModel.MinPrice.HasValue || filterModel.MinPrice <= component.Price)
+            && (!filterModel.MaxPrice.HasValue || filterModel.MaxPrice >= component.Price)
         ).Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToList());
     }
 
@@ -177,6 +178,7 @@ public class ComponentService : IComponentService
             Console.WriteLine(component.Description);
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Description");
         }
+
         if (!_validationService.IsValidEmailAddress(component.Contact.EmailAddress))
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid EmailAddress");
         if (!_validationService.IsValidStuffs(component.Manufacturer))

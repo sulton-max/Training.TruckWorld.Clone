@@ -18,6 +18,7 @@ public class AccountsController : ControllerBase
     public async ValueTask<IActionResult> Register([FromBody] RegisterDetails regisetrDetails)
     {
         var result = await _accountService.Register(regisetrDetails);
+        
         return result is not null ? Ok(result) : BadRequest();
     }
 
@@ -25,6 +26,7 @@ public class AccountsController : ControllerBase
     public async ValueTask<IActionResult> Login([FromBody] LoginDetails loginDetails)
     {
         var result = await _accountService.Login(loginDetails);
+        
         return result is not null ? Ok(result) : BadRequest();
     }
 }
