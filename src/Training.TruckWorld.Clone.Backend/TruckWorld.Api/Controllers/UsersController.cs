@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 
 namespace TruckWorld.Api.Controllers;
 
@@ -18,9 +19,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllUsers([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllUsers([FromQuery] FilterPagination filterPagination)
     {
-        var result = _userService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _userService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
@@ -29,13 +30,6 @@ public class UsersController : ControllerBase
     {
         var result = await _userService.GetByIdAsync(userId);
         return result is not null ? Ok(result) : NotFound();
-    }
-
-    [HttpPost]
-    public async ValueTask<IActionResult> CreateUser([FromBody] User user)
-    {
-        var result = await _userService.CreateAsync(user);
-        return CreatedAtAction(nameof(GetById), new { userId = result.Id }, result);
     }
 
     [HttpPut]
@@ -53,9 +47,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("credentials")]
-    public IActionResult GetAllCredentials([FromQuery] int pageToken, [FromQuery] int pageSize)
+    public IActionResult GetAllCredentials([FromQuery] FilterPagination filterPagination)
     {
-        var result = _userCredentialsService.Get(user => true).Skip((pageToken - 1) * pageSize).Take(pageSize).ToList();
+        var result = _userCredentialsService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize).ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
 
@@ -73,13 +67,6 @@ public class UsersController : ControllerBase
         return result is not null ? Ok(result) : NotFound();
     }
 
-    [HttpPost("credentials")]
-    public async ValueTask<IActionResult> CreateCredentials([FromBody] UserCredentials userCredentials)
-    {
-        var result = await _userCredentialsService.CreateAsync(userCredentials);
-        return CreatedAtAction(nameof(GetById), new { userId = result.Id }, result);
-    }
-
     [HttpPut("oldPassword/credentials")]
     public async ValueTask<IActionResult> UpdateCredentials(string oldPassword,
         [FromBody] UserCredentials userCredentials)
@@ -88,7 +75,7 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{crdentialsId:guid}")]
+    [HttpDelete("{credentialsId:guid}")]
     public async ValueTask<IActionResult> DeleteCredentials([FromRoute] Guid credentialsId)
     {
         var result = await _userCredentialsService.DeleteAsync(credentialsId);

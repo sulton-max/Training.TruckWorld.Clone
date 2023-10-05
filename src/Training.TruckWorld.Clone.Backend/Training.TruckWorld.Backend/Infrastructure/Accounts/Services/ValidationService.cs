@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
@@ -41,6 +41,5 @@ public class ValidationService : IValidationService
         !string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.Any(item => Char.IsDigit(item));
 
     public bool IsValidStuffs(string stuff) => !string.IsNullOrWhiteSpace(stuff);
-    
     public bool IsValidTruckCategory(TruckCategory category) => _appDataContext.TruckCategories.Contains(category);
 }

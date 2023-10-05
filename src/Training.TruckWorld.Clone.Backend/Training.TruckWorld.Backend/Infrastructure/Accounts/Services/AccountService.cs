@@ -27,7 +27,7 @@ public class AccountService : IAccountService
         var user = new User(registerDetails.FirstName, registerDetails.LastName, registerDetails.EmailAddress);
         var credentials = new UserCredentials(user.Id, registerDetails.Password);
 
-        await _userService.CreateAsync(user);
+        await _userService.CreateAsync(user);//.AsTask().ContinueWith(_ => _credentialsService.CreateAsync(credentials));
         await _credentialsService.CreateAsync(credentials);
 
         return user;
