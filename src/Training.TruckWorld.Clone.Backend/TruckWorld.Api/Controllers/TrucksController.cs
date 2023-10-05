@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
+using Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
@@ -34,6 +35,13 @@ public class TrucksController: ControllerBase
         return result is not null ? Ok(result) : NotFound();
     }
 
+    [HttpGet("truckFilterDataModel")]
+    public async ValueTask<IActionResult> GetTruckFilterDataModel()
+    {
+        var result = await _truckService.GetFilterDataModel();
+        return result is not null ? Ok(result) : NotFound();
+    }
+
     [HttpPost]
     public async ValueTask<IActionResult> CreateTruck([FromBody] TruckDto truckDto)
     {
@@ -41,6 +49,13 @@ public class TrucksController: ControllerBase
         var value = await _truckService.CreateAsync(truck);
         var result = _mapper.Map<TruckDto>(value);
         return CreatedAtAction(nameof(GetById), new { truckId = result.Id }, result);
+    }
+
+    [HttpPost("truckFilterModel")]
+    public async  ValueTask<IActionResult> GetFiltererTrucksAsync([FromBody] TruckFilterModel truckFilterModel)
+    {
+        var result = await _truckService.GetAsync(truckFilterModel);
+        return result.Any() ? Ok(result) : NotFound();
     }
 
     [HttpPut]

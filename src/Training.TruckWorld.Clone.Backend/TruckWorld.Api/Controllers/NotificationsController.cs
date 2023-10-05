@@ -26,9 +26,9 @@ public class NotificationsController : ControllerBase
     }
 
     [HttpPost("{userId:guid}/{templateCategory}")]
-    public IActionResult SendEmailAsync(Guid userId, string templateCategory)
+    public IActionResult SendEmail(Guid userId, string templateCategory)
     {
-        var result = _emailManagementService.SendEmailAsync(userId, templateCategory);
+        var result = _emailManagementService.SendEmail(userId, templateCategory);
         return result.Any() ? Ok(result) : BadRequest();
     }
 
@@ -41,7 +41,7 @@ public class NotificationsController : ControllerBase
 
 
     [HttpGet("{emailId:guid}/email")]
-    public async ValueTask<IActionResult> GetEmailById([FromRoute] Guid emailId)
+    public async ValueTask<IActionResult> GetEmailByIdAsync([FromRoute] Guid emailId)
     {
         var result = await _emailService.GetByIdAsync(emailId);
         return result is not null ? Ok(result) : NotFound();
@@ -49,15 +49,15 @@ public class NotificationsController : ControllerBase
 
 
     [HttpPost("email")]
-    public async ValueTask<IActionResult> CreateEmail([FromBody] Email email)
+    public async ValueTask<IActionResult> CreateEmailAsync([FromBody] Email email)
     {
         var result = await _emailService.CreateAsync(email);
-        return CreatedAtAction(nameof(GetEmailById), new { emailId = result.Id }, result);
+        return CreatedAtAction(nameof(GetEmailByIdAsync), new { emailId = result.Id }, result);
     }
 
 
     [HttpPut("email")]
-    public async ValueTask<IActionResult> UpdateEmail([FromBody] Email email)
+    public async ValueTask<IActionResult> UpdateEmailAsync([FromBody] Email email)
     {
         var result = await _emailService.UpdateAsync(email);
         return NoContent();
@@ -65,7 +65,7 @@ public class NotificationsController : ControllerBase
 
 
     [HttpDelete("{emailId:guid}")]
-    public async ValueTask<IActionResult> DeleteEmail([FromRoute] Guid emailId)
+    public async ValueTask<IActionResult> DeleteEmailAsync([FromRoute] Guid emailId)
     {
         var result = await _emailService.DeleteAsync(emailId);
         return NoContent();
