@@ -32,29 +32,5 @@ public class Component : SoftDeletedEntity, IProduct
     
     public decimal Price { get; set; }
     
-    public ContactUser Contact { get; set; }
-    
-    
-    public Component() { }
-
-    public Component(Guid userId, ComponentCategory category, string manufacturer, string model,
-        string serialNumber, int year, int quantity, double weight,
-        ComponentCondition condition, string description, ContactUser contact, ListingType listingType, decimal price)
-    {
-        Id = Guid.NewGuid();
-        UserId = userId;
-        Category = category;
-        Manufacturer = manufacturer;
-        Model = model;
-        SerialNumber = serialNumber;
-        Year = year;
-        Quantity = quantity;
-        Weight = weight;
-        Condition = condition;
-        Description = description;
-        Contact = contact;
-        ListingType = listingType;
-        CreatedDate = DateTime.UtcNow;
-        Price = price;
-    }
+    public Guid ContactId { get; set; }
 }

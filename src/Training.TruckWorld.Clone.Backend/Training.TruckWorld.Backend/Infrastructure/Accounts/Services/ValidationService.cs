@@ -38,7 +38,7 @@ public class ValidationService : IValidationService
     }
 
     public bool IsValidPhoneNumber(string phoneNumber) =>
-        !string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.Any(item => Char.IsDigit(item));
+        !string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.All(item => item == '+' || Char.IsDigit(item));
 
     public bool IsValidStuffs(string stuff) => !string.IsNullOrWhiteSpace(stuff);
     public bool IsValidTruckCategory(TruckCategory category) => _appDataContext.TruckCategories.Contains(category);

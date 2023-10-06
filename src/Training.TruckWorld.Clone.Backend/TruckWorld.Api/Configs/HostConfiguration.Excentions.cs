@@ -4,6 +4,7 @@ using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Application.Notifications.Services;
 using Training.TruckWorld.Backend.Application.Products.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
+using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Infrastructure.Accounts.Services;
 using Training.TruckWorld.Backend.Infrastructure.Components.Services;
 using Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
@@ -52,13 +53,14 @@ public static partial class HostConfiguration
     public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IAccountService, AccountService>();
-        builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+        builder.Services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
         builder.Services.AddScoped<IUserCredentialsService, UserCredentialsService>();
         builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<IValidationService, ValidationService>();
+        builder.Services.AddSingleton<IValidationService, ValidationService>();
         builder.Services.AddScoped<IComponentCategoryService, ComponentCategoryService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
-
+        builder.Services.AddScoped<IContactService, ContactService>();
+        
         builder.Services.AddScoped<IEmailManagementService, EmailManagementService>()
             .AddScoped<IEmailMessageService, EmailMessageService>()
             .AddScoped<IEmailPlaceholderService, EmailPlaceholderService>()
