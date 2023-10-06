@@ -1,4 +1,4 @@
-﻿using Training.TruckWorld.Backend.Application.Products.Interfaces;
+using Training.TruckWorld.Backend.Application.Products.Interfaces;
 using Training.TruckWorld.Backend.Domain.Common;
 using Training.TruckWorld.Backend.Domain.Enums;
 using ListingType = Training.TruckWorld.Backend.Domain.Enums.ListingType;
@@ -37,6 +37,10 @@ public class Truck : SoftDeletedEntity, IProduct
     public string? FuelType { get; set; }
 
     public string? Color { get; set; }
+    
+    public Guid ContactId { get; set; }
+   
+}
 
     public Guid ContactId { get; set; }
 }

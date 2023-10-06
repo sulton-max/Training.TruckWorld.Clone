@@ -15,8 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Trucks\Services\" />
-      <Folder Include="Infrastructure\Trucks\Services\" />
+      <Folder Include="Application\Components\Services\" />
+      <Folder Include="Infrastructure\Components\Services\" />
     </ItemGroup>
 
 

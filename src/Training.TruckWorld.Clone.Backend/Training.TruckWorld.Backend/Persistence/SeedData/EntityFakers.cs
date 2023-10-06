@@ -1,4 +1,4 @@
-﻿using Bogus;
+using Bogus;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
@@ -43,8 +43,7 @@ public static class EntityFakers
             .RuleFor(truck => truck.Price, random.Next(1000, 10000))
             .RuleFor(truck => truck.Odometer, random.Next(1000, 10000))
             .RuleFor(truck => truck.ListingType, (ListingType)random.Next(0, 2))
-            .RuleFor(truck => truck.ContactId,
-                faker => faker.PickRandom(context.Contacts.Select(contact => contact.Id)));
+            .RuleFor(truck => truck.ContactId, faker => faker.PickRandom(context.Contacts.Select(contact => contact.Id)));
         GetContactFaker(context, user, truck.Generate().ContactId);
         return truck;
     }
@@ -140,7 +139,6 @@ public static class EntityFakers
             .RuleFor(contact => contact.Country, faker => faker.Address.Country())
             .RuleFor(contact => contact.City, faker => faker.Address.City());
     }
-
     public static Faker<Email> GetEmailFaker(IDataContext context)
     {
         return new Faker<Email>()
