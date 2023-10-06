@@ -4,6 +4,7 @@ using FileBaseContext.Abstractions.Models.FileEntry;
 using FileBaseContext.Abstractions.Models.FileSet;
 using FileBaseContext.Context.Models.Configurations;
 using FileBaseContext.Context.Models.FileContext;
+using System.Diagnostics.Contracts;
 using Training.TruckWorld.Backend.Domain.Common;
 using Training.TruckWorld.Backend.Domain.Entities;
 
@@ -27,6 +28,8 @@ public class AppFileContext : FileContext, IDataContext
     public IFileSet<EmailTemplate, Guid> EmailTemplates => Set<EmailTemplate, Guid>(nameof(EmailTemplates));
 
     public IFileSet<Email, Guid> Emails => Set<Email, Guid>(nameof(Emails));
+
+    public IFileSet<ContactDetails, Guid> Contacts => Set<ContactDetails, Guid>(nameof(Contacts));
 
     public AppFileContext(IFileContextOptions<IFileContext> fileContextOptions) : base(fileContextOptions)
     {

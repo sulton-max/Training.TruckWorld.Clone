@@ -8,7 +8,7 @@ public class TruckProfile : Profile
 {
     public TruckProfile()
     {
-        CreateMap<TruckDto, Truck>();
-        CreateMap<Truck, TruckDto>();
+        CreateMap<TruckDetailsDto, Truck>();
+        CreateMap<Truck, TruckDetailsDto>();
     }
 }

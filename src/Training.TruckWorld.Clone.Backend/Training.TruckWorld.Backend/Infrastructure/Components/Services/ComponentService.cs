@@ -14,6 +14,7 @@ public class ComponentService : IComponentService
 {
     private IDataContext _appDataContext;
     private IValidationService _validationService;
+    private IContactService _contactService;
 
     public ComponentService(IDataContext appDataContext, IValidationService validationService)
     {
@@ -54,11 +55,12 @@ public class ComponentService : IComponentService
                     $"{manufacturer} ({_appDataContext.Components.Count(component => component.Manufacturer == manufacturer)})",
                     manufacturer);
             }),
-            _appDataContext.Components.Select(component => component.Contact.Location.City).Distinct().Select(state =>
+            _appDataContext.Contacts.Select(contact => contact.City).Distinct().Select(city =>
             {
                 return new KeyValuePair<string, string>(
-                    $"{state} ({_appDataContext.Components.Count(component => component.Contact.Location.City == state)})",
-                    state);
+                    $"{city} ({_appDataContext.Components.Count(component =>
+                        GetContactDetails(component).City == city)})",
+                    city);
             }),
             _appDataContext.Components.Select(component => component.Condition).Distinct().Select(condition =>
             {
@@ -66,14 +68,13 @@ public class ComponentService : IComponentService
                     $"{condition.ToString()} ({_appDataContext.Components.Count(component => component.Condition == condition)})",
                     condition);
             }),
-            _appDataContext.Components.Select(component => component.Contact.Location.Country).Distinct().Select(
-                country =>
-                {
-                    return new KeyValuePair<string, string>(
-                        $"{country} ({_appDataContext.Components.Count(component => component.Contact.Location.Country == country)})",
-                        country);
-                })
-        );
+            _appDataContext.Contacts.Select(component => component.Country).Distinct().Select(country =>
+            {
+                return new KeyValuePair<string, string>(
+                    $"{country} ({_appDataContext.Components.Count(component => GetContactDetails(component).Country == country)})",
+                    country);
+            }));
+
 
         return new ValueTask<ComponentFilterDataModel>(dataModel);
     }
@@ -179,8 +180,6 @@ public class ComponentService : IComponentService
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Description");
         }
 
-        if (!_validationService.IsValidEmailAddress(component.Contact.EmailAddress))
-            throw new InvalidEntityException(typeof(Component), component.Id, "Invalid EmailAddress");
         if (!_validationService.IsValidStuffs(component.Manufacturer))
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Manufacturer");
         if (!_validationService.IsValidStuffs(component.Model))
@@ -188,5 +187,11 @@ public class ComponentService : IComponentService
         if (!_validationService.IsValidStuffs(component.SerialNumber))
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid SerialNumber");
         return component;
+    }
+
+    private ContactDetails GetContactDetails(Component component)
+    {
+        return _contactService.Get(contact => contact.Id == component.ContactId).FirstOrDefault() ??
+               throw new EntityNotFoundException(typeof(Component));
     }
 }
