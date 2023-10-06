@@ -8,7 +8,7 @@ public interface IUserService
     IQueryable<User> Get(Expression<Func<User, bool>> predicate);
 
     ValueTask<ICollection<User>> GetAsync(IEnumerable<Guid> ids);
-
+    
     ValueTask<User?> GetByIdAsync(Guid id, CancellationToken cancellation = default);
 
     ValueTask<User> CreateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default);
