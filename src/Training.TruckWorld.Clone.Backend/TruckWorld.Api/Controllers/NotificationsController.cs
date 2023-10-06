@@ -44,7 +44,7 @@ public class NotificationsController : ControllerBase
 
 
     [HttpGet("{emailId:guid}/email")]
-    public async ValueTask<IActionResult> GetEmailByIdAsync([FromRoute] Guid emailId)
+    public async ValueTask<IActionResult> GetEmailById([FromRoute] Guid emailId)
     {
         var result = await _emailService.GetByIdAsync(emailId);
         
@@ -53,7 +53,7 @@ public class NotificationsController : ControllerBase
 
 
     [HttpPost("email")]
-    public async ValueTask<IActionResult> CreateEmailAsync([FromBody] Email email)
+    public async ValueTask<IActionResult> CreateEmail([FromBody] Email email)
     {
         var result = await _emailService.CreateAsync(email);
         
@@ -62,7 +62,7 @@ public class NotificationsController : ControllerBase
 
 
     [HttpPut("email")]
-    public async ValueTask<IActionResult> UpdateEmailAsync([FromBody] Email email)
+    public async ValueTask<IActionResult> UpdateEmail([FromBody] Email email)
     {
         var result = await _emailService.UpdateAsync(email);
         
@@ -71,7 +71,7 @@ public class NotificationsController : ControllerBase
 
 
     [HttpDelete("{emailId:guid}")]
-    public async ValueTask<IActionResult> DeleteEmailAsync([FromRoute] Guid emailId)
+    public async ValueTask<IActionResult> DeleteEmail([FromRoute] Guid emailId)
     {
         await _emailService.DeleteAsync(emailId);
 

@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Components.Models.Filters;
 using Training.TruckWorld.Backend.Application.Components.Services;
-using Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 using TruckWorld.Api.Models.Dtos;
@@ -35,7 +34,7 @@ public class ComponentsController : ControllerBase
     }
 
     [HttpGet("{componentId:guid}/component")]
-    public async ValueTask<IActionResult> GetByIdAsync([FromRoute] Guid componentId)
+    public async ValueTask<IActionResult> GetById([FromRoute] Guid componentId)
     {
         var value = await _componentService.GetByIdAsync(componentId);
 
@@ -45,14 +44,13 @@ public class ComponentsController : ControllerBase
     }
 
     [HttpGet("componentFilterDataModel")]
-    public async ValueTask<IActionResult> GetComponentFilterDataModelAsync()
+    public async ValueTask<IActionResult> GetFilterDataModel()
     {
         var result = await _componentService.GetFilterDataModel();
         return result is not null ? Ok(result) : NotFound();
     }
 
     [HttpPost]
-    // [ActionName("GetByIdAsync")]
     public async ValueTask<IActionResult> Create([FromBody] ComponentDto componentDto)
     {
         var component = _mapper.Map<Component>(componentDto);
@@ -67,38 +65,27 @@ public class ComponentsController : ControllerBase
     }
 
     [HttpPost("componentFilterModel")]
-    public async ValueTask<IActionResult> GetFiltererComponentsAsync([FromBody] ComponentFilterModel componentFilterModel)
+    public async ValueTask<IActionResult> GetFiltered([FromBody] ComponentFilterModel componentFilterModel)
     {
         var result = await _componentService.GetAsync(componentFilterModel);
         return result.Any() ? Ok(result) : NotFound();
     }
 
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateComponentAsync([FromBody] ComponentDto componentDto)
-=========
+    public async ValueTask<IActionResult> Update([FromBody] ComponentDto componentDto)
+    {
+        var component = _mapper.Map<Component>(componentDto);
+        component.UserId = Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead");
 
+        var value = _componentService.UpdateAsync(component);
+        
+        var result = _mapper.Map<ComponentDto>(value);
+        
         return CreatedAtAction(nameof(GetById), new { componentId = result.Id }, result);
     }
 
-    [HttpPut]
-    public async ValueTask<IActionResult> Update([FromBody] ComponentDto componentDto)
->>>>>>>>> Temporary merge branch 2
-    {
-        var component = _mapper.Map<Component>(componentDto);
-
-        var value = await _componentService.UpdateAsync(component);
-
-        var result = _mapper.Map<ComponentDto>(value);
-
-        return NoContent();
-    }
-
     [HttpDelete("{componentId:guid}")]
-<<<<<<<<< Temporary merge branch 1
-    public async ValueTask<IActionResult> DeleteComponentAsync([FromRoute] Guid componentId)
-=========
     public async ValueTask<IActionResult> Delete([FromRoute] Guid componentId)
->>>>>>>>> Temporary merge branch 2
     {
         var value = await _componentService.DeleteAsync(componentId);
 
