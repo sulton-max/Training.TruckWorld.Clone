@@ -37,27 +37,6 @@ public class Truck: SoftDeletedEntity, IProduct
     
     public string? Color { get; set; }
     
-    public ContactUser ContactUser { get; set; }
-    
-    public Truck(){}
-    public Truck(Guid userId, string serialNumber, string manufacturer, string model, TruckCategory category, int year, TruckCondition condition, string description, decimal price, decimal odometer, ListingType listingType, string? engineType, string? fuelType, string? color, ContactUser contactUser)
-    {
-        Id = Guid.NewGuid();
-        UserId = userId;
-        SerialNumber = serialNumber;
-        Manufacturer = manufacturer;
-        Model = model;
-        Category = category;
-        Year = year;
-        Condition = condition;
-        Description = description;
-        Price = price;
-        Odometer = odometer;
-        ListingType = listingType;
-        EngineType = engineType;
-        FuelType = fuelType;
-        Color = color;
-        ContactUser = contactUser;
-        CreatedDate = DateTime.UtcNow;
-    }
+    public Guid ContactId { get; set; }
+   
 }
