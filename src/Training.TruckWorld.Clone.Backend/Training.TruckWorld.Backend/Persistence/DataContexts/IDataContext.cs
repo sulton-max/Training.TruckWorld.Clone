@@ -13,5 +13,6 @@ public interface IDataContext
     IFileSet<UserCredentials, Guid> UserCredentials { get; }
     IFileSet<EmailTemplate, Guid> EmailTemplates { get; }
     IFileSet<Email, Guid> Emails { get; }
+    IFileSet<ContactDetails, Guid> Contacts { get; }
     ValueTask SaveChangesAsync();
 }

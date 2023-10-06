@@ -18,7 +18,7 @@ public static class SeedData
             await context.AddAsync<User>(100);
 
         if (!context.UserCredentials.Any())
-            await context.AddAsync<UserCredentials>(context.Users.Count());
+            await context.AddAsync<UserCredentials>(100);
 
         if (!context.Trucks.Any())
             await context.AddAsync<Truck>(50);
