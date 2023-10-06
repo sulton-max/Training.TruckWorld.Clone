@@ -1,8 +1,12 @@
-namespace TruckWorld.Api.Models.Dtos;
+using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Enums;
 
-public class TruckDetailsDto
+namespace TruckWorld.Api.Models.Dtos
 {
-    public TruckDto TruckDto { get; set; }
-    public Guid? ContactId { get; set; }
-    public ContactDetailsDto? ContactDetailsDto { get; set; }
+    public class TruckDetailsDto
+    {
+        public TruckDto TruckDto { get; set; }
+        public Guid? ContactId { get; set; }
+        public ContactDetailsDto? ContactDetailsDto { get; set; }
+    }
 }

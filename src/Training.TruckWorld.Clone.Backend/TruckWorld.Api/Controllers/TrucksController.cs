@@ -28,7 +28,7 @@ public class TrucksController : ControllerBase
         var value = _truckService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize)
             .Take(filterPagination.PageSize).ToList();
 
-        var result = _mapper.Map<List<TruckDto>>(value);
+        var result = _mapper.Map<List<TruckDetailsDto>>(value);
 
         return result.Any() ? Ok(result) : NotFound();
     }
@@ -38,7 +38,7 @@ public class TrucksController : ControllerBase
     {
         var value = await _truckService.GetByIdAsync(truckId);
 
-        var result = _mapper.Map<TruckDto>(value);
+        var result = _mapper.Map<TruckDetailsDto>(value);
 
         return result is not null ? Ok(result) : NotFound();
     }
@@ -51,7 +51,7 @@ public class TrucksController : ControllerBase
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> Create([FromBody] TruckDto truckDto)
+    public async ValueTask<IActionResult> Create([FromBody] TruckDetailsDto truckDto)
     {
         var truck = _mapper.Map<Truck>(truckDto);
 
@@ -59,7 +59,7 @@ public class TrucksController : ControllerBase
 
         var value = await _truckService.CreateAsync(truck);
 
-        var result = _mapper.Map<TruckDto>(value);
+        var result = _mapper.Map<TruckDetailsDto>(value);
 
         return CreatedAtAction(nameof(GetById), new { truckId = result.Id }, result);
     }
@@ -72,7 +72,7 @@ public class TrucksController : ControllerBase
     }
 
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateTruck([FromBody] TruckDto truckDto)
+    public async ValueTask<IActionResult> UpdateTruck([FromBody] TruckDetailsDto truckDto)
     {
         var truck = _mapper.Map<Truck>(truckDto);
 

@@ -1,4 +1,5 @@
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Enums;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Trucks.Models;
 
