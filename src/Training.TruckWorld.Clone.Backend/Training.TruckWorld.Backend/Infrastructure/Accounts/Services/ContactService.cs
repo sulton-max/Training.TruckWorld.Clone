@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Exceptions;
@@ -57,7 +57,7 @@ public class ContactService : IContactService
         foundContact.PhoneNumber = contactDetails.PhoneNumber;
         foundContact.Country = contactDetails.Country;
         foundContact.City = contactDetails.City;
-        
+
         await _dataContext.Contacts.UpdateAsync(foundContact, cancellationToken);
 
         if (saveChanges)
@@ -96,6 +96,7 @@ public class ContactService : IContactService
         {
             throw new InvalidEntityException(typeof(ContactDetails), contactDetails.Id, "Invalid full name!");
         }
+
         if (!_validationService.IsValidEmailAddress(contactDetails.Email))
             throw new InvalidEntityException(typeof(ContactDetails), contactDetails.Id, "Invalid Email address!");
 

@@ -1,4 +1,4 @@
-﻿using Bogus;
+using Bogus;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
 using Training.TruckWorld.Backend.Persistence.DataContexts;

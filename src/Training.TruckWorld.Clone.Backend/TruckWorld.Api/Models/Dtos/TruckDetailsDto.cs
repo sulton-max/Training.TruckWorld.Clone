@@ -1,4 +1,4 @@
-﻿using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Domain.Enums;
 
 namespace TruckWorld.Api.Models.Dtos

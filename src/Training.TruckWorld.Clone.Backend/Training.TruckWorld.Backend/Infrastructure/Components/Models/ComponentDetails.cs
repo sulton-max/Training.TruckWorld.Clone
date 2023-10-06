@@ -1,4 +1,4 @@
-﻿using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Domain.Entities;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Components.Models;
 

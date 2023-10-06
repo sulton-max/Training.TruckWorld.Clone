@@ -1,0 +1,46 @@
+Component{prop: contactId}, ComponentDto (contact id bo'lmaydi)
+
+ContactDetails, ContactDetailsDto
+
+
+ComponentDetailsDto
+{
+    ComponentDto,
+    ContactId?,
+    ContactDetailsDto?
+}
+
+=>
+new ComponentDetails
+ {
+ 	Component : _mapper.Map<Component>(ComponentDetailsDto.ComponentDto),
+ 	ContactId : ComponentDetailsDto.ContactDetailsDto,
+ 	ContactDetails : _mapper.Map<ContactDetails>(ComponentDetailsDto.ContactDetailsDto)
+ }
+ 
+ 
+ MaanagementService :
+ 
+ (ComponentService, ContactService)
+ 
+ Create(ComponentDetails)
+ {
+    #agar ikkalasi ham null bo'lsa yoki ikkalasida ham value bo'lsa exception!
+    
+    var component = ComponentDetails.Component;
+    var contact = ComponentDetails.Contact;
+    
+    
+    #ContactService.GetById(ComponentDetails.ContactId) == null exception!
+    
+    var savedContact = await ContactService.Create(contact);
+ 
+    component.ContactId = savedContact.Id;
+    await ContactService.Create(component);
+    
+    return ComponentDetails
+
+ }
+ 
+ 
+ 

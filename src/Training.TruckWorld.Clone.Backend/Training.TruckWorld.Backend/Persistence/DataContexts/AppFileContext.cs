@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using FileBaseContext.Abstractions.Models.Entity;
 using FileBaseContext.Abstractions.Models.FileContext;
 using FileBaseContext.Abstractions.Models.FileEntry;
@@ -44,7 +45,7 @@ public class AppFileContext : FileContext, IDataContext
         foreach (var entry in fileSet.GetEntries())
         {
             if (entry is not IFileEntityEntry<IEntity> entityEntry) continue;
-            
+
             if (entityEntry.State == FileEntityState.Added)
                 entityEntry.Entity.Id = Guid.NewGuid();
 

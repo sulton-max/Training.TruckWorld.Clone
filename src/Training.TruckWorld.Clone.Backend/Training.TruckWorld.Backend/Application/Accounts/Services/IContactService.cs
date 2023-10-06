@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Training.TruckWorld.Backend.Domain.Entities;
 
 namespace Training.TruckWorld.Backend.Application.Accounts.Services;
