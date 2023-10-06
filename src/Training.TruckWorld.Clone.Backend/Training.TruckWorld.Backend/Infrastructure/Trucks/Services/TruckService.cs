@@ -7,12 +7,14 @@ using Training.TruckWorld.Backend.Domain.Enums;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
 using Training.TruckWorld.Backend.Domain.Exceptions;
 
+
 namespace Training.TruckWorld.Backend.Infrastructure.Trucks.Services;
 
 public class TruckService : ITruckService
 {
     private readonly IDataContext _appDataContext;
     private readonly IValidationService _validationService;
+    private readonly IContactService _contactService;
 
     public TruckService(IDataContext appDataContext, IValidationService validationService)
     {
@@ -28,7 +30,7 @@ public class TruckService : ITruckService
         await _appDataContext.Trucks.AddAsync(truck, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.SaveChangesAsync();
+            await _appDataContext.Trucks.SaveChangesAsync();
 
         return truck;
     }
@@ -50,7 +52,7 @@ public class TruckService : ITruckService
         await _appDataContext.Trucks.RemoveAsync(foundTruck, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.SaveChangesAsync();
+            await _appDataContext.Trucks.SaveChangesAsync();
 
         return foundTruck;
     }
@@ -81,10 +83,10 @@ public class TruckService : ITruckService
                     $"{manufacturer} ({_appDataContext.Trucks.Count(truck => truck.Manufacturer == manufacturer)})",
                     manufacturer);
             }),
-            _appDataContext.Trucks.Select(truck => truck.ContactUser.Location.City).Distinct().Select(state =>
+            _appDataContext.Contacts.Select(contact => contact.City).Distinct().Select(state => 
             {
                 return new KeyValuePair<string, string>(
-                    $"{state} ({_appDataContext.Trucks.Count(truck => truck.ContactUser.Location.City == state)})",
+                    $"{state} ({_appDataContext.Trucks.Count(truck => GetContactDetails(truck).City == state)})",
                     state);
             }),
             _appDataContext.Trucks.Select(truck => truck.Condition).Distinct().Select(condition =>
@@ -93,10 +95,10 @@ public class TruckService : ITruckService
                     $"{condition.ToString()} ({_appDataContext.Trucks.Count(truck => truck.Condition == condition)})",
                     condition);
             }),
-            _appDataContext.Trucks.Select(truck => truck.ContactUser.Location.Country).Distinct().Select(country =>
+            _appDataContext.Contacts.Select(contact => contact.Country).Distinct().Select(country =>
             {
                 return new KeyValuePair<string, string>(
-                    $"{country} ({_appDataContext.Trucks.Count(truck => truck.ContactUser.Location.Country == country)})",
+                    $"{country} ({_appDataContext.Trucks.Count(truck => GetContactDetails(truck).Country == country)})",
                     country);
             })
         );
@@ -120,7 +122,9 @@ public class TruckService : ITruckService
             && (!filterModel.MaxPrice.HasValue || filterModel.MaxPrice >= truck.Price)
             && (!filterModel.MinDate.HasValue || filterModel.MinDate <= truck.CreatedDate)
             && (!filterModel.MaxDate.HasValue || filterModel.MaxDate >= truck.CreatedDate)
-        ).Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToArray());
+            && (filterModel.State == null) || filterModel.State.Equals(GetContactDetails(truck).City)
+            && (filterModel.Country == null) || filterModel.Country.Equals(GetContactDetails(truck).Country))
+        .Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToArray());
     }
 
     public ValueTask<ICollection<Truck>> GetAsync(IEnumerable<Guid> ids)
@@ -157,7 +161,7 @@ public class TruckService : ITruckService
         foundTruck.EngineType = truck.EngineType;
         foundTruck.FuelType = truck.FuelType;
         foundTruck.Color = truck.Color;
-        foundTruck.ContactUser = truck.ContactUser;
+        foundTruck.ContactId = truck.ContactId;
 
         await _appDataContext.Trucks.UpdateAsync(foundTruck, cancellationToken);
 
@@ -167,14 +171,15 @@ public class TruckService : ITruckService
         return foundTruck;
     }
 
+    private ContactDetails GetContactDetails(Truck truck)
+    => _contactService.Get(contact => contact.Id == truck.ContactId).FirstOrDefault() ?? throw new EntityNotFoundException(typeof(ContactDetails));
+    
     private Truck ToValidate(Truck truck)
     {
         if (!_validationService.IsValidTruckCategory(truck.Category))
             throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Category");
         if (!_validationService.IsValidDescription(truck.Description))
             throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Description");
-        if (!_validationService.IsValidEmailAddress(truck.ContactUser.EmailAddress))
-            throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid EmaildAddress");
         if (!_validationService.IsValidStuffs(truck.Manufacturer))
             throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Manufacturer");
         if (!_validationService.IsValidStuffs(truck.Model))
