@@ -9,7 +9,7 @@ public class ComponentFilterModel : FilterPagination
 {
     public string? Keyword { get; set; }
     
-    public IEnumerable<ComponentCategory>? Categories { get; set; }
+    public IEnumerable<string>? Categories { get; set; }
     
     public IEnumerable<ListingType>? ListingTypes { get; set; }
     

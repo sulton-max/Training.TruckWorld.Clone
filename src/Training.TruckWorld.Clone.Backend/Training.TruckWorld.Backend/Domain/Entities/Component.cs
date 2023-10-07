@@ -10,7 +10,7 @@ public class Component : SoftDeletedEntity, IProduct
 {
     public Guid UserId { get; set; }
 
-    public ComponentCategory Category { get; set; }
+    public Guid CategoryId { get; set; }
 
     public string Manufacturer { get; set; }
 

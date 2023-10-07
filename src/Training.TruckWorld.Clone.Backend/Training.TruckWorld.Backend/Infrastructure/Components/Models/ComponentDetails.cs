@@ -5,6 +5,10 @@ namespace Training.TruckWorld.Backend.Infrastructure.Components.Models;
 public class ComponentDetails
 {
     public Component Component { get; set; }
+
+    public Guid CategoryId { get; set; }
+    
     public Guid? ContactDetailsId { get; set; }
+
     public ContactDetails? ContactDetails { get; set; }
 }

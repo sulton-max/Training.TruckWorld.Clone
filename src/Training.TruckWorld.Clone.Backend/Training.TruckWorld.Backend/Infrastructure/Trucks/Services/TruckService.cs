@@ -1,4 +1,4 @@
-﻿﻿using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
@@ -15,6 +15,7 @@ public class TruckService : ITruckService
     private readonly IDataContext _appDataContext;
     private readonly IValidationService _validationService;
     private readonly IContactService _contactService;
+    private ITruckCategoryService _categoryService;
 
     public TruckService(IDataContext appDataContext, IValidationService validationService)
     {
@@ -71,11 +72,11 @@ public class TruckService : ITruckService
                     $"{listingType.ToString()} ({_appDataContext.Trucks.Count(truck => truck.ListingType == listingType)})",
                     listingType);
             }),
-            _appDataContext.Trucks.Select(truck => truck.Category).Distinct().Select(category =>
+            _appDataContext.TruckCategories.Distinct().Select(category =>
             {
-                return new KeyValuePair<string, TruckCategory>(
-                    $"{category.ToString()} ({_appDataContext.Trucks.Count(truck => truck.Category == category)})",
-                    category);
+                return new KeyValuePair<string, string>(
+                    $"{category.ToString()} ({_appDataContext.Trucks.Count(truck => truck.CategoryId == category.Id)})",
+                    category.Name);
             }),
             _appDataContext.Trucks.Select(truck => truck.Manufacturer).Distinct().Select(manufacturer =>
             {
@@ -83,7 +84,7 @@ public class TruckService : ITruckService
                     $"{manufacturer} ({_appDataContext.Trucks.Count(truck => truck.Manufacturer == manufacturer)})",
                     manufacturer);
             }),
-            _appDataContext.Contacts.Select(contact => contact.City).Distinct().Select(state => 
+            _appDataContext.Contacts.Select(contact => contact.City).Distinct().Select(state =>
             {
                 return new KeyValuePair<string, string>(
                     $"{state} ({_appDataContext.Trucks.Count(truck => GetContactDetails(truck).City == state)})",
@@ -108,23 +109,24 @@ public class TruckService : ITruckService
 
     public ValueTask<ICollection<Truck>> GetAsync(TruckFilterModel filterModel = null)
     {
-        return new ValueTask<ICollection<Truck>>(_appDataContext.Trucks.Where(truck => (filterModel is null) || 
-            (filterModel.Keyword == null ||
-             (truck.Manufacturer.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)
-              || truck.Model.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)))
-            && (filterModel.ListingTypes == null || filterModel.ListingTypes.Contains(truck.ListingType))
-            && (filterModel.Categories == null || filterModel.Categories.Select(category => category.Name).AsQueryable().Contains(truck.Category.Name))
-            && (!filterModel.MinYear.HasValue || filterModel.MinYear <= truck.Year)
-            && (!filterModel.MaxYear.HasValue || filterModel.MaxYear >= truck.Year)
-            && (!filterModel.MinOdometer.HasValue || filterModel.MinOdometer <= truck.Odometer)
-            && (!filterModel.MaxOdometer.HasValue || filterModel.MaxOdometer <= truck.Odometer)
-            && (!filterModel.MinPrice.HasValue || filterModel.MinPrice <= truck.Price)
-            && (!filterModel.MaxPrice.HasValue || filterModel.MaxPrice >= truck.Price)
-            && (!filterModel.MinDate.HasValue || filterModel.MinDate <= truck.CreatedDate)
-            && (!filterModel.MaxDate.HasValue || filterModel.MaxDate >= truck.CreatedDate)
-            && (filterModel.State == null) || filterModel.State.Equals(GetContactDetails(truck).City)
-            && (filterModel.Country == null) || filterModel.Country.Equals(GetContactDetails(truck).Country))
-        .Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToArray());
+        return new ValueTask<ICollection<Truck>>(_appDataContext.Trucks.Where(truck => (filterModel is null) ||
+                (filterModel.Keyword == null ||
+                 (truck.Manufacturer.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)
+                  || truck.Model.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)))
+                && (filterModel.ListingTypes == null || filterModel.ListingTypes.Contains(truck.ListingType))
+                && (filterModel.Categories == null ||
+                    filterModel.Categories.Contains(_categoryService.GetByIdAsync(truck.CategoryId).Result.Name))
+                && (!filterModel.MinYear.HasValue || filterModel.MinYear <= truck.Year)
+                && (!filterModel.MaxYear.HasValue || filterModel.MaxYear >= truck.Year)
+                && (!filterModel.MinOdometer.HasValue || filterModel.MinOdometer <= truck.Odometer)
+                && (!filterModel.MaxOdometer.HasValue || filterModel.MaxOdometer <= truck.Odometer)
+                && (!filterModel.MinPrice.HasValue || filterModel.MinPrice <= truck.Price)
+                && (!filterModel.MaxPrice.HasValue || filterModel.MaxPrice >= truck.Price)
+                && (!filterModel.MinDate.HasValue || filterModel.MinDate <= truck.CreatedDate)
+                && (!filterModel.MaxDate.HasValue || filterModel.MaxDate >= truck.CreatedDate)
+                && (filterModel.State == null) || filterModel.State.Equals(GetContactDetails(truck).City)
+                && (filterModel.Country == null) || filterModel.Country.Equals(GetContactDetails(truck).Country))
+            .Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToArray());
     }
 
     public ValueTask<ICollection<Truck>> GetAsync(IEnumerable<Guid> ids)
@@ -151,7 +153,7 @@ public class TruckService : ITruckService
         foundTruck.SerialNumber = truck.SerialNumber;
         foundTruck.Manufacturer = truck.Manufacturer;
         foundTruck.Model = truck.Model;
-        foundTruck.Category = truck.Category;
+        foundTruck.CategoryId = truck.CategoryId;
         foundTruck.Year = truck.Year;
         foundTruck.Condition = truck.Condition;
         foundTruck.Description = truck.Description;
@@ -172,11 +174,12 @@ public class TruckService : ITruckService
     }
 
     private ContactDetails GetContactDetails(Truck truck)
-    => _contactService.Get(contact => contact.Id == truck.ContactId).FirstOrDefault() ?? throw new EntityNotFoundException(typeof(ContactDetails));
-    
+        => _contactService.Get(contact => contact.Id == truck.ContactId).FirstOrDefault() ??
+           throw new EntityNotFoundException(typeof(ContactDetails));
+
     private Truck ToValidate(Truck truck)
     {
-        if (!_validationService.IsValidTruckCategory(truck.Category))
+        if (!_categoryService.Get(category => category.Id == truck.CategoryId).Any())
             throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Category");
         if (!_validationService.IsValidDescription(truck.Description))
             throw new InvalidEntityException(typeof(Truck), truck.Id, "Invalid Description");
