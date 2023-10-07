@@ -60,6 +60,7 @@ public class TrucksController : ControllerBase
         {
             Truck = _mapper.Map<Truck>(truckDetailsDto.TruckDto),
             ContactId = truckDetailsDto.ContactId,
+            CategoryId = truckDetailsDto.CategoryId,
             ContactDetails = _mapper.Map<ContactDetails>(truckDetailsDto.ContactDetailsDto)
         };
 

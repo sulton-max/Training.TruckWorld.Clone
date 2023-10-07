@@ -17,10 +17,12 @@ public class TruckService : ITruckService
     private readonly IContactService _contactService;
     private ITruckCategoryService _categoryService;
 
-    public TruckService(IDataContext appDataContext, IValidationService validationService)
+    public TruckService(IDataContext appDataContext, IValidationService validationService, IContactService contactService, ITruckCategoryService truckCategoryService)
     {
         _appDataContext = appDataContext;
         _validationService = validationService;
+        _contactService = contactService;
+        _categoryService = truckCategoryService;
     }
 
     public async ValueTask<Truck> CreateAsync(Truck truck, bool saveChanges = true,

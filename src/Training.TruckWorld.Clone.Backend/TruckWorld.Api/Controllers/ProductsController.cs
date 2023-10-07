@@ -5,10 +5,10 @@ using Training.TruckWorld.Backend.Infrastructure.Products.Models.Filters;
 namespace TruckWorld.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class FiltersController: ControllerBase
+public class ProductsController: ControllerBase
 {
     private readonly IFilterService _filterService;
-    public FiltersController(IFilterService filterService)
+    public ProductsController(IFilterService filterService)
     {
         _filterService = filterService;
     }

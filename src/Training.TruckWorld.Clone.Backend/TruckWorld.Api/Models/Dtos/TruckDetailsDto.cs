@@ -7,6 +7,7 @@ namespace TruckWorld.Api.Models.Dtos
     {
         public TruckDto TruckDto { get; set; }
         public Guid? ContactId { get; set; }
+        public Guid CategoryId { get; set; }
         public ContactDetailsDto? ContactDetailsDto { get; set; }
     }
 }

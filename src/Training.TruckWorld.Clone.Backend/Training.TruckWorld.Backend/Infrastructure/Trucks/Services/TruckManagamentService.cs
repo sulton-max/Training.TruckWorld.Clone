@@ -21,10 +21,10 @@ public class TruckManagamentService : ITruckManagementService
         var truck = truckDetails.Truck;
         var contact = truckDetails.ContactId is null ? await _contactService.CreateAsync(truckDetails.ContactDetails) : _contactService.Get(contact => contact.Id == truckDetails.ContactId).FirstOrDefault();
 
-        Console.WriteLine(contact is null);
+        truck.CategoryId = truckDetails.CategoryId;
         truck.ContactId = contact.Id;
         truck.UserId = userId;
-        _truckService.CreateAsync(truck);
+        await _truckService.CreateAsync(truck);
 
         return truckDetails;
     }

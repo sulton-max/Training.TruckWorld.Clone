@@ -8,14 +8,14 @@ public static class SeedData
 {
     public static async ValueTask InitializeSeedDataAsync(this IDataContext context)
     {
-        if (!context.Contacts.Any())
-            await context.AddAsync<ContactDetails>(100);
+        if (!context.ComponentsCategories.Any())
+            await context.AddAsync<ComponentCategory>(10);
 
         if (!context.TruckCategories.Any())
             await context.AddAsync<TruckCategory>(15);
 
-        if (!context.ComponentsCategories.Any())
-            await context.AddAsync<ComponentCategory>(10);
+        if (!context.Contacts.Any())
+            await context.AddAsync<ContactDetails>(100);
 
         if (!context.Users.Any())
             await context.AddAsync<User>(100);
@@ -50,7 +50,7 @@ public static class SeedData
             { } type when type == typeof(TruckCategory) => context.AddTruckCategoriesAsync(count),
             { } type when type == typeof(ComponentCategory) => context.AddComponentCategoriesAsync(count),
             { } type when type == typeof(EmailTemplate) => context.AddEmailTemplatesAsync(count),
-            {} type when type == typeof(Email) => context.AddEmailAsync(count),
+            { } type when type == typeof(Email) => context.AddEmailAsync(count),
             { } type when type == typeof(ContactDetails) => context.AddContactsAsync(count),
             _ => new ValueTask(Task.CompletedTask)
         };
@@ -128,4 +128,5 @@ public static class SeedData
         var emails = faker.Generate(1000);
         await context.Emails.AddRangeAsync(emails.Take(count).ToList());
     }
+ 
 }
