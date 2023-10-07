@@ -16,7 +16,7 @@ public static class EntityFakers
             .RuleFor(user => user.LastName, faker => faker.Person.LastName)
             .RuleFor(user => user.EmailAddress, faker => faker.Person.Email);
     }
-
+    
     public static Faker<UserCredentials> GetUserCredentialsFaker(IDataContext context)
     {
         var usersId = new Stack<Guid>(context.Users.Select(user => user.Id));

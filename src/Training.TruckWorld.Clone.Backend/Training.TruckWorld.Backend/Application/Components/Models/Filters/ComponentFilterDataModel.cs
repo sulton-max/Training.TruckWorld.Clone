@@ -9,7 +9,7 @@ public class ComponentFilterDataModel
     /// <summary>
     /// Categories 
     /// </summary>
-    public IEnumerable<KeyValuePair<string, ComponentCategory>> Categories { get; set; }
+    public IEnumerable<KeyValuePair<string, string>> Categories { get; set; }
 
     /// <summary>
     /// Listing types (Action)
@@ -37,7 +37,7 @@ public class ComponentFilterDataModel
     public IEnumerable<KeyValuePair<string, string>> Countries { get; set; }
 
 
-    public ComponentFilterDataModel(IEnumerable<KeyValuePair<string, ComponentCategory>> categories, IEnumerable<KeyValuePair<string, ListingType>> listingTypes, IEnumerable<KeyValuePair<string, string>> manufacturers, IEnumerable<KeyValuePair<string, string>> states, IEnumerable<KeyValuePair<string, ComponentCondition>> conditions, IEnumerable<KeyValuePair<string, string>> countries)
+    public ComponentFilterDataModel(IEnumerable<KeyValuePair<string, string>> categories, IEnumerable<KeyValuePair<string, ListingType>> listingTypes, IEnumerable<KeyValuePair<string, string>> manufacturers, IEnumerable<KeyValuePair<string, string>> states, IEnumerable<KeyValuePair<string, ComponentCondition>> conditions, IEnumerable<KeyValuePair<string, string>> countries)
     {
         Categories = categories;
         ListingTypes = listingTypes;

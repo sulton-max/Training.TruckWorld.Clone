@@ -15,6 +15,7 @@ public class ComponentService : IComponentService
     private IDataContext _appDataContext;
     private IValidationService _validationService;
     private IContactService _contactService;
+    private IComponentCategoryService _componentCategoryService;
 
     public ComponentService(IDataContext appDataContext, IValidationService validationService)
     {
@@ -37,11 +38,11 @@ public class ComponentService : IComponentService
     public ValueTask<ComponentFilterDataModel> GetFilterDataModel()
     {
         var dataModel = new ComponentFilterDataModel(
-            _appDataContext.Components.Select(component => component.Category).Distinct().Select(category =>
+            _appDataContext.ComponentsCategories.Distinct().Select(category =>
             {
-                return new KeyValuePair<string, ComponentCategory>(
-                    $"{category.ToString()} ({_appDataContext.Components.Count(component => component.Category == category)})",
-                    category);
+                return new KeyValuePair<string, string>(
+                    $"{category.Name} ({_appDataContext.Components.Count(component => component.CategoryId == category.Id)})",
+                    category.Name);
             }),
             _appDataContext.Components.Select(component => component.ListingType).Distinct().Select(listingType =>
             {
@@ -86,7 +87,8 @@ public class ComponentService : IComponentService
              (component.Manufacturer.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)
               || component.Model.Contains(filterModel.Keyword)))
             && (filterModel.ListingTypes is null || filterModel.ListingTypes.Contains(component.ListingType))
-            && (filterModel.Categories is null || filterModel.Categories.Contains(component.Category))
+            && (filterModel.Categories is null ||
+                filterModel.Categories.Contains(_componentCategoryService.GetByIdAsync(component.CategoryId).Result.Name))
             && (!filterModel.MinYear.HasValue || filterModel.MinYear <= component.Year)
             && (!filterModel.MaxYear.HasValue || filterModel.MaxYear >= component.Year)
             && (!filterModel.MinDate.HasValue || filterModel.MinDate <= component.CreatedDate)
@@ -95,7 +97,7 @@ public class ComponentService : IComponentService
             && (!filterModel.MaxPrice.HasValue || filterModel.MaxPrice >= component.Price)
         ).Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToList());
     }
-
+    
     public ValueTask<Component> DeleteAsync(Component component, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
@@ -152,7 +154,7 @@ public class ComponentService : IComponentService
         foundComponent.SerialNumber = component.SerialNumber;
         foundComponent.Manufacturer = component.Manufacturer;
         foundComponent.Model = component.Model;
-        foundComponent.Category = component.Category;
+        foundComponent.CategoryId = component.CategoryId;
         foundComponent.Year = component.Year;
         foundComponent.Condition = component.Condition;
         foundComponent.Description = component.Description;
@@ -172,7 +174,7 @@ public class ComponentService : IComponentService
 
     private Component ToValidate(Component component)
     {
-        if (!_validationService.IsValidComponentCategory(component.Category))
+        if (!_componentCategoryService.Get(category => category.Id == component.CategoryId).Any())
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Category");
         if (!_validationService.IsValidDescription(component.Description))
         {

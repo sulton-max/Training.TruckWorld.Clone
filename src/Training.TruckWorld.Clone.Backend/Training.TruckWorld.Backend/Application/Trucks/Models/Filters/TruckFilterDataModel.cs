@@ -14,7 +14,7 @@ public class TruckFilterDataModel
     /// <summary>
     /// Categories 
     /// </summary>
-    public IEnumerable<KeyValuePair<string, TruckCategory>>? Categories { get; set; }
+    public IEnumerable<KeyValuePair<string, string>>? Categories { get; set; }
 
     /// <summary>
     /// Manufacturers (ishlab chiqarunchi - brand) 
@@ -38,7 +38,7 @@ public class TruckFilterDataModel
 
 
     public TruckFilterDataModel(IEnumerable<KeyValuePair<string, ListingType>>? listingTypes,
-        IEnumerable<KeyValuePair<string, TruckCategory>>? categories,
+        IEnumerable<KeyValuePair<string, string>>? categories,
         IEnumerable<KeyValuePair<string, string>>? manufacturers, IEnumerable<KeyValuePair<string, string>>? state,
         IEnumerable<KeyValuePair<string, TruckCondition>>? conditions,
         IEnumerable<KeyValuePair<string, string>>? country)

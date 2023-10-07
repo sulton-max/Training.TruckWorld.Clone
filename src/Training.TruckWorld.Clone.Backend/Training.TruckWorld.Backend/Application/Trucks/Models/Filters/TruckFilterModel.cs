@@ -11,7 +11,7 @@ public class TruckFilterModel : FilterPagination
     
     public IEnumerable<ListingType>? ListingTypes { get; set; }
     
-    public IEnumerable<TruckCategory>? Categories { get; set; }
+    public IEnumerable<string>? Categories { get; set; }
     
     public IEnumerable<string>? Manufacturers { get; set; }
     
