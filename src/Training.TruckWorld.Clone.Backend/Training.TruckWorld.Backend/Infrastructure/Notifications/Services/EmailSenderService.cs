@@ -7,41 +7,40 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services;
 
 public class EmailSenderService : IEmailSenderService
 {
-    public async ValueTask<bool> SendEmailAsync(EmailMessage emailMessage)
+    public SmtpClient SmtpClientInstance { get; init; }
+
+    public EmailSenderService()
     {
-        var sendEmailMessage = false;
-
-        try
+        SmtpClientInstance = new SmtpClient("smtp.gmail.com", 587);
+        SmtpClientInstance.Credentials = new NetworkCredential("sultonbek.rakhimov.recovery@gmail.com", "szabguksrhwsbtie");
+        SmtpClientInstance.EnableSsl = true;
+    }
+    public Task<bool> SendEmailAsync(EmailMessage emailMessage)
+    {
+        return Task.Run(async () =>
         {
-            using (var smtp = new SmtpClient("smpt.gmail.com", 587))
+            var result = true;
+            try
             {
+                var smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.Credentials = new NetworkCredential("sultonbek.rakhimov.recovery@gmail.com", "szabguksrhwsbtie");
-
                 smtp.EnableSsl = true;
 
-                var mail = new MailMessage(emailMessage.SenderAddress, emailMessage.ReceiverAddress);
-
+                var mail = new MailMessage("sultonbek.rakhimov@gmail.com", emailMessage.ReceiverAddress);
                 mail.Subject = emailMessage.Subject;
-
                 mail.Body = emailMessage.Body;
+
+                emailMessage.IsSent = result;
+                emailMessage.SentTime = DateTime.UtcNow;
 
                 await smtp.SendMailAsync(mail);
             }
-            emailMessage.IsSent = true;
+            catch (Exception e)
+            {
+                result = false;
+            }
 
-            emailMessage.SentTime = DateTimeOffset.UtcNow;
-
-            sendEmailMessage = true;
-        }
-        catch (Exception ex)
-        {
-            emailMessage.IsSent = false;
-
-            emailMessage.SentTime = DateTimeOffset.UtcNow;
-
-            sendEmailMessage = false;
-        }
-
-        return sendEmailMessage;
+            return result;
+        });
     }
 }

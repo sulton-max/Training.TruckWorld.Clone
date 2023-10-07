@@ -40,7 +40,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost("componentCategory")]
-    [ActionName(nameof(GetComponentCategoryById))]
+    //[ActionName(nameof(GetComponentCategoryById))]
     public async ValueTask<IActionResult> CreateComponentCategory([FromBody] ComponentCategory componentCategory)
     {
         var result = await _componentCategoryService.CreateAsync(componentCategory);

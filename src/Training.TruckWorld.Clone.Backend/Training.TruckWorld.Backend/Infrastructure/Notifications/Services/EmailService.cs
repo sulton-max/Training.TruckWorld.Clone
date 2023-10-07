@@ -3,6 +3,7 @@ using Training.TruckWorld.Backend.Application.Notifications.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
 using Training.TruckWorld.Backend.Persistence.DataContexts;
 using Training.TruckWorld.Backend.Domain.Exceptions;
+using System;
 
 namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
 {
@@ -49,10 +50,8 @@ namespace Training.TruckWorld.Backend.Infrastructure.Notifications.Services
             return DeleteAsync(email.Id, saveChanges, cancellationToken);
         }
 
-        public IQueryable<Email> Get(Expression<Func<Email, bool>> expression)
-        {
-            return _appDataContext.Emails.Where(expression.Compile()).AsQueryable();
-        }
+        public IQueryable<Email> Get(Expression<Func<Email, bool>> predicate)
+        => _appDataContext.Emails.Where(predicate.Compile()).AsQueryable();
 
         public ValueTask<ICollection<Email>> GetAsync(IEnumerable<Guid> ids)
         {

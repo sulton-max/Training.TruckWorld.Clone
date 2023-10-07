@@ -31,12 +31,8 @@ public class EmailTemplateService : IEmailTemplateService
         return _appDateContext.EmailTemplates.Where(expression.Compile()).AsQueryable();
     }
 
-    public ValueTask<EmailTemplate?> GetByIdAsync(Guid id)
-    {
-        var emailTemplate = _appDateContext.EmailTemplates.FirstOrDefault(emailTemplate => emailTemplate.Id == id);
-
-        return new ValueTask<EmailTemplate?>(emailTemplate);
-    }
+    public async ValueTask<EmailTemplate?> GetByIdAsync(Guid id)
+    => await _appDateContext.EmailTemplates.FindAsync(id);
 
     public ValueTask<ICollection<EmailTemplate>> GetAsync(IEnumerable<Guid> ids)
     {

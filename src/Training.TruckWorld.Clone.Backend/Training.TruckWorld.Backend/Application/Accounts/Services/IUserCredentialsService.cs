@@ -9,7 +9,7 @@ public interface IUserCredentialsService
     
     ValueTask<ICollection<UserCredentials>> Get(IEnumerable<Guid> ids);
     
-    ValueTask<UserCredentials> GetByIdAsync(Guid id);
+    ValueTask<UserCredentials?> GetByIdAsync(Guid id);
    
     ValueTask<UserCredentials> CreateAsync(UserCredentials userCredentials, bool saveChanges = true, CancellationToken cancellationToken = default);
     

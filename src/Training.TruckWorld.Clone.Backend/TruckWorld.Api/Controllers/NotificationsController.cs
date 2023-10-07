@@ -13,52 +13,47 @@ public class NotificationsController : ControllerBase
     private readonly IEmailService _emailService;
     private readonly IEmailTemplateService _emailTemplateService;
 
-    public NotificationsController(IEmailManagementService emailManagementService)
+    public NotificationsController(IEmailManagementService emailManagementService, IEmailService emailService, IEmailTemplateService emailTemplateService)
     {
         _emailManagementService = emailManagementService;
+        _emailService = emailService;
+        _emailTemplateService = emailTemplateService;
     }
 
-    [HttpPost("{userId:guid}/{tempateId:Guid}")]
-    public async ValueTask<IActionResult> SendEmail(Guid userId, Guid templateId)
+    [HttpPost("{userId:guid}/{tempateId:guid}")]
+    public async ValueTask<IActionResult> SendEmailByTemplateId([FromRoute] Guid userId, Guid templateId)
     {
+        Console.WriteLine(templateId);
         var result = await _emailManagementService.SendEmailAsync(userId, templateId);
 
         return result ? Ok(result) : BadRequest();
     }
 
     [HttpPost("{userId:guid}/{templateCategory}")]
-    public IActionResult SendEmail(Guid userId, string templateCategory)
+    public async ValueTask<IActionResult> SendEmailTemplateCategory([FromRoute] Guid userId, [FromRoute]string templateCategory)
     {
-        var result = _emailManagementService.SendEmail(userId, templateCategory);
-
-        return result.Any() ? Ok(result) : BadRequest();
+        var result = await  _emailManagementService.SendEmailAsync(userId, templateCategory);
+        return result ? Ok(result) : BadRequest();
     }
 
     [HttpGet("emails")]
     public IActionResult GetAllEmails([FromQuery] FilterPagination filterPagination)
     {
-        var result = _emailService.Get(email => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize)
-            .Take(filterPagination.PageSize).ToList();
-
+        
+        var result = _emailService.Get(email => true)
+            .Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize)
+            .ToList();
+        
         return result.Any() ? Ok(result) : NotFound();
     }
 
 
-    [HttpGet("{emailId:guid}/email")]
+    [HttpGet("emails/{emailId:guid}/email")]
     public async ValueTask<IActionResult> GetEmailById([FromRoute] Guid emailId)
     {
         var result = await _emailService.GetByIdAsync(emailId);
 
         return result is not null ? Ok(result) : NotFound();
-    }
-
-
-    [HttpPost("email")]
-    public async ValueTask<IActionResult> CreateEmail([FromBody] Email email)
-    {
-        var result = await _emailService.CreateAsync(email);
-
-        return CreatedAtAction(nameof(GetEmailById), new { emailId = result.Id }, result);
     }
 
 
@@ -71,7 +66,7 @@ public class NotificationsController : ControllerBase
     }
 
 
-    [HttpDelete("{emailId:guid}")]
+    [HttpDelete("emails/{emailId:guid}")]
     public async ValueTask<IActionResult> DeleteEmail([FromRoute] Guid emailId)
     {
         await _emailService.DeleteAsync(emailId);
@@ -90,7 +85,7 @@ public class NotificationsController : ControllerBase
     }
 
 
-    [HttpGet("{emailTemplateId:guid}/emailTemplate")]
+    [HttpGet("emailTemplates/{emailTemplateId:guid}/emailTemplate")]
     public async ValueTask<IActionResult> GetEmailTemplateById([FromRoute] Guid emailTemplateId)
     {
         var result = await _emailTemplateService.GetByIdAsync(emailTemplateId);
@@ -117,7 +112,7 @@ public class NotificationsController : ControllerBase
     }
 
 
-    [HttpDelete("{emailTemplateId:guid}")]
+    [HttpDelete("emailTemplates/{emailTemplateId:guid}")]
     public async ValueTask<IActionResult> DeleteEmailTemplate([FromRoute] Guid emailTemplateId)
     {
         await _emailTemplateService.DeleteAsync(emailTemplateId);

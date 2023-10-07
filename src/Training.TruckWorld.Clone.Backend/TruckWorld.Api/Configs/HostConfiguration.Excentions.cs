@@ -53,10 +53,11 @@ public static partial class HostConfiguration
     public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IAccountService, AccountService>();
-        builder.Services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
+        builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
         builder.Services.AddScoped<IUserCredentialsService, UserCredentialsService>();
         builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddSingleton<IValidationService, ValidationService>();
+        builder.Services.AddScoped<IValidationService, ValidationService>();
+        builder.Services.AddScoped<IComponentManagementService, ComponentManagementService>();
         builder.Services.AddScoped<IComponentCategoryService, ComponentCategoryService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
         builder.Services.AddScoped<IContactService, ContactService>();
@@ -69,6 +70,7 @@ public static partial class HostConfiguration
             .AddScoped<IEmailTemplateService, EmailTemplateService>();
 
         builder.Services.AddScoped<IFilterService, FilterService>();
+        builder.Services.AddScoped<ITruckManagementService, TruckManagamentService>();
         builder.Services.AddScoped<ITruckCategoryService, TruckCategoryService>();
         builder.Services.AddScoped<ITruckService, TruckService>();
 
