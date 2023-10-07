@@ -17,15 +17,4 @@
     <ProjectReference Include="..\Training.TruckWorld.Backend\Training.TruckWorld.Backend.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Data\DataStorage\componentcategories.json" />
-    <_ContentIncludedByDefault Remove="Data\DataStorage\components.json" />
-    <_ContentIncludedByDefault Remove="Data\DataStorage\emails.json" />
-    <_ContentIncludedByDefault Remove="Data\DataStorage\emailtemplates.json" />
-    <_ContentIncludedByDefault Remove="Data\DataStorage\truckcategories.json" />
-    <_ContentIncludedByDefault Remove="Data\DataStorage\trucks.json" />
-    <_ContentIncludedByDefault Remove="Data\DataStorage\usercredentials.json" />
-    <_ContentIncludedByDefault Remove="Data\DataStorage\users.json" />
-  </ItemGroup>
-
 </Project>

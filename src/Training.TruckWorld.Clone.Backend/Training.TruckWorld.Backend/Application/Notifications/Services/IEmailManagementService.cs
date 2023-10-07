@@ -4,5 +4,5 @@ public interface IEmailManagementService
 {
     ValueTask<bool> SendEmailAsync(Guid userId, Guid templateId);
     
-    IQueryable<ValueTask<bool>> SendEmailAsync(Guid userId, string templateCategory);
+    ValueTask<bool> SendEmailAsync(Guid userId, string templateCategory);
 }

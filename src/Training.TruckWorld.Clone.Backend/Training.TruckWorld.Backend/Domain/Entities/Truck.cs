@@ -42,5 +42,4 @@ public class Truck : SoftDeletedEntity, IProduct
    
 }
 
-    public Guid ContactId { get; set; }
-}
+    

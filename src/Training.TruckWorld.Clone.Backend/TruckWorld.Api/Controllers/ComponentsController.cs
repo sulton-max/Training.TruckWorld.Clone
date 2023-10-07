@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Training.TruckWorld.Backend.Application.Components.Models.Filters;
 using Training.TruckWorld.Backend.Application.Components.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Components.Models;
 using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
 using TruckWorld.Api.Models.Dtos;
 
@@ -13,11 +14,13 @@ namespace TruckWorld.Api.Controllers;
 public class ComponentsController : ControllerBase
 {
     private readonly IComponentService _componentService;
+    private readonly IComponentManagementService _componentManagementService;
     private readonly IMapper _mapper;
 
-    public ComponentsController(IComponentService componentService, IMapper mapper)
+    public ComponentsController(IComponentService componentService, IComponentManagementService componentManagementService, IMapper mapper)
     {
         _componentService = componentService;
+        _componentManagementService = componentManagementService;
         _mapper = mapper;
     }
 
@@ -51,17 +54,21 @@ public class ComponentsController : ControllerBase
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> Create([FromBody] ComponentDto componentDto)
+    public async ValueTask<IActionResult> Create([FromBody] ComponentDetailsDto componentDetailsDto)
     {
-        var component = _mapper.Map<Component>(componentDto);
+        var componentDetails = new ComponentDetails()
+        {
+            Component = _mapper.Map<Component>(componentDetailsDto.ComponentDto),
+            ContactDetailsId = componentDetailsDto.ContactId,
+            ContactDetails = _mapper.Map<ContactDetails>(componentDetailsDto.ContactDetailsDto) 
+        };
 
-        component.UserId = Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead");
+        var managedComponentDetails = await _componentManagementService.CreateAsync(componentDetails);
+        managedComponentDetails.Component.UserId = Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead");
 
-        var value = await _componentService.CreateAsync(component);
+        var result = _mapper.Map<ComponentDetailsDto>(componentDetails);
 
-        var result = _mapper.Map<ComponentDto>(value);
-
-        return CreatedAtAction(nameof(GetById), new { componentId = result.Id }, result);
+        return CreatedAtAction(nameof(GetById), new { componentId = result.ComponentDto.Id}, result);
     }
 
     [HttpPost("componentFilterModel")]

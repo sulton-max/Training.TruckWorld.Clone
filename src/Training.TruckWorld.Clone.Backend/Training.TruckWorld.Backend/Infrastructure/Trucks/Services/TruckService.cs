@@ -106,14 +106,14 @@ public class TruckService : ITruckService
         return new ValueTask<TruckFilterDataModel>(dataModel);
     }
 
-    public ValueTask<ICollection<Truck>> GetAsync(TruckFilterModel filterModel)
+    public ValueTask<ICollection<Truck>> GetAsync(TruckFilterModel filterModel = null)
     {
-        return new ValueTask<ICollection<Truck>>(_appDataContext.Trucks.Where(truck =>
+        return new ValueTask<ICollection<Truck>>(_appDataContext.Trucks.Where(truck => (filterModel is null) || 
             (filterModel.Keyword == null ||
              (truck.Manufacturer.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)
               || truck.Model.Contains(filterModel.Keyword, StringComparison.OrdinalIgnoreCase)))
             && (filterModel.ListingTypes == null || filterModel.ListingTypes.Contains(truck.ListingType))
-            && (filterModel.Categories == null || filterModel.Categories.Contains(truck.Category))
+            && (filterModel.Categories == null || filterModel.Categories.Select(category => category.Name).AsQueryable().Contains(truck.Category.Name))
             && (!filterModel.MinYear.HasValue || filterModel.MinYear <= truck.Year)
             && (!filterModel.MaxYear.HasValue || filterModel.MaxYear >= truck.Year)
             && (!filterModel.MinOdometer.HasValue || filterModel.MinOdometer <= truck.Odometer)
@@ -166,7 +166,7 @@ public class TruckService : ITruckService
         await _appDataContext.Trucks.UpdateAsync(foundTruck, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.SaveChangesAsync();
+            await _appDataContext.Trucks.SaveChangesAsync();
 
         return foundTruck;
     }

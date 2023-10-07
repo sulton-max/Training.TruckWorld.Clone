@@ -4,7 +4,9 @@ using Training.TruckWorld.Backend.Application.Accounts.Services;
 using Training.TruckWorld.Backend.Application.Trucks.Models.Filters;
 using Training.TruckWorld.Backend.Application.Trucks.Services;
 using Training.TruckWorld.Backend.Domain.Entities;
+using Training.TruckWorld.Backend.Infrastructure.Components.Models;
 using Training.TruckWorld.Backend.Infrastructure.Filters.Models;
+using Training.TruckWorld.Backend.Infrastructure.Trucks.Models;
 using TruckWorld.Api.Models.Dtos;
 
 namespace TruckWorld.Api.Controllers;
@@ -14,21 +16,22 @@ namespace TruckWorld.Api.Controllers;
 public class TrucksController : ControllerBase
 {
     private readonly ITruckService _truckService;
+    private readonly ITruckManagementService _truckManagementService;
     private readonly IMapper _mapper;
 
-    public TrucksController(ITruckService truckService, IMapper mapper)
+    public TrucksController(ITruckService truckService, ITruckManagementService truckManagementService, IMapper mapper)
     {
         _truckService = truckService;
+        _truckManagementService = truckManagementService;
         _mapper = mapper;
     }
 
     [HttpGet]
     public IActionResult GetAll([FromQuery] FilterPagination filterPagination)
     {
-        var value = _truckService.Get(user => true).Skip((filterPagination.PageToken - 1) * filterPagination.PageSize)
-            .Take(filterPagination.PageSize).ToList();
-
-        var result = _mapper.Map<List<TruckDetailsDto>>(value);
+        var result = _truckService.Get(truck => true)
+            .Skip((filterPagination.PageToken - 1) * filterPagination.PageSize).Take(filterPagination.PageSize)
+            .ToList();
 
         return result.Any() ? Ok(result) : NotFound();
     }
@@ -38,7 +41,7 @@ public class TrucksController : ControllerBase
     {
         var value = await _truckService.GetByIdAsync(truckId);
 
-        var result = _mapper.Map<TruckDetailsDto>(value);
+        var result = _mapper.Map<TruckDto>(value);
 
         return result is not null ? Ok(result) : NotFound();
     }
@@ -51,17 +54,19 @@ public class TrucksController : ControllerBase
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> Create([FromBody] TruckDetailsDto truckDto)
+    public async ValueTask<IActionResult> Create([FromBody] TruckDetailsDto truckDetailsDto)
     {
-        var truck = _mapper.Map<Truck>(truckDto);
+        var truckDetails = new TruckDetails()
+        {
+            Truck = _mapper.Map<Truck>(truckDetailsDto.TruckDto),
+            ContactId = truckDetailsDto.ContactId,
+            ContactDetails = _mapper.Map<ContactDetails>(truckDetailsDto.ContactDetailsDto)
+        };
 
-        truck.UserId = Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead");
+        var managedTruckDetails = await _truckManagementService.CreateAsync(truckDetails, Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead"));
 
-        var value = await _truckService.CreateAsync(truck);
-
-        var result = _mapper.Map<TruckDetailsDto>(value);
-
-        return CreatedAtAction(nameof(GetById), new { truckId = result.Id }, result);
+        return managedTruckDetails is not null ? Ok(managedTruckDetails) : BadRequest();
+        //return CreatedAtAction(nameof(GetById), new { TruckId = result.TruckDto.Id }, result);
     }
 
     [HttpPost("truckFilterModel")]
@@ -72,7 +77,7 @@ public class TrucksController : ControllerBase
     }
 
     [HttpPut]
-    public async ValueTask<IActionResult> UpdateTruck([FromBody] TruckDetailsDto truckDto)
+    public async ValueTask<IActionResult> UpdateTruck([FromBody] TruckDto truckDto)
     {
         var truck = _mapper.Map<Truck>(truckDto);
 

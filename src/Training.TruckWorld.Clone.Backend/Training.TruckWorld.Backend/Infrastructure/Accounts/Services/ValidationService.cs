@@ -16,9 +16,8 @@ public class ValidationService : IValidationService
         _appDataContext = appDataContext;
     }
 
-    public bool IsValidComponentCategory(ComponentCategory category) =>
-        _appDataContext.ComponentsCategories.Contains(category);
-
+    public bool IsValidComponentCategory(ComponentCategory category) 
+     => _appDataContext.ComponentsCategories.Select(category => category.Name).AsQueryable().Contains(category.Name);
     public bool IsValidDescription(string description) =>
         !string.IsNullOrWhiteSpace(description) && description.Length > 10;
 
@@ -41,5 +40,6 @@ public class ValidationService : IValidationService
         !string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.All(item => item == '+' || Char.IsDigit(item));
 
     public bool IsValidStuffs(string stuff) => !string.IsNullOrWhiteSpace(stuff);
-    public bool IsValidTruckCategory(TruckCategory category) => _appDataContext.TruckCategories.Contains(category);
+    public bool IsValidTruckCategory(TruckCategory category)
+         => _appDataContext.TruckCategories.Select(category => category.Name).AsQueryable().Contains(category.Name);
 }

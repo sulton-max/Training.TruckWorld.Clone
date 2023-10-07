@@ -69,7 +69,8 @@ public class UserCredentialsService : IUserCredentialsService
         var credentials = await GetByIdAsync(userCredentials.Id)
                           ?? throw new EntityNotFoundException(typeof(UserCredentials));
 
-        if (_passwordHasherService.Verify(oldPassword, credentials.Password))
+        
+        if (!_passwordHasherService.Verify(oldPassword, credentials.Password))
             throw new IncorrectPasswordException("Password incorrect!");
 
         credentials.Password = _passwordHasherService.Hash(userCredentials.Password);
@@ -82,9 +83,7 @@ public class UserCredentialsService : IUserCredentialsService
         return credentials;
     }
 
-    public async ValueTask<UserCredentials> GetByIdAsync(Guid id) =>
-        await _appDataContext.UserCredentials.FindAsync(id);
-
+    public async ValueTask<UserCredentials?> GetByIdAsync(Guid id) => await _appDataContext.UserCredentials.FindAsync(id);
 
     private bool ValidateOnCreate(UserCredentials userCredentials)
     {
