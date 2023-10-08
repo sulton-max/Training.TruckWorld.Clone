@@ -16,14 +16,15 @@ public static class EntityFakers
             .RuleFor(user => user.LastName, faker => faker.Person.LastName)
             .RuleFor(user => user.EmailAddress, faker => faker.Person.Email);
     }
-    
+
     public static Faker<UserCredentials> GetUserCredentialsFaker(IDataContext context)
     {
         var usersId = new Stack<Guid>(context.Users.Select(user => user.Id));
         return new Faker<UserCredentials>()
-            .RuleFor(userCredentials => userCredentials.Id, Guid.NewGuid())
+            .RuleFor(userCredentials => userCredentials.Id, Guid.NewGuid)
             .RuleFor(userCredentials => userCredentials.UserId, () => usersId.Pop())
-            .RuleFor(userCredentials => userCredentials.Password, faker => new PasswordHasherService().Hash(faker.Internet.Password(8, false)));
+            .RuleFor(userCredentials => userCredentials.Password,
+                faker => new PasswordHasherService().Hash(faker.Internet.Password(8, false)));
     }
 
     public static Faker<Truck> GetTruckFaker(IDataContext context)
@@ -35,14 +36,16 @@ public static class EntityFakers
             .RuleFor(truck => truck.SerialNumber, faker => faker.Lorem.Word())
             .RuleFor(truck => truck.Manufacturer, faker => faker.Company.CompanyName())
             .RuleFor(truck => truck.Model, faker => faker.Lorem.Word())
-            .RuleFor(truck => truck.CategoryId, faker => faker.PickRandom(context.TruckCategories.Select(componentCategory => componentCategory.Id)))
+            .RuleFor(truck => truck.CategoryId,
+                faker => faker.PickRandom(context.TruckCategories.Select(category => category.Id)))
             .RuleFor(truck => truck.Year, random.Next(1900, 2025))
             .RuleFor(truck => truck.Condition, (TruckCondition)random.Next(0, 4))
             .RuleFor(truck => truck.Description, faker => faker.Lorem.Text())
             .RuleFor(truck => truck.Price, random.Next(1000, 10000))
             .RuleFor(truck => truck.Odometer, random.Next(1000, 10000))
             .RuleFor(truck => truck.ListingType, (ListingType)random.Next(0, 2))
-            .RuleFor(truck => truck.ContactId, faker => faker.PickRandom(context.Contacts.Select(contact => contact.Id)));
+            .RuleFor(truck => truck.ContactId,
+                faker => faker.PickRandom(context.Contacts.Select(contact => contact.Id)));
     }
 
     public static Faker<TruckCategory> GetTruckCategoryFaker()
@@ -84,7 +87,9 @@ public static class EntityFakers
             .RuleFor(component => component.SerialNumber, faker => faker.Lorem.Word())
             .RuleFor(component => component.Manufacturer, faker => faker.Company.CompanyName())
             .RuleFor(component => component.Model, faker => faker.Lorem.Word())
-            .RuleFor(component => component.CategoryId, faker => faker.PickRandom(context.ComponentsCategories.Select(componentCategory => componentCategory.Id)))
+            .RuleFor(component => component.CategoryId,
+                faker => faker.PickRandom(
+                    context.ComponentsCategories.Select(componentCategory => componentCategory.Id)))
             .RuleFor(component => component.Year, random.Next(1900, 2025))
             .RuleFor(component => component.Condition, (ComponentCondition)random.Next(0, 5))
             .RuleFor(component => component.Description, faker => faker.Lorem.Text())
@@ -92,8 +97,8 @@ public static class EntityFakers
             .RuleFor(component => component.ListingType, (ListingType)random.Next(0, 2))
             .RuleFor(component => component.Quantity, random.Next(1, 100))
             .RuleFor(component => component.Weight, random.Next(1, 100))
-            .RuleFor(component => component.ContactId, Faker => Faker.PickRandom(context.Contacts.Select(contact => contact.Id)));
-
+            .RuleFor(component => component.ContactId,
+                Faker => Faker.PickRandom(context.Contacts.Select(contact => contact.Id)));
     }
 
     public static Faker<ComponentCategory> GetComponentCategoryFaker()
@@ -132,6 +137,7 @@ public static class EntityFakers
             .RuleFor(contact => contact.Country, faker => faker.Address.Country())
             .RuleFor(contact => contact.City, faker => faker.Address.City());
     }
+
     public static Faker<Email> GetEmailFaker(IDataContext context)
     {
         return new Faker<Email>()

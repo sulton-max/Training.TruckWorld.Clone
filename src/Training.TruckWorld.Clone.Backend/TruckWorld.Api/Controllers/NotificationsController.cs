@@ -28,7 +28,7 @@ public class NotificationsController : ControllerBase
 
         return result ? Ok(result) : BadRequest();
     }
-
+    
     [HttpPost("{userId:guid}/{templateCategory}")]
     public async ValueTask<IActionResult> SendEmailTemplateCategory([FromRoute] Guid userId, [FromRoute]string templateCategory)
     {
