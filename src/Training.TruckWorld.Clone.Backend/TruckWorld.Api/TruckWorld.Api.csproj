@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Training.TruckWorld.Backend\Training.TruckWorld.Backend.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>

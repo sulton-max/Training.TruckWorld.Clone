@@ -33,7 +33,7 @@ public class TruckService : ITruckService
         await _appDataContext.Trucks.AddAsync(truck, cancellationToken);
 
         if (saveChanges)
-            await _appDataContext.Trucks.SaveChangesAsync();
+            await _appDataContext.SaveChangesAsync();
 
         return truck;
     }
