@@ -17,10 +17,12 @@ public class ComponentService : IComponentService
     private IContactService _contactService;
     private IComponentCategoryService _componentCategoryService;
 
-    public ComponentService(IDataContext appDataContext, IValidationService validationService)
+    public ComponentService(IDataContext appDataContext, IValidationService validationService, IContactService contactService, IComponentCategoryService componentCategoryService)
     {
         _appDataContext = appDataContext;
         _validationService = validationService;
+        _componentCategoryService = componentCategoryService;
+        _contactService = contactService;
     }
 
     public async ValueTask<Component> CreateAsync(Component component, bool saveChanges = true,
@@ -148,8 +150,6 @@ public class ComponentService : IComponentService
         if (foundComponent is null)
             throw new EntityNotFoundException(typeof(Component), foundComponent.Id);
 
-        ToValidate(foundComponent);
-
         foundComponent.UserId = component.UserId;
         foundComponent.SerialNumber = component.SerialNumber;
         foundComponent.Manufacturer = component.Manufacturer;
@@ -174,6 +174,7 @@ public class ComponentService : IComponentService
 
     private Component ToValidate(Component component)
     {
+        Console.WriteLine(component.CategoryId);
         if (!_componentCategoryService.Get(category => category.Id == component.CategoryId).Any())
             throw new InvalidEntityException(typeof(Component), component.Id, "Invalid Category");
         if (!_validationService.IsValidDescription(component.Description))

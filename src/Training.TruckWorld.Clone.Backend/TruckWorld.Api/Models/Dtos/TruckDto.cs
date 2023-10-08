@@ -14,7 +14,7 @@ public class TruckDto
 
     public string Model { get; set; }
 
-    public TruckCategory Category { get; set; }
+    public Guid CategoryId { get; set; }
 
     public int Year { get; set; }
 

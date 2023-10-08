@@ -6,10 +6,10 @@ namespace TruckWorld.Api.Models.Dtos;
 public class ComponentDto
 {
     public Guid Id { get; set; }
+
     public Guid UserId { get; set; }
-    
-    public ComponentCategory Category { get; set; }
-    
+  
+    public Guid CategoryId { get; set; }
     public string Manufacturer { get; set; }
     
     public string Model { get; set; }

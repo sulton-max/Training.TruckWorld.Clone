@@ -60,15 +60,13 @@ public class ComponentsController : ControllerBase
         {
             Component = _mapper.Map<Component>(componentDetailsDto.ComponentDto),
             ContactDetailsId = componentDetailsDto.ContactId,
+            CategoryId = componentDetailsDto.CategoryId,
             ContactDetails = _mapper.Map<ContactDetails>(componentDetailsDto.ContactDetailsDto) 
         };
 
-        var managedComponentDetails = await _componentManagementService.CreateAsync(componentDetails);
-        managedComponentDetails.Component.UserId = Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead");
+        var managedComponentDetails = await _componentManagementService.CreateAsync(componentDetails, Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead"));
 
-        var result = _mapper.Map<ComponentDetailsDto>(componentDetails);
-
-        return CreatedAtAction(nameof(GetById), new { componentId = result.ComponentDto.Id}, result);
+        return CreatedAtAction(nameof(GetById), new { componentId = managedComponentDetails.Component.Id}, managedComponentDetails);
     }
 
     [HttpPost("componentFilterModel")]
@@ -84,7 +82,7 @@ public class ComponentsController : ControllerBase
         var component = _mapper.Map<Component>(componentDto);
         component.UserId = Guid.Parse("0ed10899-a5e4-4424-848d-51875fa59ead");
 
-        var value = _componentService.UpdateAsync(component);
+        var value = await _componentService.UpdateAsync(component);
         
         var result = _mapper.Map<ComponentDto>(value);
         

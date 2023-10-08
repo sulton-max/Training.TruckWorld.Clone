@@ -6,5 +6,6 @@ public class ComponentDetailsDto
 {
     public ComponentDto ComponentDto {get; set; }
     public Guid? ContactId { get; set; }
+    public Guid CategoryId { get; set; }
     public ContactDetailsDto? ContactDetailsDto { get; set; }
 }

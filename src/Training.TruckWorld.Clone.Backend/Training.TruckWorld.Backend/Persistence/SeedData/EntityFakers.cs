@@ -35,8 +35,7 @@ public static class EntityFakers
             .RuleFor(truck => truck.SerialNumber, faker => faker.Lorem.Word())
             .RuleFor(truck => truck.Manufacturer, faker => faker.Company.CompanyName())
             .RuleFor(truck => truck.Model, faker => faker.Lorem.Word())
-            .RuleFor(truck => truck.Category,
-                faker => faker.PickRandom(context.TruckCategories.Select(truckCategory => truckCategory)))
+            .RuleFor(truck => truck.CategoryId, faker => faker.PickRandom(context.TruckCategories.Select(componentCategory => componentCategory.Id)))
             .RuleFor(truck => truck.Year, random.Next(1900, 2025))
             .RuleFor(truck => truck.Condition, (TruckCondition)random.Next(0, 4))
             .RuleFor(truck => truck.Description, faker => faker.Lorem.Text())
@@ -85,8 +84,7 @@ public static class EntityFakers
             .RuleFor(component => component.SerialNumber, faker => faker.Lorem.Word())
             .RuleFor(component => component.Manufacturer, faker => faker.Company.CompanyName())
             .RuleFor(component => component.Model, faker => faker.Lorem.Word())
-            .RuleFor(component => component.Category,
-                faker => faker.PickRandom(context.ComponentsCategories.Select(componentCategory => componentCategory)))
+            .RuleFor(component => component.CategoryId, faker => faker.PickRandom(context.ComponentsCategories.Select(componentCategory => componentCategory.Id)))
             .RuleFor(component => component.Year, random.Next(1900, 2025))
             .RuleFor(component => component.Condition, (ComponentCondition)random.Next(0, 5))
             .RuleFor(component => component.Description, faker => faker.Lorem.Text())
