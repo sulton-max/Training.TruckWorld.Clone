@@ -36,7 +36,7 @@ public class TrucksController : ControllerBase
         return result.Any() ? Ok(result) : NotFound();
     }
 
-    [HttpGet("{truckId:guid}/truck")]
+    [HttpGet("{truckId:guid}")]
     public async ValueTask<IActionResult> GetById([FromRoute] Guid truckId)
     {
         var value = await _truckService.GetByIdAsync(truckId);

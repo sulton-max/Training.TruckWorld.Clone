@@ -81,10 +81,10 @@ public class ContactService : IContactService
         if (foundContact.IsDeleted)
             throw new EntityDeletedException(typeof(ContactDetails), foundContact.Id);
 
-        await _dataContext.Contacts.RemoveAsync(foundContact);
+        await _dataContext.Contacts.RemoveAsync(foundContact, cancellationToken);
 
         if (saveChanges)
-            await _dataContext.Contacts.SaveChangesAsync(cancellationToken);
+            await _dataContext.SaveChangesAsync();
 
         return foundContact;
     }

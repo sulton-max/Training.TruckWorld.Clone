@@ -48,7 +48,7 @@ public class NotificationsController : ControllerBase
     }
 
 
-    [HttpGet("emails/{emailId:guid}/email")]
+    [HttpGet("emails/{emailId:guid}")]
     public async ValueTask<IActionResult> GetEmailById([FromRoute] Guid emailId)
     {
         var result = await _emailService.GetByIdAsync(emailId);
@@ -85,7 +85,7 @@ public class NotificationsController : ControllerBase
     }
 
 
-    [HttpGet("emailTemplates/{emailTemplateId:guid}/emailTemplate")]
+    [HttpGet("emailTemplates/{emailTemplateId:guid}")]
     public async ValueTask<IActionResult> GetEmailTemplateById([FromRoute] Guid emailTemplateId)
     {
         var result = await _emailTemplateService.GetByIdAsync(emailTemplateId);
