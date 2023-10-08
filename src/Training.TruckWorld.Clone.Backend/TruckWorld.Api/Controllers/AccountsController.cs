@@ -88,18 +88,17 @@ public class AccountsController : ControllerBase
         return result is not null ? Ok(result) : NotFound();
     }
 
-    [HttpGet("credentials/{userId:guid}/credentials")]
+    [HttpGet("credentials/{userId:guid}credentials")]
     public IActionResult GetCredentialsByUserId([FromRoute] Guid userId)
     {
         var result = _userCredentialsService.Get(credentials => credentials.UserId == userId).First();
         return result is not null ? Ok(result) : NotFound();
     }
 
-    [HttpPut("credentials/{oldPassword}")]
-    public async ValueTask<IActionResult> UpdateCredentials(string oldPassword,
-        [FromBody] UserCredentials userCredentials)
+    [HttpPut("credentials/securityAction")]
+    public async ValueTask<IActionResult> UpdateCredentials([FromBody] SecurityActionDto securityActionDto)
     {
-        var result = await _userCredentialsService.UpdateAsync(oldPassword, userCredentials);
+        var result = await _userCredentialsService.UpdateAsync(securityActionDto.OldPassword, securityActionDto.UserCredentials);
         return NoContent();
     }
 
@@ -119,7 +118,7 @@ public class AccountsController : ControllerBase
         return result.Any() ? Ok(result) : NotFound();
     }
 
-    [HttpGet("contacts/{contactId:guid}/contact")]
+    [HttpGet("contacts/{contactId:guid}")]
     public async ValueTask<IActionResult> GetContactById([FromRoute] Guid contactId)
     {
         var result = await _contactService.GetByIdAsync(contactId);

@@ -31,7 +31,7 @@ public class CategoriesController : ControllerBase
     }
 
 
-    [HttpGet("{componentCategoryId:guid}/componentCategory")]
+    [HttpGet("{componentCategoryId:guid}")]
     public async ValueTask<IActionResult> GetComponentCategoryById([FromRoute] Guid componentCategoryId)
     {
         var result = await _componentCategoryService.GetByIdAsync(componentCategoryId);
@@ -58,7 +58,7 @@ public class CategoriesController : ControllerBase
     }
 
 
-    [HttpDelete("{componentCategoryId:guid}/componentCategory")]
+    [HttpDelete("{componentCategoryId:guid}")]
     public async ValueTask<IActionResult> DeleteComponentCategoryAsync([FromRoute] Guid componentCategoryId)
     {
         await _componentCategoryService.DeleteAsync(componentCategoryId);
@@ -76,7 +76,7 @@ public class CategoriesController : ControllerBase
     }
 
 
-    [HttpGet("{truckCategoryId:guid}/truckCategory")]
+    [HttpGet("{truckCategoryId:guid}")]
     public async ValueTask<IActionResult> GetTruckCategoryById([FromRoute] Guid truckCategoryId)
     {
         var result = await _truckCategoryService.GetByIdAsync(truckCategoryId);
@@ -101,7 +101,7 @@ public class CategoriesController : ControllerBase
     }
 
 
-    [HttpDelete("{truckCategoryId:guid}/truckCategory")]
+    [HttpDelete("{truckCategoryId:guid}")]
     public async ValueTask<IActionResult> DeleteTruckCategoryAsync([FromRoute] Guid truckCategoryId)
     {
         await _truckCategoryService.DeleteAsync(truckCategoryId);

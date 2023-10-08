@@ -36,7 +36,7 @@ public class ComponentsController : ControllerBase
         return result.Any() ? Ok(result) : NotFound();
     }
 
-    [HttpGet("{componentId:guid}/component")]
+    [HttpGet("{componentId:guid}")]
     public async ValueTask<IActionResult> GetById([FromRoute] Guid componentId)
     {
         var value = await _componentService.GetByIdAsync(componentId);
