@@ -50,14 +50,14 @@ public class AccountsController : ControllerBase
         return result.Any() ? Ok(result) : NotFound();
     }
 
-    [HttpGet("users/{userId:guid}/user")]
+    [HttpGet("users/{userId:guid}")]
     public async ValueTask<IActionResult> GetById([FromRoute] Guid userId)
     {
         var result = await _userService.GetByIdAsync(userId);
         return result is not null ? Ok(result) : NotFound();
     }
 
-    [HttpPut("user")]
+    [HttpPut("users/user")]
     public async ValueTask<IActionResult> UpdateUser([FromBody] User user)
     {
         var result = await _userService.UpdateAsync(user);
@@ -79,8 +79,8 @@ public class AccountsController : ControllerBase
             .ToList();
         return result.Any() ? Ok(result) : NotFound();
     }
-
-    [HttpGet("credentials/{credentialsId:guid}/credentials")]
+    
+    [HttpGet("credentials/{credentialsId:guid}")]
     public async ValueTask<IActionResult> GetCredentialsById([FromRoute] Guid credentialsId)
     {
         var result = await _userCredentialsService.GetByIdAsync(credentialsId);
@@ -88,14 +88,14 @@ public class AccountsController : ControllerBase
         return result is not null ? Ok(result) : NotFound();
     }
 
-    [HttpGet("{userId:guid}/credentials")]
+    [HttpGet("credentials/{userId:guid}/credentials")]
     public IActionResult GetCredentialsByUserId([FromRoute] Guid userId)
     {
         var result = _userCredentialsService.Get(credentials => credentials.UserId == userId).First();
         return result is not null ? Ok(result) : NotFound();
     }
 
-    [HttpPut("credentials/oldPassword/credentials")]
+    [HttpPut("credentials/{oldPassword}")]
     public async ValueTask<IActionResult> UpdateCredentials(string oldPassword,
         [FromBody] UserCredentials userCredentials)
     {

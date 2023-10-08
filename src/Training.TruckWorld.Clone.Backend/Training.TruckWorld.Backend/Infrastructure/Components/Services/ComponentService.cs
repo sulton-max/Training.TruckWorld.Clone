@@ -17,7 +17,8 @@ public class ComponentService : IComponentService
     private IContactService _contactService;
     private IComponentCategoryService _componentCategoryService;
 
-    public ComponentService(IDataContext appDataContext, IValidationService validationService, IContactService contactService, IComponentCategoryService componentCategoryService)
+    public ComponentService(IDataContext appDataContext, IValidationService validationService,
+        IContactService contactService, IComponentCategoryService componentCategoryService)
     {
         _appDataContext = appDataContext;
         _validationService = validationService;
@@ -90,7 +91,8 @@ public class ComponentService : IComponentService
               || component.Model.Contains(filterModel.Keyword)))
             && (filterModel.ListingTypes is null || filterModel.ListingTypes.Contains(component.ListingType))
             && (filterModel.Categories is null ||
-                filterModel.Categories.Contains(_componentCategoryService.GetByIdAsync(component.CategoryId).Result.Name))
+                filterModel.Categories.Contains(
+                    _componentCategoryService.GetByIdAsync(component.CategoryId).Result.Name))
             && (!filterModel.MinYear.HasValue || filterModel.MinYear <= component.Year)
             && (!filterModel.MaxYear.HasValue || filterModel.MaxYear >= component.Year)
             && (!filterModel.MinDate.HasValue || filterModel.MinDate <= component.CreatedDate)
@@ -99,7 +101,7 @@ public class ComponentService : IComponentService
             && (!filterModel.MaxPrice.HasValue || filterModel.MaxPrice >= component.Price)
         ).Skip((filterModel.PageToken - 1) * filterModel.PageSize).Take(filterModel.PageSize).ToList());
     }
-    
+
     public ValueTask<Component> DeleteAsync(Component component, bool saveChanges = true,
         CancellationToken cancellationToken = default)
     {
@@ -192,9 +194,9 @@ public class ComponentService : IComponentService
         return component;
     }
 
-    private ContactDetails GetContactDetails(Component component)
+    private ContactDetails? GetContactDetails(Component component)
     {
-        return _contactService.Get(contact => contact.Id == component.ContactId).FirstOrDefault() ??
+        return _contactService.GetByIdAsync(component.ContactId).Result ??
                throw new EntityNotFoundException(typeof(Component));
     }
 }
