@@ -3,12 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AC791DF8-F2D0-469C-AF09-2AB9CE5F7220}"
-	ProjectSection(SolutionItems) = preProject
-		temp.txt = temp.txt
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Api", "TruckWorld.Api\TruckWorld.Api.csproj", "{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Clone.Presentation", "TruckWorld.Clone.Presentation\TruckWorld.Clone.Presentation.csproj", "{D8725B63-2126-4580-8FF1-F71E797515F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Application", "TruckWorld.Application\TruckWorld.Application.csproj", "{2C9E4522-920D-4645-BA21-DC86D155C725}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Domain", "TruckWorld.Domain\TruckWorld.Domain.csproj", "{4AE91FCC-BDBC-427E-8360-EEBDD974A299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Infrastructure", "TruckWorld.Infrastructure\TruckWorld.Infrastructure.csproj", "{656E421D-FD50-4D79-AC85-CCDA04960B6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Persistence", "TruckWorld.Persistence\TruckWorld.Persistence.csproj", "{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +22,25 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D8725B63-2126-4580-8FF1-F71E797515F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8725B63-2126-4580-8FF1-F71E797515F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8725B63-2126-4580-8FF1-F71E797515F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8725B63-2126-4580-8FF1-F71E797515F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C9E4522-920D-4645-BA21-DC86D155C725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C9E4522-920D-4645-BA21-DC86D155C725}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C9E4522-920D-4645-BA21-DC86D155C725}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C9E4522-920D-4645-BA21-DC86D155C725}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AE91FCC-BDBC-427E-8360-EEBDD974A299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AE91FCC-BDBC-427E-8360-EEBDD974A299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AE91FCC-BDBC-427E-8360-EEBDD974A299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AE91FCC-BDBC-427E-8360-EEBDD974A299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{656E421D-FD50-4D79-AC85-CCDA04960B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{656E421D-FD50-4D79-AC85-CCDA04960B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{656E421D-FD50-4D79-AC85-CCDA04960B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{656E421D-FD50-4D79-AC85-CCDA04960B6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
