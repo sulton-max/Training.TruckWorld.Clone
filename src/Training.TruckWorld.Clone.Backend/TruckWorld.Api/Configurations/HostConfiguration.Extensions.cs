@@ -14,6 +14,7 @@ public static partial class HostConfiguration
 
         return builder;
     }
+    
     /// <summary>
     /// Configures devTools including controllers
     /// </summary>
@@ -26,6 +27,7 @@ public static partial class HostConfiguration
 
         return builder;
     }
+    
     /// <summary>
     /// Add Controller middleWhere
     /// </summary>
@@ -37,6 +39,7 @@ public static partial class HostConfiguration
 
         return app;
     }
+    
     /// <summary>
     /// Add Controller middleWhere
     /// </summary>
