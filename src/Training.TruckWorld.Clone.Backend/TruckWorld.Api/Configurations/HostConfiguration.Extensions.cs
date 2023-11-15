@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-namespace TruckWorld.Api.Configurations;
+﻿namespace TruckWorld.Api.Configurations;
 
 public static partial class HostConfiguration
 {
+    /// <summary>
+    /// Configures exposers including controllers
+    /// </summary>
+    /// <param name="builder">Application builder</param>
+    /// <returns></returns>
     private static WebApplicationBuilder AddExposers(this WebApplicationBuilder builder)
     {
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -10,7 +14,11 @@ public static partial class HostConfiguration
 
         return builder;
     }
-
+    /// <summary>
+    /// Configures devTools including controllers
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
     private static WebApplicationBuilder AddDevTools(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
@@ -18,14 +26,22 @@ public static partial class HostConfiguration
 
         return builder;
     }
-
+    /// <summary>
+    /// Add Controller middleWhere
+    /// </summary>
+    /// <param name="app">Application host</param>
+    /// <returns>Application host</returns>
     private static WebApplication UseExposers(this WebApplication app)
     {
         app.MapControllers();
 
         return app;
     }
-
+    /// <summary>
+    /// Add Controller middleWhere
+    /// </summary>
+    /// <param name="app">Application host</param>
+    /// <returns>Application host</returns>
     private static WebApplication UseDevTools(this WebApplication app)
     {
         app.UseSwagger();
