@@ -1,12 +1,28 @@
-﻿namespace TruckWorld.Api.Configurations;
+﻿using Microsoft.EntityFrameworkCore;
+using TruckWorld.Persistence.DataContext;
+
+namespace TruckWorld.Api.Configurations;
 
 public static partial class HostConfiguration
 {
+    /// <summary>
+    /// DbContext registered in DI with connection string
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("TruckWorldDatabaseConnection")));
+
+        return builder;
+    }
     /// <summary>
     /// Configures exposers including controllers
     /// </summary>
     /// <param name="builder">Application builder</param>
     /// <returns></returns>
+
     private static WebApplicationBuilder AddExposers(this WebApplicationBuilder builder)
     {
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -14,7 +30,7 @@ public static partial class HostConfiguration
 
         return builder;
     }
-    
+
     /// <summary>
     /// Configures devTools including controllers
     /// </summary>
@@ -27,7 +43,7 @@ public static partial class HostConfiguration
 
         return builder;
     }
-    
+
     /// <summary>
     /// Add Controller middleWhere
     /// </summary>
@@ -39,7 +55,7 @@ public static partial class HostConfiguration
 
         return app;
     }
-    
+
     /// <summary>
     /// Add Controller middleWhere
     /// </summary>
