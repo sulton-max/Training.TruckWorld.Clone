@@ -5,11 +5,10 @@ using TruckWorld.Domain.Common.Entities;
 namespace TruckWorld.Persistence.Repositories;
 
 /// <summary>
-/// EntityRepositoryBase added
+/// Defines entity repositories behavior
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TContext"></typeparam>
-
 public abstract class EntityRepositoryBase<TEntity, TContext>
     where TEntity : class, IEntity where TContext : DbContext
 {
@@ -21,6 +20,12 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
         _dbContext = dbContext;
     }
 
+    /// <summary>
+    /// Returns entity as queryable
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="asNoTracking"></param>
+    /// <returns></returns>
     protected IQueryable<TEntity> Get(Expression<Func<TEntity, bool>>? predicate, bool asNoTracking = false)
     {
         var initialQuery = DbContext.Set<TEntity>().Where(entity => true);
@@ -34,6 +39,13 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
         return initialQuery;
     }
 
+    /// <summary>
+    /// Returns entity by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="asNoTracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected async ValueTask<TEntity?> GetByIdAsync(
         Guid id,
         bool asNoTracking = false,
@@ -48,6 +60,13 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
         return await initialQuery.SingleOrDefaultAsync(entity => entity.Id == id, cancellationToken);
     }
 
+    /// <summary>
+    /// Returns entities by their id
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <param name="asNoTracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected async ValueTask<IList<TEntity>> GetByIdsAsync(
         IEnumerable<Guid> ids,
         bool asNoTracking = false,
@@ -64,6 +83,13 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
         return await initialQuery.ToListAsync(cancellationToken: cancellationToken);
     }
 
+    /// <summary>
+    /// Adds the entity to the database
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="saveChanges"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected async ValueTask<TEntity> CreateAsync(
         TEntity entity,
         bool saveChanges = true,
@@ -80,11 +106,18 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
     }
 
 
+    /// <summary>
+    /// Updates the entity from the database
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="saveChanges"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected async ValueTask<TEntity> UpdateAsync(
         TEntity entity,
         bool saveChanges = true,
         CancellationToken cancellationToken = default
-        )
+    )
     {
         DbContext.Set<TEntity>().Update(entity);
 
@@ -94,11 +127,18 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
         return entity;
     }
 
+    /// <summary>
+    /// Removes the entity from the database
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="saveChanges"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected async ValueTask<TEntity?> DeleteAsync(
         TEntity entity,
         bool saveChanges = true,
         CancellationToken cancellationToken = default
-        )
+    )
     {
         DbContext.Set<TEntity>().Remove(entity);
 
@@ -108,6 +148,14 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
         return entity;
     }
 
+    /// <summary>
+    /// Removes the entity from the database by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="saveChanges"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     protected async ValueTask<TEntity?> DeleteByIdAsync(
         Guid id,
         bool saveChanges = true,
@@ -124,19 +172,25 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
         return entity;
     }
 
-    protected async ValueTask<IList<TEntity>?> DeleteByIdsAsync(
+    /// <summary>
+    /// Removes the entities from the database by their ids
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <param name="saveChanges"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    protected async ValueTask<int?> DeleteByIdsAsync(
         IEnumerable<Guid> ids,
         bool saveChanges = true,
         CancellationToken cancellationToken = default
     )
     {
-        var entities = DbContext.Set<TEntity>().Where(entity => ids.Contains(entity.Id));
-        
-        DbContext.Set<TEntity>().RemoveRange(entities);
+        var entities = await DbContext.Set<TEntity>().Where(entity => ids.Contains(entity.Id))
+            .ExecuteDeleteAsync(cancellationToken: cancellationToken);
         
         if (saveChanges)
             await DbContext.SaveChangesAsync(cancellationToken);
 
-        return await entities.ToListAsync(cancellationToken: cancellationToken);
+        return entities;
     }
 }

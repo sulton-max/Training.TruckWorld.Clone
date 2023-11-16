@@ -6,23 +6,23 @@ namespace TruckWorld.Api.Configurations;
 public static partial class HostConfiguration
 {
     /// <summary>
-    /// DbContext registered in DI with connection string
+    /// Registers NotificationDbContext in DI 
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
-        builder.Services.AddDbContext<AppDbContext>(options =>
+        builder.Services.AddDbContext<NotificationsDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("TruckWorldDatabaseConnection")));
 
         return builder;
     }
+    
     /// <summary>
     /// Configures exposers including controllers
     /// </summary>
     /// <param name="builder">Application builder</param>
     /// <returns></returns>
-
     private static WebApplicationBuilder AddExposers(this WebApplicationBuilder builder)
     {
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
