@@ -11,6 +11,7 @@ public static partial class HostConfiguration
     {
         builder
             .AddPersistence()
+            .AddIdentityInfrastructure()
             .AddDevTools()
             .AddExposers();
         

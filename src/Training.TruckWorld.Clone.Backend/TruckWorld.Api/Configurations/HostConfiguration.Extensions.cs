@@ -1,10 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+using TruckWorld.Application.Common.Identity.Services;
+using TruckWorld.Application.Common.Settings;
+using TruckWorld.Infrastructure.Common.Identity.Services;
+using TruckWorld.Infrastructure.Common.MapperProfiles;
 using TruckWorld.Persistence.DataContext;
+using TruckWorld.Persistence.Repositories;
+using TruckWorld.Persistence.Repositories.Interface;
 
 namespace TruckWorld.Api.Configurations;
 
 public static partial class HostConfiguration
 {
+
     /// <summary>
     /// Registers NotificationDbContext in DI 
     /// </summary>
@@ -13,11 +25,28 @@ public static partial class HostConfiguration
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
         builder.Services.AddDbContext<NotificationsDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("TruckWorldDatabaseConnection")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("NotificationsDatabaseConnection")));
 
         return builder;
     }
-    
+    /// <summary>
+    /// Configures IdentityInfrastucture including controllers
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddIdentityInfrastructure(this WebApplicationBuilder builder)
+    {
+        builder.Services
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IUserService, UserService>();
+
+        builder.Services.Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
+        builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
+
+        return builder;
+
+    }
+
     /// <summary>
     /// Configures exposers including controllers
     /// </summary>
