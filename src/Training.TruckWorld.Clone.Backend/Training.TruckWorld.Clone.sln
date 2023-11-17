@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Infrastructure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Persistence", "TruckWorld.Persistence\TruckWorld.Persistence.csproj", "{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Api", "Test.Api\Test.Api.csproj", "{14B6DF9B-4373-43F9-8127-88E96394AC3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
