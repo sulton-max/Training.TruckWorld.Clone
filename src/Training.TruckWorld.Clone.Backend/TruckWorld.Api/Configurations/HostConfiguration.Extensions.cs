@@ -1,10 +1,53 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
+using TruckWorld.Application.Common.Brokers;
+using TruckWorld.Application.Common.Services;
+using TruckWorld.Infrastructure.Common.Notifications.Brokers;
+using TruckWorld.Infrastructure.Common.Notifications.Services;
+using TruckWorld.Infrastructure.Common.Settings;
 using TruckWorld.Persistence.DataContext;
 
 namespace TruckWorld.Api.Configurations;
 
 public static partial class HostConfiguration
 {
+    private static readonly ICollection<Assembly> _assemblies;
+
+    static HostConfiguration()
+    {
+        _assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(Assembly.Load).ToList();
+        _assemblies.Add(Assembly.GetExecutingAssembly());
+    }
+
+    /// <summary>
+    /// Register NotificationInfrastructure
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddNotificationInfrastructure(this WebApplicationBuilder builder)
+    {
+        // register configurations 
+        builder.Services
+            .Configure<SmtpEmailSenderSettings>(builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)))
+            .Configure<TwilioSmsSenderSettings>(builder.Configuration.GetSection(nameof(TwilioSmsSenderBroker)));
+
+        // register brokers
+        builder.Services
+            .AddScoped<ISmsSenderBroker, TwilioSmsSenderBroker>()
+            .AddScoped<IEmailSenderBroker, SmtpEmailSenderBroker>();
+
+        // register helper foundation services
+        builder.Services
+            .AddScoped<ISmsSenderService, SmsSenderService>()
+            .AddScoped<IEmailSenderService, EmailSenderService>();
+
+        builder.Services.AddValidatorsFromAssemblies(_assemblies);
+
+        return builder;
+    }
+
     /// <summary>
     /// Registers NotificationDbContext in DI 
     /// </summary>

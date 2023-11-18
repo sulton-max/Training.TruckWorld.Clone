@@ -6,7 +6,7 @@ public class FuncResult<T>
 
     public Exception? Exception { get; }
 
-    bool IsSuccess => Exception is null;
+    public bool IsSuccess => Exception is null;
 
     public FuncResult(T data) => Data = data;
 
