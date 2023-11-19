@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 using TruckWorld.Application.Common.Identity.Services;
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Infrastructure.Common.Identity.Services;
-using TruckWorld.Infrastructure.Common.MapperProfiles;
 using TruckWorld.Persistence.DataContext;
 using TruckWorld.Persistence.Repositories;
 using TruckWorld.Persistence.Repositories.Interface;
@@ -16,7 +13,6 @@ namespace TruckWorld.Api.Configurations;
 
 public static partial class HostConfiguration
 {
-
     /// <summary>
     /// Registers NotificationDbContext in DI 
     /// </summary>
@@ -29,6 +25,7 @@ public static partial class HostConfiguration
 
         return builder;
     }
+
     /// <summary>
     /// Configures IdentityInfrastucture including controllers
     /// </summary>
@@ -39,6 +36,9 @@ public static partial class HostConfiguration
         builder.Services
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IUserService, UserService>();
+
+        builder.Services
+            .AddScoped<ValidationSettings>();
 
         builder.Services.Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
         builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());

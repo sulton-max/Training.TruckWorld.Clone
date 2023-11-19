@@ -1,8 +1,17 @@
 ﻿namespace TruckWorld.Domain.Common;
 
+/// <summary>
+/// Represents an auditable entity that tracks creation and modification dates.
+/// </summary>
 public interface IAuditableEntity : IEntity
 {
-    DateTimeOffset CreatedDate { get; set; }    
+    /// <summary>
+    /// Gets or sets the creation date of the entity.
+    /// </summary>
+    DateTime CreatedDate { get; set; }
 
-    DateTimeOffset? ModifiedDate { get; set; }
+    /// <summary>
+    /// Gets or sets the last modification date of the entity.
+    /// </summary>
+    DateTime? ModifiedDate { get; set; }
 }

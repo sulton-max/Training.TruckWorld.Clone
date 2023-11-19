@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>06c5d57d-9f69-4a0c-b42d-866cf7f93cbb</UserSecretsId>
@@ -15,7 +15,7 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>

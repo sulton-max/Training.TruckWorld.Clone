@@ -187,7 +187,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
     {
         var entities = await DbContext.Set<TEntity>().Where(entity => ids.Contains(entity.Id))
             .ExecuteDeleteAsync(cancellationToken: cancellationToken);
-        
+
         if (saveChanges)
             await DbContext.SaveChangesAsync(cancellationToken);
 

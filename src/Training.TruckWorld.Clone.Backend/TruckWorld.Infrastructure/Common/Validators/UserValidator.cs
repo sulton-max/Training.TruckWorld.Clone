@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-
 using Microsoft.Extensions.Options;
 
 using TruckWorld.Application.Common.Settings;
@@ -12,6 +11,10 @@ namespace TruckWorld.Infrastructure.Common.Validators;
 /// </summary>
 public class UserValidator : AbstractValidator<User>
 {
+    /// <summary>
+    /// The validation settings used for user data validation.
+    /// </summary>
+    /// <param name="validationSettings"></param>
     public UserValidator(IOptions<ValidationSettings> validationSettings)
     {
         var validationSettingsValue = validationSettings.Value;

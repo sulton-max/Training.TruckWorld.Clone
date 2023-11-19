@@ -10,6 +10,9 @@ namespace TruckWorld.Infrastructure.Common.MapperProfiles;
 /// </summary>
 public class UserProfile : Profile
 {
+    /// <summary>
+    /// Initializes a new instance of the UserProfile
+    /// </summary>
     public UserProfile()
     {
         CreateMap<User, UserDto>().ReverseMap();

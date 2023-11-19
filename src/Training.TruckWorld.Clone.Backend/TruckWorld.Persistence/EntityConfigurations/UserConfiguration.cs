@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TruckWorld.Domain.Entities;
 
 namespace TruckWorld.Persistence.EntityConfigurations;
+
 /// <summary>
 /// Configurations class for the User entity in the database.
 /// </summary>

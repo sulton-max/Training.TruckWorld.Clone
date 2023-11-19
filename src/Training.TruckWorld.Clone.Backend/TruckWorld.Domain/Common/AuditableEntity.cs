@@ -1,8 +1,10 @@
-﻿
-namespace TruckWorld.Domain.Common;
+﻿namespace TruckWorld.Domain.Common;
 
+/// <summary>
+/// Represents an entity with audit information.
+/// </summary>
 public class AuditableEntity : Entity, IAuditableEntity
 {
-    public DateTimeOffset CreatedDate { get; set; }
-    public DateTimeOffset? ModifiedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
-
 using TruckWorld.Domain.Entities;
 
 namespace TruckWorld.Application.Common.Identity.Services;
+
 /// <summary>
 /// Service interface for managing user-related operations.
 /// </summary>

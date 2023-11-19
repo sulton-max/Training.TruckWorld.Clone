@@ -3,6 +3,7 @@
 using TruckWorld.Domain.Entities;
 
 namespace TruckWorld.Persistence.DataContext;
+
 /// <summary>
 /// Represents the database context for managing notifications-related entities
 /// </summary>

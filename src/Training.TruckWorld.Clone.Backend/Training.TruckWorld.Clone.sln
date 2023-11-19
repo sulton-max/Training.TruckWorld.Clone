@@ -3,25 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Api", "TruckWorld.Api\TruckWorld.Api.csproj", "{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckWorld.Api", "TruckWorld.Api\TruckWorld.Api.csproj", "{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Application", "TruckWorld.Application\TruckWorld.Application.csproj", "{2C9E4522-920D-4645-BA21-DC86D155C725}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckWorld.Application", "TruckWorld.Application\TruckWorld.Application.csproj", "{2C9E4522-920D-4645-BA21-DC86D155C725}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Domain", "TruckWorld.Domain\TruckWorld.Domain.csproj", "{4AE91FCC-BDBC-427E-8360-EEBDD974A299}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckWorld.Domain", "TruckWorld.Domain\TruckWorld.Domain.csproj", "{4AE91FCC-BDBC-427E-8360-EEBDD974A299}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Infrastructure", "TruckWorld.Infrastructure\TruckWorld.Infrastructure.csproj", "{656E421D-FD50-4D79-AC85-CCDA04960B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckWorld.Infrastructure", "TruckWorld.Infrastructure\TruckWorld.Infrastructure.csproj", "{656E421D-FD50-4D79-AC85-CCDA04960B6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckWorld.Persistence", "TruckWorld.Persistence\TruckWorld.Persistence.csproj", "{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Api", "Test.Api\Test.Api.csproj", "{14B6DF9B-4373-43F9-8127-88E96394AC3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckWorld.Persistence", "TruckWorld.Persistence\TruckWorld.Persistence.csproj", "{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EAF03314-AF81-4B6C-8E55-F4BBB42B7E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,9 +39,8 @@ Global
 		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1634F1F5-B26E-476A-AA58-5CF1518DBCE3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14B6DF9B-4373-43F9-8127-88E96394AC3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
