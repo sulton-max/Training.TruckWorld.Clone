@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using TruckWorld.Domain.Common.Entities;
+using TruckWorld.Domain.Common;
 
 namespace TruckWorld.Persistence.Repositories;
 
@@ -13,7 +13,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
     where TEntity : class, IEntity where TContext : DbContext
 {
     private readonly TContext _dbContext;
-    protected TContext DbContext => (TContext)_dbContext;
+    protected TContext DbContext => _dbContext;
 
     protected EntityRepositoryBase(TContext dbContext)
     {
@@ -187,7 +187,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
     {
         var entities = await DbContext.Set<TEntity>().Where(entity => ids.Contains(entity.Id))
             .ExecuteDeleteAsync(cancellationToken: cancellationToken);
-        
+
         if (saveChanges)
             await DbContext.SaveChangesAsync(cancellationToken);
 
