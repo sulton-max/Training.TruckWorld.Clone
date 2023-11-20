@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
+using FluentValidation;
+
 using Microsoft.Extensions.Options;
 
 using TruckWorld.Application.Common.Identity.Services;
@@ -10,7 +12,8 @@ using TruckWorld.Persistence.Repositories.Interface;
 
 namespace TruckWorld.Infrastructure.Common.Identity.Services;
 
-public class UserService(IUserRepository userRepository, IOptions<ValidationSettings> validationSettings) : IUserService
+public class UserService(IUserRepository userRepository,
+    IValidator<User> emailTemplateValidator) : IUserService
 {
     public ValueTask<User> CreateAsync(
         User user,
@@ -18,7 +21,9 @@ public class UserService(IUserRepository userRepository, IOptions<ValidationSett
         CancellationToken cancellationToken = default
         )
     {
-        IsValidUser(user);
+        var validationResult = emailTemplateValidator.Validate(user);
+        if(!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
 
         return userRepository.CreateAsync(user, saveChanges, cancellationToken);
     }
@@ -64,7 +69,9 @@ public class UserService(IUserRepository userRepository, IOptions<ValidationSett
         CancellationToken cancellationToken = default
         )
     {
-        IsValidUser(user);
+        var validationResult = emailTemplateValidator.Validate(user);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
 
         return userRepository.UpdateAsync(user, saveChanges, cancellationToken);
     }
@@ -77,14 +84,4 @@ public class UserService(IUserRepository userRepository, IOptions<ValidationSett
     {
         return userRepository.DeleteAsync(user, saveChanges, cancellationToken);
     }
-
-    public void IsValidUser(User user)
-    {
-        if (!Regex.IsMatch(user.EmailAddress, validationSettings.Value.EmailRegexPattern))
-            throw new InvalidOperationException("Invalid email address");
-
-        if (!Regex.IsMatch(user.Password, validationSettings.Value.PasswordRegexPattern))
-            throw new InvalidOperationException("Invalid password");
-    }
-
 }

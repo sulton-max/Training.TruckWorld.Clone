@@ -69,10 +69,4 @@ public interface IUserService
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     ValueTask<User?> DeleteAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Validates a user based on application-specific criteria.
-    /// </summary>
-    /// <param name="user"></param>
-    void IsValidUser(User user);
 }
