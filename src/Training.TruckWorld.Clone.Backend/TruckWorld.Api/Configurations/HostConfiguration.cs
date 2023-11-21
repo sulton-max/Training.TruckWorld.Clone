@@ -10,10 +10,11 @@ public static partial class HostConfiguration
     public static ValueTask<WebApplicationBuilder> ConfigureAsync(this WebApplicationBuilder builder)
     {
         builder
+            .AddNotificationInfrastructure()
             .AddPersistence()
             .AddDevTools()
             .AddExposers();
-        
+
         return new(builder);
     }
 
@@ -27,7 +28,7 @@ public static partial class HostConfiguration
         app
             .UseDevTools()
             .UseExposers();
-        
+
         return new(app);
     }
 }

@@ -16,7 +16,7 @@ public class TwilioSmsSenderBroker : ISmsSenderBroker
     public TwilioSmsSenderBroker(IOptions<TwilioSmsSenderSettings> settings) =>
         _settings = settings.Value;
 
-    public async ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken)
+    public async ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken = default)
     {
         TwilioClient.Init(_settings.AccountSid, _settings.AuthToken);
 

@@ -4,5 +4,5 @@ namespace TruckWorld.Application.Common.Services;
 
 public interface ISmsSenderService
 {
-    ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken);
+    ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken = default);
 }

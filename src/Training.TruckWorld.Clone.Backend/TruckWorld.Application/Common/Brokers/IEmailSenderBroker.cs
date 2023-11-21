@@ -4,5 +4,5 @@ namespace TruckWorld.Application.Common.Brokers;
 
 public interface IEmailSenderBroker
 {
-    ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken);
+    ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken = default);
 }

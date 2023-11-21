@@ -4,5 +4,5 @@ namespace TruckWorld.Application.Common.Services;
 
 public interface IEmailSenderService
 {
-    ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken);
+    ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken = default);
 }

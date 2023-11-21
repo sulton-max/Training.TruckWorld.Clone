@@ -18,7 +18,7 @@ public class EmailSenderService : IEmailSenderService
         _mailSenderBroker = emailSenderBrokers;
     }
 
-    public async ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken)
+    public async ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken = default)
     {
         var validationResult = _emailMessageValidator.Validate(emailMessage,
             options => options.IncludeRuleSets(NotificationEvent.OnSending.ToString()));

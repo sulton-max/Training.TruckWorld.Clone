@@ -18,7 +18,7 @@ public class SmsSenderService : ISmsSenderService
         _smsSenderValidator = smsSenderValidator;
     }
 
-    public async ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken)
+    public async ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken = default)
     {
         var validationResult = _smsSenderValidator.Validate(smsMessage,
             options => options.IncludeRuleSets(NotificationEvent.OnRedering.ToString()));
