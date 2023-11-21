@@ -9,16 +9,11 @@ namespace TruckWorld.Persistence.Repositories;
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TContext"></typeparam>
-public abstract class EntityRepositoryBase<TEntity, TContext>
+public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext)
     where TEntity : class, IEntity where TContext : DbContext
 {
-    private readonly TContext _dbContext;
+    private readonly TContext _dbContext = dbContext;
     protected TContext DbContext => _dbContext;
-
-    protected EntityRepositoryBase(TContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
 
     /// <summary>
     /// Returns entity as queryable
@@ -26,7 +21,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>
     /// <param name="predicate"></param>
     /// <param name="asNoTracking"></param>
     /// <returns></returns>
-    protected IQueryable<TEntity> Get(Expression<Func<TEntity, bool>>? predicate, bool asNoTracking = false)
+    protected IQueryable<TEntity> Get(Expression<Func<TEntity, bool>>? predicate = default, bool asNoTracking = false)
     {
         var initialQuery = DbContext.Set<TEntity>().Where(entity => true);
 

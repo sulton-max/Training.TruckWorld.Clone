@@ -14,8 +14,8 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
 
     public ValueTask<User> CreateAsync(
         User user,
-        bool saveChanges, 
-        CancellationToken cancellationToken
+        bool saveChanges = true, 
+        CancellationToken cancellationToken = default
         )
     {
         return base.CreateAsync(user, saveChanges, cancellationToken);
@@ -23,16 +23,16 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
 
     public ValueTask<User?> DeleteAsync(
         User user, 
-        bool saveChanges, 
-        CancellationToken cancellationToken
+        bool saveChanges = true, 
+        CancellationToken cancellationToken = default
         )
     {
         return base.DeleteAsync(user, saveChanges, cancellationToken);
     }
 
     public IQueryable<User> Get(
-        Expression<Func<User, bool>>? predicate, 
-        bool asNoTracking
+        Expression<Func<User, bool>>? predicate = default, 
+        bool asNoTracking = false
         )
     {
         return base.Get(predicate, asNoTracking);
@@ -40,8 +40,8 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
 
     public ValueTask<User?> GetByIdAsync(
         Guid userId, 
-        bool asNoTracking,
-        CancellationToken cancellationToken
+        bool asNoTracking = false,
+        CancellationToken cancellationToken = default
         )
     {
         return base.GetByIdAsync(userId, asNoTracking, cancellationToken);
@@ -49,8 +49,8 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
 
     public ValueTask<IList<User>> GetByIdsAsync(
         IEnumerable<Guid> ids,
-        bool asNoTracking,
-        CancellationToken cancellationToken
+        bool asNoTracking = false,
+        CancellationToken cancellationToken = default
         )
     {
         return base.GetByIdsAsync(ids, asNoTracking, cancellationToken);
@@ -58,14 +58,18 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
 
     public ValueTask<User> UpdateAsync(
         User user,
-        bool saveChanges,
-        CancellationToken cancellationToken
+        bool saveChanges = true,
+        CancellationToken cancellationToken = default
         )
     {
         return base.UpdateAsync(user, saveChanges, cancellationToken);
     }
 
-    public ValueTask<User?> DeleteByIdAsync(Guid userId, bool saveChanges, CancellationToken cancellationToken)
+    public ValueTask<User?> DeleteByIdAsync(
+        Guid userId, 
+        bool saveChanges = true,
+        CancellationToken cancellationToken = default
+        )
     {
         return base.DeleteByIdAsync(userId , saveChanges, cancellationToken);
     }
