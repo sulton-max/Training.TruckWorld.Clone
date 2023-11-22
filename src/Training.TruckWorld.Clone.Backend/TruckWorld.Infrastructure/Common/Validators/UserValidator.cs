@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Options;
-
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Domain.Entities;
+using TruckWorld.Domain.Enums;
 
 namespace TruckWorld.Infrastructure.Common.Validators;
 
@@ -19,16 +19,19 @@ public class UserValidator : AbstractValidator<User>
     {
         var validationSettingsValue = validationSettings.Value;
 
-        RuleFor(user => user.EmailAddress)
-            .NotEmpty()
-            .MinimumLength(5)
-            .MaximumLength(64)
-            .Matches(validationSettingsValue.EmailRegexPattern);
+        RuleSet(EntityEvent.OnCreate.ToString(),
+            () =>
+            {
+                RuleFor(code => code.Id).NotEqual(Guid.Empty);
 
-        RuleFor(user => user.PasswordHash)
-            .NotEmpty()
-            .MinimumLength(8)
-            .MaximumLength(64)
-            .Matches(validationSettingsValue.PasswordRegexPattern);
+                RuleFor(code => code.ExpiryTime)
+                    .GreaterThanOrEqualTo(DateTime.UtcNow)
+                    .LessThanOrEqualTo(DateTime.UtcNow.AddSeconds(validationSettingsValue.VerificationCodeExpiryTimeInSeconds));
+
+                RuleFor(code => code.IsActive).Equal(true);
+
+                RuleFor(code => code.VerificationLink).NotEmpty().Matches(validationSettingsValue.UrlRegexPattern);
+            }
+         );
     }
 }

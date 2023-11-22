@@ -43,30 +43,18 @@ public static partial class HostConfiguration
     }
 
     /// <summary>
-    /// Registers NotificationDbContext in DI 
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <returns></returns>
-    private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
-    {
-        builder.Services.AddDbContext<NotificationsDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("NotificationsDatabaseConnection")));
-
-        return builder;
-    }
-
-    /// <summary>
-    /// Configures IdentityInfrastucture including controllers
+    /// Configures IdentityInfrastucture including controllers,Registers NotificationDbContext in DI 
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
     private static WebApplicationBuilder AddIdentityInfrastructure(this WebApplicationBuilder builder)
     {
+        builder.Services.AddDbContext<NotificationsDbContext>(options =>
+           options.UseNpgsql(builder.Configuration.GetConnectionString("NotificationsDatabaseConnection")));
+
         builder.Services
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IUserService, UserService>();
-        builder.Services
-            .AddScoped<ValidationSettings>();
 
         builder.Services.Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
 

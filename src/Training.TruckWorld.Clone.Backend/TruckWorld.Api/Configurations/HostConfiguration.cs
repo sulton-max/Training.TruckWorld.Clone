@@ -13,7 +13,6 @@ public static partial class HostConfiguration
             .AddValidators()
             .AddMappers()
             .AddIdentityInfrastructure()
-            .AddPersistence()
             .AddDevTools()
             .AddExposers();
         

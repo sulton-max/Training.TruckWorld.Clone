@@ -36,12 +36,18 @@ namespace TruckWorld.Persistence.Migrations
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTimeOffset>("ExpiryTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -53,10 +59,14 @@ namespace TruckWorld.Persistence.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("VerificationLink")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
