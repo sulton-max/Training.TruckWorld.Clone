@@ -23,5 +23,5 @@ public class UserDto
     /// <summary>
     ///Gets or sets the password of the user 
     /// </summary>
-    public string Password { get; set; } = default!;
+    public string PasswordHash { get; set; } = default!;
 }

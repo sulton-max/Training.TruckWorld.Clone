@@ -25,10 +25,5 @@ public class User : SoftDeletedEntity
     /// <summary>
     ///Gets or sets the password of the user 
     /// </summary>
-    public string Password { get; set; } = default!;
-
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    public User() {}
+    public string PasswordHash { get; set; } = default!;
 }

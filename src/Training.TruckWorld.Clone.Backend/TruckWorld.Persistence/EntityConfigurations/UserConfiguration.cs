@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 using TruckWorld.Domain.Entities;
 
 namespace TruckWorld.Persistence.EntityConfigurations;
@@ -16,9 +15,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     /// <param name="builder"></param>
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.HasKey(userId => userId.Id);
+        builder.HasKey();
 
-        builder.Property(email => email.EmailAddress).HasMaxLength(100).IsRequired();
-        builder.Property(password => password.Password).HasMaxLength(100).IsRequired();
+        builder.Property(user => user.EmailAddress).HasMaxLength(64).IsRequired();
+        builder.Property(user => user.PasswordHash).HasMaxLength(64).IsRequired();
     }
 }

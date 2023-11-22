@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 using TruckWorld.Api.Models.DTOs;
 using TruckWorld.Application.Common.Identity.Services;
-
 using TruckWorld.Domain.Entities;
 
 namespace TruckWorld.Api.Controllers;

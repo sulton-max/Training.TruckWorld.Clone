@@ -25,9 +25,10 @@ public class UserValidator : AbstractValidator<User>
             .MaximumLength(64)
             .Matches(validationSettingsValue.EmailRegexPattern);
 
-        RuleFor(user => user.Password)
+        RuleFor(user => user.PasswordHash)
             .NotEmpty()
             .MinimumLength(8)
-            .MaximumLength(128);
+            .MaximumLength(64)
+            .Matches(validationSettingsValue.PasswordRegexPattern);
     }
 }

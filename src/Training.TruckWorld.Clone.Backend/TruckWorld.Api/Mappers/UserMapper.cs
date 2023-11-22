@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-
 using TruckWorld.Api.Models.DTOs;
 using TruckWorld.Domain.Entities;
 

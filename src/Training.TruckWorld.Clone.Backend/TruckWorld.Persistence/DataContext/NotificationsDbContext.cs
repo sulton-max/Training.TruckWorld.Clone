@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 using TruckWorld.Domain.Entities;
 
 namespace TruckWorld.Persistence.DataContext;

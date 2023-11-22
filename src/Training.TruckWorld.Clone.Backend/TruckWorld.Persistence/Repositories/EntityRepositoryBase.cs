@@ -20,7 +20,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="asNoTracking"></param>
-    /// <returns></returns>
+    /// <returns>An IQueryable collection of TEntity objects.</returns>
     protected IQueryable<TEntity> Get(Expression<Func<TEntity, bool>>? predicate = default, bool asNoTracking = false)
     {
         var initialQuery = DbContext.Set<TEntity>().Where(entity => true);
@@ -40,7 +40,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// <param name="id"></param>
     /// <param name="asNoTracking"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>Returning the entity object.</returns>
     protected async ValueTask<TEntity?> GetByIdAsync(
         Guid id,
         bool asNoTracking = false,
@@ -61,7 +61,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// <param name="ids"></param>
     /// <param name="asNoTracking"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>Returning a list of entities.</returns>
     protected async ValueTask<IList<TEntity>> GetByIdsAsync(
         IEnumerable<Guid> ids,
         bool asNoTracking = false,
@@ -84,7 +84,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// <param name="entity"></param>
     /// <param name="saveChanges"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>The entity that has been added to the database.</returns>
     protected async ValueTask<TEntity> CreateAsync(
         TEntity entity,
         bool saveChanges = true,
@@ -107,7 +107,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// <param name="entity"></param>
     /// <param name="saveChanges"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>The entity that has been updated in the database.</returns>
     protected async ValueTask<TEntity> UpdateAsync(
         TEntity entity,
         bool saveChanges = true,
@@ -128,7 +128,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// <param name="entity"></param>
     /// <param name="saveChanges"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>The entity that has been removed from the database.</returns>
     protected async ValueTask<TEntity?> DeleteAsync(
         TEntity entity,
         bool saveChanges = true,
@@ -149,7 +149,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// <param name="id"></param>
     /// <param name="saveChanges"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>The entity that has been removed from the database.</returns>
     /// <exception cref="InvalidOperationException"></exception>
     protected async ValueTask<TEntity?> DeleteByIdAsync(
         Guid id,
@@ -173,7 +173,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(TContext dbContext
     /// <param name="ids"></param>
     /// <param name="saveChanges"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>The number of entities that have been removed from the database.</returns>
     protected async ValueTask<int?> DeleteByIdsAsync(
         IEnumerable<Guid> ids,
         bool saveChanges = true,

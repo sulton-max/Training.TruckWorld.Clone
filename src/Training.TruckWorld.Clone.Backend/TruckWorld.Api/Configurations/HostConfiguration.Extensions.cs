@@ -1,9 +1,6 @@
 ﻿using System.Reflection;
-
 using FluentValidation;
-
 using Microsoft.EntityFrameworkCore;
-
 using TruckWorld.Application.Common.Identity.Services;
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Infrastructure.Common.Identity.Services;

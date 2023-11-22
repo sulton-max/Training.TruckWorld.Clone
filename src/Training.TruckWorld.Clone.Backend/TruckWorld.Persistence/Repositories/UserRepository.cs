@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-
 using TruckWorld.Domain.Entities;
 using TruckWorld.Persistence.DataContext;
 using TruckWorld.Persistence.Repositories.Interface;
@@ -10,24 +9,6 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
 {
     public UserRepository(NotificationsDbContext dbContext) : base(dbContext)
     {
-    }
-
-    public ValueTask<User> CreateAsync(
-        User user,
-        bool saveChanges = true, 
-        CancellationToken cancellationToken = default
-        )
-    {
-        return base.CreateAsync(user, saveChanges, cancellationToken);
-    }
-
-    public ValueTask<User?> DeleteAsync(
-        User user, 
-        bool saveChanges = true, 
-        CancellationToken cancellationToken = default
-        )
-    {
-        return base.DeleteAsync(user, saveChanges, cancellationToken);
     }
 
     public IQueryable<User> Get(
@@ -56,6 +37,15 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
         return base.GetByIdsAsync(ids, asNoTracking, cancellationToken);
     }
 
+    public ValueTask<User> CreateAsync(
+        User user,
+        bool saveChanges = true, 
+        CancellationToken cancellationToken = default
+        )
+    {
+        return base.CreateAsync(user, saveChanges, cancellationToken);
+    }
+
     public ValueTask<User> UpdateAsync(
         User user,
         bool saveChanges = true,
@@ -72,5 +62,14 @@ public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>
         )
     {
         return base.DeleteByIdAsync(userId , saveChanges, cancellationToken);
+    }
+
+    public ValueTask<User?> DeleteAsync(
+        User user, 
+        bool saveChanges = true, 
+        CancellationToken cancellationToken = default
+        )
+    {
+        return base.DeleteAsync(user, saveChanges, cancellationToken);
     }
 }

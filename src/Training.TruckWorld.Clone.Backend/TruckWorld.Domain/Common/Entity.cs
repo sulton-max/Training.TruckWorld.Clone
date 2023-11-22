@@ -1,5 +1,4 @@
-﻿
-namespace TruckWorld.Domain.Common;
+﻿namespace TruckWorld.Domain.Common;
 
 /// <summary>
 /// Base class for entities with a unique identifier.
