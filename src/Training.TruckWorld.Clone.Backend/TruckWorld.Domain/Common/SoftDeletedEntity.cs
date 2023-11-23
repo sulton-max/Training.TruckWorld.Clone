@@ -3,8 +3,8 @@
 /// <summary>
 /// Represents an entity with support for soft deletion and audit information.
 /// </summary>
-public class SoftDeletedEntity : AuditableEntity, ISoftDeletedEntity
+public abstract class SoftDeletedEntity : AuditableEntity, ISoftDeletedEntity
 {
     public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; }
+    public DateTime? DeletedTime { get; set; }
 }

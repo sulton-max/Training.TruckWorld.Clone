@@ -3,7 +3,7 @@
 /// <summary>
 /// Base class for entities with a unique identifier.
 /// </summary>
-public class Entity : IEntity
+public abstract class Entity : IEntity
 {
     public Guid Id { get; set; }
 }

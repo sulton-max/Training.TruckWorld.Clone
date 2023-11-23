@@ -5,6 +5,6 @@
 /// </summary>
 public class AuditableEntity : Entity, IAuditableEntity
 {
-    public DateTime CreatedDate { get; set; }
-    public DateTime? ModifiedDate { get; set; }
+    public DateTime CreatedTime { get; set; }
+    public DateTime? ModifiedTime { get; set; }
 }

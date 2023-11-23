@@ -13,5 +13,5 @@ public interface ISoftDeletedEntity : IAuditableEntity
     /// <summary>
     /// Gets or sets the date when the entity was deleted
     /// </summary>
-    DateTime? DeletedDate { get; set; }
+    DateTime? DeletedTime { get; set; }
 }

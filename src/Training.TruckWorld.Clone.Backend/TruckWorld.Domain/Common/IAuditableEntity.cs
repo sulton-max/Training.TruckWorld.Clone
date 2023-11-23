@@ -8,10 +8,10 @@ public interface IAuditableEntity : IEntity
     /// <summary>
     /// Gets or sets the creation date of the entity.
     /// </summary>
-    DateTime CreatedDate { get; set; }
+    DateTime CreatedTime { get; set; }
 
     /// <summary>
     /// Gets or sets the last modification date of the entity.
     /// </summary>
-    DateTime? ModifiedDate { get; set; }
+    DateTime? ModifiedTime { get; set; }
 }
