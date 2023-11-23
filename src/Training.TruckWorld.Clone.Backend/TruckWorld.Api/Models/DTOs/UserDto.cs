@@ -6,6 +6,11 @@
 public class UserDto
 {
     /// <summary>
+    /// Gets or sets the unique identifier for the entity
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
     /// Gets or sets the first name of the user
     /// </summary>
     public string FirstName { get; set; } = default!;

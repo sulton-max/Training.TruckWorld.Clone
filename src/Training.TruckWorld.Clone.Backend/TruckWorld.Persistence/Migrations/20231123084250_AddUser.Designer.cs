@@ -12,7 +12,7 @@ using TruckWorld.Persistence.DataContext;
 namespace TruckWorld.Persistence.Migrations
 {
     [DbContext(typeof(NotificationsDbContext))]
-    [Migration("20231122073808_AddUser")]
+    [Migration("20231123084250_AddUser")]
     partial class AddUser
     {
         /// <inheritdoc />
@@ -42,15 +42,9 @@ namespace TruckWorld.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<DateTimeOffset>("ExpiryTime")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -66,10 +60,6 @@ namespace TruckWorld.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
-
-                    b.Property<string>("VerificationLink")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

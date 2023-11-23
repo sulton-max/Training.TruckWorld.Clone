@@ -19,19 +19,38 @@ public class UserValidator : AbstractValidator<User>
     {
         var validationSettingsValue = validationSettings.Value;
 
-        RuleSet(EntityEvent.OnCreate.ToString(),
+        RuleSet (
+            EntityEvent.OnCreate.ToString(),
             () =>
             {
                 RuleFor(code => code.Id).NotEqual(Guid.Empty);
 
-                RuleFor(code => code.ExpiryTime)
-                    .GreaterThanOrEqualTo(DateTime.UtcNow)
-                    .LessThanOrEqualTo(DateTime.UtcNow.AddSeconds(validationSettingsValue.VerificationCodeExpiryTimeInSeconds));
+                RuleFor(user => user.EmailAddress)
+                    .NotEmpty()
+                    .MinimumLength(5)
+                    .MaximumLength(64)
+                    .Matches(validationSettingsValue.EmailRegexPattern);
 
-                RuleFor(code => code.IsActive).Equal(true);
+                RuleFor(user => user.FirstName)
+                    .NotEmpty()
+                    .MinimumLength(3)
+                    .MaximumLength(64)
+                    .Matches(validationSettingsValue.NameRegexPattern)
+                    .WithMessage("First name is not valid!");
 
-                RuleFor(code => code.VerificationLink).NotEmpty().Matches(validationSettingsValue.UrlRegexPattern);
+                RuleFor(user => user.LastName)
+                    .NotEmpty()
+                    .MinimumLength(3)
+                    .MaximumLength(64)
+                    .Matches(validationSettingsValue.NameRegexPattern)
+                    .WithMessage("Last name is not valid!");
+
+                RuleFor(user => user.PasswordHash)
+                    .NotEmpty()
+                    .MinimumLength(8)
+                    .MaximumLength(64)
+                    .Matches(validationSettingsValue.PasswordRegexPattern);
             }
-         );
+        );
     }
 }
