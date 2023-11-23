@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TruckWorld.Application.Common.Brokers;
 using TruckWorld.Application.Common.Services;
+using TruckWorld.Application.Common.Settings;
 using TruckWorld.Infrastructure.Common.Notifications.Brokers;
 using TruckWorld.Infrastructure.Common.Notifications.Services;
 using TruckWorld.Infrastructure.Common.Settings;
@@ -28,6 +29,7 @@ public static partial class HostConfiguration
     {
         // register configurations 
         builder.Services
+            .Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)))
             .Configure<SmtpEmailSenderSettings>(builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)))
             .Configure<TwilioSmsSenderSettings>(builder.Configuration.GetSection(nameof(TwilioSmsSenderSettings)));
 
