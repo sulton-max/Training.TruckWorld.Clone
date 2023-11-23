@@ -41,9 +41,6 @@ public static partial class HostConfiguration
             .AddScoped<ISmsTemplateService, SmsTemplateService>()
             .AddScoped<IEmailTemplateService, EmailTemplateService>();
 
-
-
-
         return builder;
     }
 
