@@ -21,7 +21,9 @@ public class SmsSenderService : ISmsSenderService
     public async ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken = default)
     {
         var validationResult = _smsSenderValidator.Validate(smsMessage,
-            options => options.IncludeRuleSets(NotificationEvent.OnRedering.ToString()));
+            options => options
+            .IncludeRuleSets(NotificationEvent.OnRedering.ToString())
+            .IncludeRuleSets(NotificationEvent.OnSending.ToString()));
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);

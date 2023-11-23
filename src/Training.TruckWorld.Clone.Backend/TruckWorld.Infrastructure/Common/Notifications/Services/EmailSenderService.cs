@@ -21,7 +21,9 @@ public class EmailSenderService : IEmailSenderService
     public async ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken = default)
     {
         var validationResult = _emailMessageValidator.Validate(emailMessage,
-            options => options.IncludeRuleSets(NotificationEvent.OnSending.ToString()));
+            options => options
+            .IncludeRuleSets(NotificationEvent.OnRedering.ToString())
+            .IncludeRuleSets(NotificationEvent.OnSending.ToString()));
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);

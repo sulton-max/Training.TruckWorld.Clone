@@ -1,12 +1,14 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Options;
 using TruckWorld.Application.Common.Models;
+using TruckWorld.Application.Common.Settings;
 using TruckWorld.Domain.Enums;
 
 namespace TruckWorld.Infrastructure.Common.Validators;
 
 public class SmsMessageValidator : AbstractValidator<SmsMessage>
 {
-    public SmsMessageValidator()
+    public SmsMessageValidator(IOptions<ValidationSettings> validatorSettings)
     {
         RuleSet(NotificationEvent.OnRedering.ToString(),
             () =>
@@ -18,8 +20,8 @@ public class SmsMessageValidator : AbstractValidator<SmsMessage>
         RuleSet(NotificationEvent.OnSending.ToString(),
             () =>
             {
-                RuleFor(message => message.SenderPhoneNumber).NotNull().NotEmpty();
-                RuleFor(message => message.RecieverPhoneNumber).NotNull().NotEmpty();
+                RuleFor(message => message.SenderPhoneNumber).NotNull().NotEmpty().Matches(validatorSettings.Value.PhoneNumberRegexPattern);
+                RuleFor(message => message.RecieverPhoneNumber).NotNull().NotEmpty().Matches(validatorSettings.Value.PhoneNumberRegexPattern);
                 RuleFor(message => message.Message).NotNull().NotEmpty();
             });
     }
