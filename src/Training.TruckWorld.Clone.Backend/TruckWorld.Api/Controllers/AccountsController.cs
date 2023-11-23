@@ -28,7 +28,7 @@ public class AccountsController(IUserService userService, IMapper mapper) : Cont
     [HttpPost]
     public async ValueTask<IActionResult> CreateAsync([FromBody] UserDto user)
     {
-        var entity = mapper.Map<UserDto, User>(user);
+        var entity = mapper.Map<User>(user);
         var createdUser = await userService.CreateAsync(entity);
         return CreatedAtAction(nameof(GetUserById),
             new
@@ -41,9 +41,9 @@ public class AccountsController(IUserService userService, IMapper mapper) : Cont
     [HttpPut]
     public async ValueTask<IActionResult> Update([FromBody] UserDto user)
     {
-        var entity = mapper.Map<UserDto, User>(user);
+        var entity = mapper.Map<User>(user);
         await userService.UpdateAsync(entity);
-        return Ok();
+        return Ok(entity);
     }
 
     [HttpDelete("{userId:guid}")]
