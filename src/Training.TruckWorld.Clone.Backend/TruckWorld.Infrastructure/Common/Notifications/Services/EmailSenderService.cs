@@ -35,7 +35,8 @@ public class EmailSenderService : IEmailSenderService
             emailMessage.IsSuccessfull = result.IsSuccess;
             emailMessage.ErrorMessage = result.Exception?.Message;
 
-            return emailMessage.IsSuccessfull;
+            if (emailMessage.IsSuccessfull)
+                return true;
         }
 
         return false;

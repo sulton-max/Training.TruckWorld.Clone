@@ -35,7 +35,8 @@ public class SmsSenderService : ISmsSenderService
             smsMessage.IsSuccessfull = result.IsSuccess;
             smsMessage.ErrorMessage = result.Exception?.Message;
 
-            return smsMessage.IsSuccessfull;
+            if (smsMessage.IsSuccessfull)
+                return true;
         }
 
         return false;
