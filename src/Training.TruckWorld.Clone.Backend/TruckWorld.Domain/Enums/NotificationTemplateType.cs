@@ -12,5 +12,5 @@ namespace TruckWorld.Domain.Enums
         EmailAddressVerificationNotification = 1,
         PhoneNumberVerificationnotification = 2,
         ReferralNotification = 3
-    }
+    } 
 }
