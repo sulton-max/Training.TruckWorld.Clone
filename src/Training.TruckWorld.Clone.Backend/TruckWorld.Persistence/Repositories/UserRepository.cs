@@ -5,12 +5,8 @@ using TruckWorld.Persistence.Repositories.Interface;
 
 namespace TruckWorld.Persistence.Repositories;
 
-public class UserRepository : EntityRepositoryBase<User, NotificationsDbContext>, IUserRepository
+public class UserRepository(NotificationsDbContext dbContext) : EntityRepositoryBase<User, NotificationsDbContext>(dbContext), IUserRepository
 {
-    public UserRepository(NotificationsDbContext dbContext) : base(dbContext)
-    {
-    }
-
     public IQueryable<User> Get(
         Expression<Func<User, bool>>? predicate = default, 
         bool asNoTracking = false
