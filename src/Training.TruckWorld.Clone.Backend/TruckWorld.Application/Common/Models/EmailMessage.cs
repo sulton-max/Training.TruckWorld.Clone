@@ -3,7 +3,7 @@
 namespace TruckWorld.Application.Common.Models;
 
 /// <summary>
-/// Represent a email message
+/// Represents a email message
 /// </summary>
 public class EmailMessage : NotificationMessage
 {
