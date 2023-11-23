@@ -11,7 +11,7 @@ public class EmailMessageValidator : AbstractValidator<EmailMessage>
         RuleSet(NotificationEvent.OnRedering.ToString(),
             () =>
             {
-                RuleFor(message => message.Variables).NotNull();
+                RuleFor(message => message.Template).NotNull();
                 RuleFor(message => message.Variables).NotNull();
             });
 
