@@ -1,10 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using TruckWorld.Application.Common.Notifications.Services;
+using TruckWorld.Infrastructure.Common.Notifications.Services;
 using TruckWorld.Persistence.DataContext;
+using TruckWorld.Persistence.Repositories;
+using TruckWorld.Persistence.Repositories.Interfaces;
 
 namespace TruckWorld.Api.Configurations;
 
 public static partial class HostConfiguration
 {
+    private static readonly ICollection<Assembly> Assemblies;
+    static HostConfiguration()
+    {
+        Assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(Assembly.Load).ToList();
+        Assemblies.Add(Assembly.GetExecutingAssembly());
+    }
     /// <summary>
     /// Registers NotificationDbContext in DI 
     /// </summary>
@@ -18,6 +30,24 @@ public static partial class HostConfiguration
         return builder;
     }
     
+    private static WebApplicationBuilder AddNotificationInfrastructure(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddValidatorsFromAssemblies(Assemblies);
+        builder.Services
+            .AddScoped<IEmailTemplateRepository, EmailTemplateRepository>()
+            .AddScoped<ISmsTemplateRepository, SmsTemplateRepository>();
+
+        builder.Services
+            .AddScoped<ISmsTemplateService, SmsTemplateService>()
+            .AddScoped<IEmailTemplateService, EmailTemplateService>();
+
+
+
+
+        return builder;
+    }
+
+
     /// <summary>
     /// Configures exposers including controllers
     /// </summary>
