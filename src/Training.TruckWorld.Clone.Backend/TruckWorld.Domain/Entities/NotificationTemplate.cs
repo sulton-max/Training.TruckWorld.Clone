@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 using TruckWorld.Domain.Common.Entities;
 using TruckWorld.Domain.Enums;
 
-namespace TruckWorld.Domain.Entities
+namespace TruckWorld.Domain.Entities;
+
+/// <summary>
+/// NotificationTemplate abstract model implemented IEntity
+/// </summary>
+public abstract class NotificationTemplate : IEntity
 {
-    public abstract class NotificationTemplate : IEntity
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public NotificationType Type { get; set; }
+    public NotificationType Type { get; set; }
 
-        public NotificationTemplateType TemplateType { get; set; }
+    public NotificationTemplateType TemplateType { get; set; }
 
-        public string Content { get; set; } = default!;
-    }
+    public string Content { get; set; } = default!;
 }
