@@ -13,7 +13,6 @@ public class SmsSenderService(IEnumerable<ISmsSenderBroker> smsSenderBroker, IVa
     private IEnumerable<ISmsSenderBroker> _smsSenderBroker => smsSenderBroker;
     private IValidator<SmsMessage> _smsSenderValidator => smsSenderValidator;
 
-
     public async ValueTask<bool> SendAsync(SmsMessage smsMessage, CancellationToken cancellationToken = default)
     {
         var validationResult = _smsSenderValidator.Validate(smsMessage,

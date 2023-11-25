@@ -13,7 +13,6 @@ public class EmailSenderService(IEnumerable<IEmailSenderBroker> emailSenderBroke
     private IEnumerable<IEmailSenderBroker> _mailSenderBroker => emailSenderBrokers;
     private IValidator<EmailMessage> _emailMessageValidator => validator;
 
-
     public async ValueTask<bool> SendAsync(EmailMessage emailMessage, CancellationToken cancellationToken = default)
     {
         var validationResult = _emailMessageValidator.Validate(emailMessage,

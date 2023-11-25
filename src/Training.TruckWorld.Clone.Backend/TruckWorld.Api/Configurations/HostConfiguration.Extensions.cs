@@ -24,7 +24,6 @@ public static partial class HostConfiguration
         Assemblies.Add(Assembly.GetExecutingAssembly());
     }
 
-
     /// <summary>
     /// Register NotificationInfrastructure
     /// </summary>
