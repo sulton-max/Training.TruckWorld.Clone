@@ -3,7 +3,7 @@
 namespace TruckWorld.Application.Common.Notificaitons.Brokers;
 
 /// <summary>
-/// Represent sending email messages
+/// Provides methods to send Email messages
 /// </summary>
 public interface IEmailSenderBroker
 {

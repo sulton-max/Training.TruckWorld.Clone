@@ -6,17 +6,17 @@
 public enum NotificationEvent
 {
     /// <summary>
-    /// status in rendering the notification
+    /// Indicates status in rendering the notification
     /// </summary>
     OnRedering,
 
     /// <summary>
-    /// status in sending the notificaiton
+    /// Indicates status in sending the notificaiton
     /// </summary>
     OnSending,
 
     /// <summary>
-    /// status in saving the notificaiton
+    /// Indicates status in saving the notificaiton
     /// </summary>
     OnSaving,
 }

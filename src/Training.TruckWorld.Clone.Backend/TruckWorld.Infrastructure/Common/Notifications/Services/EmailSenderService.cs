@@ -17,7 +17,6 @@ public class EmailSenderService(IEnumerable<IEmailSenderBroker> emailSenderBroke
     {
         var validationResult = _emailMessageValidator.Validate(emailMessage,
             options => options
-            .IncludeRuleSets(NotificationEvent.OnRedering.ToString())
             .IncludeRuleSets(NotificationEvent.OnSending.ToString()));
 
         if (!validationResult.IsValid)

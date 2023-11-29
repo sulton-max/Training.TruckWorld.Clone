@@ -33,7 +33,6 @@ public static partial class HostConfiguration
     {
         // register configurations 
         builder.Services
-            .Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)))
             .Configure<SmtpEmailSenderSettings>(builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)))
             .Configure<TwilioSmsSenderSettings>(builder.Configuration.GetSection(nameof(TwilioSmsSenderSettings)));
 
@@ -47,8 +46,6 @@ public static partial class HostConfiguration
             .AddScoped<ISmsSenderService, SmsSenderService>()
             .AddScoped<IEmailSenderService, EmailSenderService>();
 
-        builder.Services.AddValidatorsFromAssemblies(Assemblies);
-
         return builder;
     }
 
@@ -60,6 +57,9 @@ public static partial class HostConfiguration
     private static WebApplicationBuilder AddValidators(this WebApplicationBuilder builder)
     {
         builder.Services.AddValidatorsFromAssemblies(Assemblies);
+
+        builder.Services
+            .Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
 
         return builder;
     }
@@ -88,8 +88,6 @@ public static partial class HostConfiguration
         builder.Services
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IUserService, UserService>();
-
-        builder.Services.Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
 
         return builder;
 

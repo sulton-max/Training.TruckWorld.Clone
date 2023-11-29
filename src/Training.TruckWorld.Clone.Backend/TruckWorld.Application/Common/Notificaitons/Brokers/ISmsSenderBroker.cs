@@ -3,7 +3,7 @@
 namespace TruckWorld.Application.Common.Notificaitons.Brokers;
 
 /// <summary>
-/// Represent sending sms messages
+/// Provides methods to send SMS messages
 /// </summary>
 public interface ISmsSenderBroker
 {

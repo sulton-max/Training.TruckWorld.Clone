@@ -3,10 +3,17 @@
 namespace TruckWorld.Domain.Extensions;
 
 /// <summary>
-/// Represents any entity that return data or exetption
+/// Provides exception extensions
 /// </summary>
 public static class ExceptionExtensions
 {
+    /// <summary>
+    /// Try catch wrapper for async functions
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="func"></param>
+    /// <returns></returns>
+
     public static async ValueTask<FuncResult<T>> GetValueAsync<T>(this Func<Task<T>> func) where T : struct
     {
         FuncResult<T> result;
@@ -23,6 +30,12 @@ public static class ExceptionExtensions
         return result;
     }
 
+    /// <summary>
+    /// Try catch wrapper for async functions
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="func"></param>
+    /// <returns></returns>
     public static async ValueTask<FuncResult<T>> GetValueAsync<T>(this Func<ValueTask<T>> func) where T : struct
     {
         FuncResult<T> result;

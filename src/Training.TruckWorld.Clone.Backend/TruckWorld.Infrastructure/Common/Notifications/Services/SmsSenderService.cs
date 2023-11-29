@@ -17,7 +17,6 @@ public class SmsSenderService(IEnumerable<ISmsSenderBroker> smsSenderBroker, IVa
     {
         var validationResult = _smsSenderValidator.Validate(smsMessage,
             options => options
-            .IncludeRuleSets(NotificationEvent.OnRedering.ToString())
             .IncludeRuleSets(NotificationEvent.OnSending.ToString()));
 
         if (!validationResult.IsValid)
