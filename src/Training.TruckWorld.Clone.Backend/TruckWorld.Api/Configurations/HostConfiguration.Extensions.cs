@@ -2,10 +2,13 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TruckWorld.Application.Common.Identity.Services;
-using TruckWorld.Application.Common.Notifications.Services;
+using TruckWorld.Application.Common.Notificaitons.Brokers;
+using TruckWorld.Application.Common.Notificaitons.Services;
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Infrastructure.Common.Identity.Services;
+using TruckWorld.Infrastructure.Common.Notifications.Brokers;
 using TruckWorld.Infrastructure.Common.Notifications.Services;
+using TruckWorld.Infrastructure.Common.Settings;
 using TruckWorld.Persistence.DataContext;
 using TruckWorld.Persistence.Repositories;
 using TruckWorld.Persistence.Repositories.Interface;
@@ -22,6 +25,31 @@ public static partial class HostConfiguration
     }
 
     /// <summary>
+    /// Register NotificationInfrastructure
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddNotificationInfrastructure(this WebApplicationBuilder builder)
+    {
+        // register configurations 
+        builder.Services
+            .Configure<SmtpEmailSenderSettings>(builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)))
+            .Configure<TwilioSmsSenderSettings>(builder.Configuration.GetSection(nameof(TwilioSmsSenderSettings)));
+
+        // register brokers
+        builder.Services
+            .AddScoped<ISmsSenderBroker, TwilioSmsSenderBroker>()
+            .AddScoped<IEmailSenderBroker, SmtpEmailSenderBroker>();
+
+        // register helper foundation services
+        builder.Services
+            .AddScoped<ISmsSenderService, SmsSenderService>()
+            .AddScoped<IEmailSenderService, EmailSenderService>();
+
+        return builder;
+    }
+
+    /// <summary>
     /// Configures the Dependency Injection container to include validators from referenced assemblies.
     /// </summary>
     /// <param name="builder"></param>
@@ -29,6 +57,9 @@ public static partial class HostConfiguration
     private static WebApplicationBuilder AddValidators(this WebApplicationBuilder builder)
     {
         builder.Services.AddValidatorsFromAssemblies(Assemblies);
+
+        builder.Services
+            .Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
 
         return builder;
     }
@@ -56,13 +87,7 @@ public static partial class HostConfiguration
 
         builder.Services
             .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<IUserService, UserService>()
-            .AddScoped<IEmailTemplateRepository, EmailTemplateRepository>()
-            .AddScoped<IEmailTemplateService, EmailTemplateService>()
-            .AddScoped<ISmsTemplateRepository, SmsTemplateRepository>()
-            .AddScoped<ISmsTemplateService, SmsTemplateService>();
-
-        builder.Services.Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
+            .AddScoped<IUserService, UserService>();
 
         return builder;
 
