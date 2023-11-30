@@ -1,13 +1,22 @@
-﻿using TruckWorld.Domain.Common;
-using TruckWorld.Domain.Enums;
+﻿using Type = TruckWorld.Domain.Enums.NotificationType;
 
 namespace TruckWorld.Domain.Entities;
 
-public class EmailTemplate : IEntity
+/// <summary>
+/// represents emailTemplate
+/// </summary>
+public class EmailTemplate : NotificationTemplate
 {
-    public EmailTemplate() => Type = NotificationType.Email;
+    /// <summary>
+    /// gets or sets the subject of Email
+    /// </summary>
+    public string Subject { get; set; } = default!;
 
-    public Guid Id { get; set; }
-
-    public NotificationType Type { get; set; }
+    /// <summary>
+    /// takes notificationType from Type which was email
+    /// </summary>
+    public EmailTemplate()
+    {
+        Type = Type.Email;
+    }
 }
