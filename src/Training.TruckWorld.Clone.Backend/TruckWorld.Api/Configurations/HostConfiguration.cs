@@ -13,6 +13,7 @@ public static partial class HostConfiguration
             .AddValidators()
             .AddMappers()
             .AddIdentityInfrastructure()
+            .AddNotificationInfrastructure()
             .AddDevTools()
             .AddExposers();
         
