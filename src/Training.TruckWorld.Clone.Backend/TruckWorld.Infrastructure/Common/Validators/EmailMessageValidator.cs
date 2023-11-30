@@ -10,7 +10,7 @@ public class EmailMessageValidator : AbstractValidator<EmailMessage>
 {
     public EmailMessageValidator(IOptions<ValidationSettings> validation)
     {
-        RuleSet(NotificationEvent.OnRedering.ToString(),
+        RuleSet(NotificationEvent.OnRendering.ToString(),
             () =>
             {
                 RuleFor(message => message.Template).NotNull();

@@ -8,7 +8,7 @@ public enum NotificationEvent
     /// <summary>
     /// Indicates status in rendering the notification
     /// </summary>
-    OnRedering,
+    OnRendering,
 
     /// <summary>
     /// Indicates status in sending the notificaiton

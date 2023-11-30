@@ -10,7 +10,7 @@ public class SmsMessageValidator : AbstractValidator<SmsMessage>
 {
     public SmsMessageValidator(IOptions<ValidationSettings> validatorSettings)
     {
-        RuleSet(NotificationEvent.OnRedering.ToString(),
+        RuleSet(NotificationEvent.OnRendering.ToString(),
             () =>
             {
                 RuleFor(message => message.Template).NotNull();
