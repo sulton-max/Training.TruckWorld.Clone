@@ -16,3 +16,4 @@ public class SmsTemplate : NotificationTemplate
         Type = NotificationType.Sms;
     }
 }
+ 

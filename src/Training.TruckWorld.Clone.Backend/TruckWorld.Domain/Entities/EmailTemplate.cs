@@ -20,3 +20,4 @@ public class EmailTemplate : NotificationTemplate
         Type = Type.Email;
     }
 }
+ 

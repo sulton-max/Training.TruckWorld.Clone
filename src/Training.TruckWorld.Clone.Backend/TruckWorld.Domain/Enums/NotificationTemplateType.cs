@@ -10,3 +10,4 @@ public enum NotificationTemplateType
     PhoneNumberVerificationnotification = 2,
     ReferralNotification = 3
 }
+ 

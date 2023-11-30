@@ -25,6 +25,6 @@ public abstract class NotificationTemplate : IEntity
 
     /// <summary>
     /// gets or sets content of NotificationTemplate it can not be default
-    /// </summary>
+    /// </summary> 
     public string Content { get; set; } = default!;
 }
