@@ -2,8 +2,10 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TruckWorld.Application.Common.Identity.Services;
+using TruckWorld.Application.Common.Notifications.Services;
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Infrastructure.Common.Identity.Services;
+using TruckWorld.Infrastructure.Common.Notifications.Services;
 using TruckWorld.Persistence.DataContext;
 using TruckWorld.Persistence.Repositories;
 using TruckWorld.Persistence.Repositories.Interface;
@@ -54,7 +56,11 @@ public static partial class HostConfiguration
 
         builder.Services
             .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<IUserService, UserService>();
+            .AddScoped<IUserService, UserService>()
+            .AddScoped<IEmailTemplateRepository, EmailTemplateRepository>()
+            .AddScoped<IEmailTemplateService, EmailTemplateService>()
+            .AddScoped<ISmsTemplateRepository, SmsTemplateRepository>()
+            .AddScoped<ISmsTemplateService, SmsTemplateService>();
 
         builder.Services.Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
 
