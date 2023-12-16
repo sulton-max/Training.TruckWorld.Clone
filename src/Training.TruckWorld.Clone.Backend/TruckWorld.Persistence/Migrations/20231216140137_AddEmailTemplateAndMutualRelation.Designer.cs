@@ -12,8 +12,8 @@ using TruckWorld.Persistence.DataContext;
 namespace TruckWorld.Persistence.Migrations
 {
     [DbContext(typeof(NotificationsDbContext))]
-    [Migration("20231128100406_AddEmailTemplate")]
-    partial class AddEmailTemplate
+    [Migration("20231216140137_AddEmailTemplateAndMutualRelation")]
+    partial class AddEmailTemplateAndMutualRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,13 +110,6 @@ namespace TruckWorld.Persistence.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasDiscriminator().HasValue(0);
-                });
-
-            modelBuilder.Entity("TruckWorld.Domain.Entities.SmsTemplate", b =>
-                {
-                    b.HasBaseType("TruckWorld.Domain.Entities.NotificationTemplate");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 #pragma warning restore 612, 618
         }

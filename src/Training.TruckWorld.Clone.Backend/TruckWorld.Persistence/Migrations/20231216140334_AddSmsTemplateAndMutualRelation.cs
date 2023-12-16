@@ -5,7 +5,7 @@
 namespace TruckWorld.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddEmailTemplate : Migration
+    public partial class AddSmsTemplateAndMutualRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

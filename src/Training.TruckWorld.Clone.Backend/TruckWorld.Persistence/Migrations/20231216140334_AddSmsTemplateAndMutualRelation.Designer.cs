@@ -12,8 +12,8 @@ using TruckWorld.Persistence.DataContext;
 namespace TruckWorld.Persistence.Migrations
 {
     [DbContext(typeof(NotificationsDbContext))]
-    [Migration("20231128093459_AddSmsTemplate")]
-    partial class AddSmsTemplate
+    [Migration("20231216140334_AddSmsTemplateAndMutualRelation")]
+    partial class AddSmsTemplateAndMutualRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
