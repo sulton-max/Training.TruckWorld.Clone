@@ -17,14 +17,14 @@ public class NotificationsController : ControllerBase
         _smsTemplateService = smsTemplateService;
     }
 
-    [HttpGet("getSmsTemplates")]
+    [HttpGet("smsTemplates")]
     public async ValueTask<IActionResult> GetSmsTemplates([FromQuery] FilterPagination pagination)
     {
         var result = await _smsTemplateService.GetByFilterAsync(pagination);
         return Ok(result);
     }
 
-    [HttpGet("getEmailTemplates")]
+    [HttpGet("emailTemplates")]
     public async ValueTask<IActionResult> GetEmailTemplates([FromQuery] FilterPagination filterPagination)
     {
         var result = await _emailTemplateService.GetByFilterAsync(filterPagination);
