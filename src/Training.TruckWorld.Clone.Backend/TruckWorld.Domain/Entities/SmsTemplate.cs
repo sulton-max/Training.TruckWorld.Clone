@@ -1,13 +1,18 @@
-﻿using TruckWorld.Domain.Common;
-using TruckWorld.Domain.Enums;
+﻿using TruckWorld.Domain.Enums;
+//using Type = TruckWorld.Domain.Enums.NotificationType;
 
 namespace TruckWorld.Domain.Entities;
 
-public class SmsTemplate : IEntity
+/// <summary>
+/// represents SmsTemplate class
+/// </summary>
+public class SmsTemplate : NotificationTemplate
 {
-    public SmsTemplate() => Type = NotificationType.Sms;
-
-    public Guid Id { get; set; }
-
-    public NotificationType Type { get; set; }
+    /// <summary>
+    /// takes type of Template which was sms
+    /// </summary>
+    public SmsTemplate()
+    {
+        Type = NotificationType.Sms;
+    }
 }

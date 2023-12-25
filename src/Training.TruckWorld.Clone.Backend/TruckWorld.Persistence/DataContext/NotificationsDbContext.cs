@@ -7,9 +7,14 @@ public class NotificationsDbContext : DbContext
 {
     public DbSet<User> Users => Set<User>();
 
-    public NotificationsDbContext(DbContextOptions<NotificationsDbContext> dbContextOptions) : base(dbContextOptions)
+    public DbSet<SmsTemplate> SmsTemplates => Set<SmsTemplate>();
+
+    public DbSet<EmailTemplate> EmailTemplates => Set<EmailTemplate>();
+
+    public NotificationsDbContext(DbContextOptions options) : base(options)
     {
     }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

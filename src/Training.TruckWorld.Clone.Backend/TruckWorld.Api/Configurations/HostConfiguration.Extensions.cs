@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TruckWorld.Application.Common.Identity.Services;
 using TruckWorld.Application.Common.Notificaitons.Brokers;
 using TruckWorld.Application.Common.Notificaitons.Services;
+using TruckWorld.Application.Common.Notifications.Services;
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Infrastructure.Common.Identity.Services;
 using TruckWorld.Infrastructure.Common.Notifications.Brokers;
@@ -44,7 +45,11 @@ public static partial class HostConfiguration
         // register helper foundation services
         builder.Services
             .AddScoped<ISmsSenderService, SmsSenderService>()
-            .AddScoped<IEmailSenderService, EmailSenderService>();
+            .AddScoped<IEmailSenderService, EmailSenderService>()
+            .AddScoped<IEmailTemplateRepository, EmailTemplateRepository>()
+            .AddScoped<ISmsTemplateRepository, SmsTemplateRepository>()
+            .AddScoped<IEmailTemplateService, EmailTemplateService>()
+            .AddScoped<ISmsTemplateService, SmsTemplateService>();
 
         return builder;
     }

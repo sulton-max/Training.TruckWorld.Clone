@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TruckWorld.Persistence.DataContext;
@@ -11,9 +12,11 @@ using TruckWorld.Persistence.DataContext;
 namespace TruckWorld.Persistence.Migrations
 {
     [DbContext(typeof(NotificationsDbContext))]
-    partial class NotificationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231216140137_AddEmailTemplateAndMutualRelation")]
+    partial class AddEmailTemplateAndMutualRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,13 +110,6 @@ namespace TruckWorld.Persistence.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasDiscriminator().HasValue(0);
-                });
-
-            modelBuilder.Entity("TruckWorld.Domain.Entities.SmsTemplate", b =>
-                {
-                    b.HasBaseType("TruckWorld.Domain.Entities.NotificationTemplate");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 #pragma warning restore 612, 618
         }
