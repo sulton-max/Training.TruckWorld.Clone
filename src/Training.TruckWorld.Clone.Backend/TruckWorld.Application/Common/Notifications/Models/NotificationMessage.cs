@@ -1,4 +1,4 @@
-﻿namespace TruckWorld.Application.Common.Notificaitons.Models;
+﻿namespace TruckWorld.Application.Common.Notifications.Models;
 
 /// <summary>
 /// Represent a notification message

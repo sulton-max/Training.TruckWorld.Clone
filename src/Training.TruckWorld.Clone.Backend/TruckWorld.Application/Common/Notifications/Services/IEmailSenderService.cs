@@ -1,11 +1,11 @@
-﻿using TruckWorld.Application.Common.Notificaitons.Models;
+﻿using TruckWorld.Application.Common.Notifications.Models;
 
-namespace TruckWorld.Application.Common.Notificaitons.Brokers;
+namespace TruckWorld.Application.Common.Notifications.Services;
 
 /// <summary>
-/// Provides methods to send Email messages
+/// Represent sending email messages
 /// </summary>
-public interface IEmailSenderBroker
+public interface IEmailSenderService
 {
     /// <summary>
     /// Function that sends email messages

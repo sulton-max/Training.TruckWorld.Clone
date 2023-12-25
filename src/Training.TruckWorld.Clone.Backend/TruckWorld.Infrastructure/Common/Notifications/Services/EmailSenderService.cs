@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using TruckWorld.Application.Common.Notificaitons.Brokers;
-using TruckWorld.Application.Common.Notificaitons.Models;
-using TruckWorld.Application.Common.Notificaitons.Services;
+using TruckWorld.Application.Common.Notifications.Brokers;
+using TruckWorld.Application.Common.Notifications.Models;
+using TruckWorld.Application.Common.Notifications.Services;
 using TruckWorld.Domain.Enums;
 using TruckWorld.Domain.Extensions;
 

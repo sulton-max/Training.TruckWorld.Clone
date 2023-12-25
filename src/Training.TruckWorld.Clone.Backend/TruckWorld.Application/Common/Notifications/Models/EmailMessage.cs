@@ -1,6 +1,6 @@
 ﻿using TruckWorld.Domain.Entities;
 
-namespace TruckWorld.Application.Common.Notificaitons.Models;
+namespace TruckWorld.Application.Common.Notifications.Models;
 
 /// <summary>
 /// Represents a email message

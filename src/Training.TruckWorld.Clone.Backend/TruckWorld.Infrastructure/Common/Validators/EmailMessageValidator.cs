@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Options;
-using TruckWorld.Application.Common.Notificaitons.Models;
+using TruckWorld.Application.Common.Notifications.Models;
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Domain.Enums;
 

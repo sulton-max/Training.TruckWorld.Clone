@@ -2,8 +2,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TruckWorld.Application.Common.Identity.Services;
-using TruckWorld.Application.Common.Notificaitons.Brokers;
-using TruckWorld.Application.Common.Notificaitons.Services;
+using TruckWorld.Application.Common.Notifications.Brokers;
 using TruckWorld.Application.Common.Notifications.Services;
 using TruckWorld.Application.Common.Settings;
 using TruckWorld.Infrastructure.Common.Identity.Services;
@@ -49,7 +48,9 @@ public static partial class HostConfiguration
             .AddScoped<IEmailTemplateRepository, EmailTemplateRepository>()
             .AddScoped<ISmsTemplateRepository, SmsTemplateRepository>()
             .AddScoped<IEmailTemplateService, EmailTemplateService>()
-            .AddScoped<ISmsTemplateService, SmsTemplateService>();
+            .AddScoped<ISmsTemplateService, SmsTemplateService>()
+            .AddScoped<IEmailRenderingService, EmailRenderingService>()
+            .AddScoped<ISmsRenderingService, SmsRenderingService>();
 
         return builder;
     }
