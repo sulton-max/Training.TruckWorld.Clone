@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TruckWorld.Application.Common.Notificaitons.Models;
-using TruckWorld.Application.Common.Notificaitons.Services;
+using TruckWorld.Application.Common.Notifications.Models;
+using TruckWorld.Application.Common.Notifications.Services;
 
 namespace TruckWorld.Api.Controllers;
 

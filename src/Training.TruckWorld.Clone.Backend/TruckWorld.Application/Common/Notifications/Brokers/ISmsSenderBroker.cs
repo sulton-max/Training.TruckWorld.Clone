@@ -1,6 +1,6 @@
-﻿using TruckWorld.Application.Common.Notificaitons.Models;
+﻿using TruckWorld.Application.Common.Notifications.Models;
 
-namespace TruckWorld.Application.Common.Notificaitons.Brokers;
+namespace TruckWorld.Application.Common.Notifications.Brokers;
 
 /// <summary>
 /// Provides methods to send SMS messages

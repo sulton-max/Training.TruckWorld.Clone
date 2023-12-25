@@ -1,6 +1,6 @@
-﻿using TruckWorld.Application.Common.Notificaitons.Models;
+﻿using TruckWorld.Application.Common.Notifications.Models;
 
-namespace TruckWorld.Application.Common.Notificaitons.Services;
+namespace TruckWorld.Application.Common.Notifications.Services;
 
 /// <summary>
 /// Represent sending sms messages
