@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
-using TruckWorld.Application.Common.Notificaitons.Brokers;
-using TruckWorld.Application.Common.Notificaitons.Models;
+using TruckWorld.Application.Common.Notifications.Brokers;
+using TruckWorld.Application.Common.Notifications.Models;
 using TruckWorld.Infrastructure.Common.Settings;
 
 namespace TruckWorld.Infrastructure.Common.Notifications.Brokers;
